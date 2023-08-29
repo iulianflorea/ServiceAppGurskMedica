@@ -1,0 +1,29 @@
+.register-form-container {
+  border-radius: 20px;
+  background-color: #e0c879;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-big-div {
+  margin-top: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-form {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
