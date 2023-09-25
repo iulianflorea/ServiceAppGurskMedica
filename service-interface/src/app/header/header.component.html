@@ -12,7 +12,8 @@
         </button>
       </div>
 
-      <button *ngIf="isUserLoggedIn()" mat-button color="primary" routerLink="/login" (click)="logoutUser()">Logout</button>
+      <button *ngIf="isUserLoggedIn()" mat-button color="primary" routerLink="/login" (click)="logoutUser()">Logout
+      </button>
 
       <button *ngIf="!isUserLoggedIn()" routerLink="/login" mat-button color="primary"> Login</button>
 
