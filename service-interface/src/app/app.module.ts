@@ -10,12 +10,17 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatCardModule} from "@angular/material/card";
+import {HttpClientModule} from "@angular/common/http";
+import { UserLoginComponent } from './user-login/user-login.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserRegisterComponent,
-    HeaderComponent
+    HeaderComponent,
+    UserLoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +30,8 @@ import {MatCardModule} from "@angular/material/card";
     MatButtonModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatCardModule
+    MatCardModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

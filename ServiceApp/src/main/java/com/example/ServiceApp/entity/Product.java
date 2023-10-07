@@ -1,16 +1,16 @@
 package com.example.ServiceApp.entity;
 
+import com.example.ServiceApp.dto.ProducerDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Builder
+@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +19,6 @@ public class Product {
     private String cod;
     @ManyToOne
     @JoinColumn(name = "producer_id")
-    private Producer producerId;
+    private Producer producer;
 
-    public Product(Long id, String name, String cod, Producer producerId) {
-        this.id = id;
-        this.name = name;
-        this.cod = cod;
-        this.producerId = producerId;
-    }
 }

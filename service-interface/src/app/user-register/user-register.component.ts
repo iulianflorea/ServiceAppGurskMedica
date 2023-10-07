@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Router} from "@angular/router";
 import {FormControl, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-register',
@@ -28,6 +28,7 @@ export class UserRegisterComponent {
       registered => {
         localStorage.setItem("RegisteredInUserEmail", registerBody.email);
         localStorage.setItem("RegisteredInUserPass", registerBody.pass);
+        this.router.navigate(["/login"]);
       },
       error => {
         alert("Ceva a mers prost");
