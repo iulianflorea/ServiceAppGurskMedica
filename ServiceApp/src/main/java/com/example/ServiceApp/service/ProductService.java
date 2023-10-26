@@ -52,6 +52,7 @@ public class ProductService {
         Product product = productRepository.findById(productDto.getId()).orElseThrow();
         product.setCod(productDto.getCod());
         product.setName(productDto.getName());
+        product.setQuantity(productDto.getQuantity());
         product.setProducer(product.getProducer());
         return productRepository.save(product);
     }

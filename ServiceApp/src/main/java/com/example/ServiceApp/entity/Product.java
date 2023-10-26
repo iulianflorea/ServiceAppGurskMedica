@@ -17,6 +17,7 @@ public class Product {
     private Long id;
     private String name;
     private String cod;
+    private Integer quantity;
     @ManyToOne
     @JoinColumn(name = "producer_id")
     private Producer producer;
