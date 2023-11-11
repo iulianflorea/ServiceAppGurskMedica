@@ -4,11 +4,12 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
-public class ProducerDto {
+public class EquipmentDto {
 
     private Long id;
-    private String name;
+    private String model;
+    private Long producerId;
 }

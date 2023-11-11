@@ -30,7 +30,7 @@ public class ProductService {
     public Product save(ProductDto productDto) {
         Product productToBeSaved = productMapper.toProduct(productDto);
         Producer producer = findProducerById(productDto.getProducer());
-        productToBeSaved.setProducer(producer);
+        productToBeSaved.setProducerId(producer);
         return productRepository.save(productToBeSaved);
     }
 
@@ -53,7 +53,7 @@ public class ProductService {
         product.setCod(productDto.getCod());
         product.setName(productDto.getName());
         product.setQuantity(productDto.getQuantity());
-        product.setProducer(product.getProducer());
+        product.setProducerId(product.getProducerId());
         return productRepository.save(product);
     }
 

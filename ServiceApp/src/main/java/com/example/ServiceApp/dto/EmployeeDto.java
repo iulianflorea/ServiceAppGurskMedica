@@ -7,12 +7,9 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ProductDto {
+public class EmployeeDto {
 
     private Long id;
     private String name;
-    private String cod;
-    private Integer quantity;
-    private Long producer;
+    private String cnp;
 }
-

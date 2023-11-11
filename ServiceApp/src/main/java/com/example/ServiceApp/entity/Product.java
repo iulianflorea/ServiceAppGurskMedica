@@ -20,6 +20,6 @@ public class Product {
     private Integer quantity;
     @ManyToOne
     @JoinColumn(name = "producer_id")
-    private Producer producer;
+    private Producer producerId;
 
 }

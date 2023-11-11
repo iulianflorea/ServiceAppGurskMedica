@@ -28,7 +28,7 @@ public class ProductMapper {
                 .cod(product.getCod())
                 .name(product.getName())
                 .quantity(product.getQuantity())
-                .producer(product.getProducer().getId())
+                .producer(product.getProducerId().getId())
                 .build();
     }
 
