@@ -27,11 +27,12 @@ public class ProductService {
     }
 
 
-    public Product save(ProductDto productDto) {
+    public ProductDto save(ProductDto productDto) {
         Product productToBeSaved = productMapper.toProduct(productDto);
         Producer producer = findProducerById(productDto.getProducer());
         productToBeSaved.setProducerId(producer);
-        return productRepository.save(productToBeSaved);
+        Product productSaved = productRepository.save(productToBeSaved);
+        return productMapper.toDto(productSaved);
     }
 
     public Producer findProducerById(Long id) {
