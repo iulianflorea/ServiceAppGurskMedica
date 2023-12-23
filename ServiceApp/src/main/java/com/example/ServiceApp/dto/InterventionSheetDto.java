@@ -1,6 +1,12 @@
 package com.example.ServiceApp.dto;
 
+import com.example.ServiceApp.entity.Customer;
+import com.example.ServiceApp.entity.Employee;
+import com.example.ServiceApp.entity.Equipment;
+import com.example.ServiceApp.entity.TypeOfIntervention;
 import lombok.*;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -9,12 +15,12 @@ import lombok.*;
 @Setter
 public class InterventionSheetDto {
     private Long id;
-    private String typeOfIntervention;
-    private Long equipmentId;
+    private TypeOfIntervention typeOfIntervention;
+    private Equipment equipmentId;
     private String serialNumber;
-    private Long dateOfIntervention;
-    private Long customerId;
-    private Long employeeId;
+    private Date dateOfIntervention;
+    private Customer customerId;
+    private Employee employeeId;
     private String noticed;
     private String fixed;
     private String engineerNote;
