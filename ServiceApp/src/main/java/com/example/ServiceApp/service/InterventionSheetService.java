@@ -41,4 +41,11 @@ public class InterventionSheetService {
         InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheetToBeSaved);
         return interventionSheetMapper.toDto(interventionSheetSaved);
     }
+
+    public InterventionSheetDto findById (Long id){
+        InterventionSheet interventionSheet = interventionSheetRepository.findById(id).orElseThrow();
+        return interventionSheetMapper.toDto(interventionSheet);
+    }
+
+
 }

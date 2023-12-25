@@ -1,27 +1,28 @@
 package com.example.ServiceApp.service;
 
+import com.example.ServiceApp.dto.ProducerDto;
 import com.example.ServiceApp.dto.ProductDto;
 import com.example.ServiceApp.entity.Producer;
 import com.example.ServiceApp.entity.Product;
+import com.example.ServiceApp.mapper.ProducerMapper;
 import com.example.ServiceApp.mapper.ProductMapper;
 import com.example.ServiceApp.repository.ProducerRepository;
 import com.example.ServiceApp.repository.ProductRepository;
 
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class ProductService {
     private final ProducerRepository producerRepository;
+    private final ProducerMapper producerMapper;
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    public ProductService(ProducerRepository producerRepository, ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(ProducerRepository producerRepository, ProducerMapper producerMapper, ProductRepository productRepository, ProductMapper productMapper) {
         this.producerRepository = producerRepository;
+        this.producerMapper = producerMapper;
         this.productRepository = productRepository;
         this.productMapper = productMapper;
     }
