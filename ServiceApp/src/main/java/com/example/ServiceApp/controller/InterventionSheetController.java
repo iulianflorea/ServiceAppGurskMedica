@@ -2,10 +2,7 @@ package com.example.ServiceApp.controller;
 
 import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.service.InterventionSheetService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/intervention-sheet")
@@ -19,5 +16,10 @@ public class InterventionSheetController {
 @PostMapping
     public InterventionSheetDto create(@RequestBody InterventionSheetDto interventionSheetDto) {
         return interventionSheetService.create(interventionSheetDto);
+    }
+
+    @GetMapping("/{id}")
+    public InterventionSheetDto findById(@PathVariable Long id) {
+        return interventionSheetService.findById(id);
     }
 }
