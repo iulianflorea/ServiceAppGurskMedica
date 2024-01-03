@@ -12,6 +12,8 @@ import com.example.ServiceApp.repository.EquipmentRepository;
 import com.example.ServiceApp.repository.InterventionSheetRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InterventionSheetService {
 
@@ -42,10 +44,13 @@ public class InterventionSheetService {
         return interventionSheetMapper.toDto(interventionSheetSaved);
     }
 
-    public InterventionSheetDto findById (Long id){
+    public InterventionSheetDto findById(Long id) {
         InterventionSheet interventionSheet = interventionSheetRepository.findById(id).orElseThrow();
         return interventionSheetMapper.toDto(interventionSheet);
     }
 
-
+    public List<InterventionSheetDto> findAll() {
+        List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAll();
+        return interventionSheetMapper.toDtoList(interventionSheetList);
+    }
 }

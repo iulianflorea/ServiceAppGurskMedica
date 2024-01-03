@@ -4,6 +4,8 @@ import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.service.InterventionSheetService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/intervention-sheet")
 public class InterventionSheetController {
@@ -21,5 +23,10 @@ public class InterventionSheetController {
     @GetMapping("/{id}")
     public InterventionSheetDto findById(@PathVariable Long id) {
         return interventionSheetService.findById(id);
+    }
+
+    @GetMapping("/find-all")
+    public List<InterventionSheetDto> findAll(){
+        return interventionSheetService.findAll();
     }
 }
