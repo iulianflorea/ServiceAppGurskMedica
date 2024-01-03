@@ -53,4 +53,19 @@ public class InterventionSheetService {
         List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAll();
         return interventionSheetMapper.toDtoList(interventionSheetList);
     }
+
+    public InterventionSheetDto update(InterventionSheetDto interventionSheetDto) {
+        InterventionSheet interventionSheet = interventionSheetRepository.findById(interventionSheetDto.getId()).orElseThrow();
+        interventionSheet.setEmployeeId(interventionSheetDto.getEmployeeId());
+        interventionSheet.setDateOfIntervention(interventionSheetDto.getDateOfIntervention());
+        interventionSheet.setCustomerId(interventionSheetDto.getCustomerId());
+        interventionSheet.setEquipmentId(interventionSheetDto.getEquipmentId());
+        interventionSheet.setFixed(interventionSheetDto.getFixed());
+        interventionSheet.setSerialNumber(interventionSheetDto.getSerialNumber());
+        interventionSheet.setEngineerNote(interventionSheetDto.getEngineerNote());
+        interventionSheet.setNoticed(interventionSheetDto.getNoticed());
+        interventionSheet.setTypeOfIntervention(interventionSheetDto.getTypeOfIntervention());
+        InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheet);
+        return interventionSheetMapper.toDto(interventionSheetSaved);
+    }
 }
