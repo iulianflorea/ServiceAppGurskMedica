@@ -29,4 +29,14 @@ public class InterventionSheetController {
     public List<InterventionSheetDto> findAll(){
         return interventionSheetService.findAll();
     }
+
+    @PutMapping("/update")
+    public InterventionSheetDto update(@RequestBody InterventionSheetDto interventionSheetDto) {
+        return interventionSheetService.update(interventionSheetDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        interventionSheetService.delete(id);
+    }
 }

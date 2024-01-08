@@ -68,4 +68,9 @@ public class InterventionSheetService {
         InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheet);
         return interventionSheetMapper.toDto(interventionSheetSaved);
     }
+
+    public void delete (Long id) {
+        interventionSheetRepository.deleteById(id);
+    }
+
 }

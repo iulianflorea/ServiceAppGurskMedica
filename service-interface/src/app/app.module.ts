@@ -8,11 +8,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCardModule} from "@angular/material/card";
 import {HttpClientModule} from "@angular/common/http";
 import { UserLoginComponent } from './user-login/user-login.component';
 import { HomeComponent } from './home/home.component';
+import { InterventionSheetFormComponent } from './intervention-sheet-form/intervention-sheet-form.component';
+import {MatSelectModule} from "@angular/material/select";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 @NgModule({
   declarations: [
@@ -20,7 +23,8 @@ import { HomeComponent } from './home/home.component';
     UserRegisterComponent,
     HeaderComponent,
     UserLoginComponent,
-    HomeComponent
+    HomeComponent,
+    InterventionSheetFormComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +35,10 @@ import { HomeComponent } from './home/home.component';
     MatInputModule,
     ReactiveFormsModule,
     MatCardModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    MatSelectModule,
+    MatDatepickerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
