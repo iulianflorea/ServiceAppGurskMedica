@@ -16,11 +16,11 @@ import java.util.Date;
 public class InterventionSheetDto {
     private Long id;
     private TypeOfIntervention typeOfIntervention;
-    private Equipment equipmentId;
+    private Long equipmentId;
     private String serialNumber;
     private Date dateOfIntervention;
-    private Customer customerId;
-    private Employee employeeId;
+    private Long customerId;
+    private Long employeeId;
     private String noticed;
     private String fixed;
     private String engineerNote;

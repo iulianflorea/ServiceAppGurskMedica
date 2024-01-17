@@ -11,7 +11,6 @@ public class CustomerMapper {
 
     public Customer toCustomer(CustomerDto customerDto) {
         return Customer.builder()
-                .id(customerDto.getId())
                 .name(customerDto.getName())
                 .cui(customerDto.getCui())
                 .address(customerDto.getAddress())

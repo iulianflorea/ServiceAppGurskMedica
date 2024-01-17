@@ -36,8 +36,8 @@ public class CustomerService {
         return customerMapper.toDtoList(customers);
     }
 
-    public CustomerDto update(Long id, CustomerDto customerDto) {
-        Customer customerToBeSaved = customerRepository.findById(id).orElseThrow();
+    public CustomerDto update(CustomerDto customerDto) {
+        Customer customerToBeSaved = customerRepository.findById(customerDto.getId()).orElseThrow();
         customerToBeSaved.setName(customerDto.getName());
         customerToBeSaved.setCui(customerDto.getCui());
         customerToBeSaved.setAddress(customerDto.getAddress());

@@ -9,7 +9,7 @@
         <mat-form-field>
           <mat-label>Customer</mat-label>
           <mat-select [(ngModel)]="customerSelected" [ngModelOptions]="{standalone: true}">
-            <mat-option *ngFor="let customer of customerList" [value]="customer">
+            <mat-option *ngFor="let customer of customerList" [value]="customer.id">
               {{customer.name}}
             </mat-option>
           </mat-select>
@@ -18,20 +18,20 @@
         <mat-form-field>
           <mat-label>Employee</mat-label>
           <mat-select [(ngModel)]="employeeSelected" [ngModelOptions]="{standalone: true}">
-            <mat-option *ngFor="let employee of employeeList" [value]="employee">
+            <mat-option *ngFor="let employee of employeeList" [value]="employee.id">
               {{employee.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Equipment</mat-label>
-          <mat-select [(ngModel)]="equipmentSelected" [ngModelOptions]="{standalone: true}">
-            <mat-option *ngFor="let equipment of equipmentList" [value]="equipment">
-              {{equipment.model}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+<!--        <mat-form-field>-->
+<!--          <mat-label>Equipment</mat-label>-->
+<!--          <mat-select [(ngModel)]="equipmentSelected" [ngModelOptions]="{standalone: true}">-->
+<!--            <mat-option *ngFor="let equipment of equipmentList" [value]="equipment.id">-->
+<!--              {{equipment.model}}-->
+<!--            </mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
 
         <mat-form-field>
           <mat-label>Engineer Note</mat-label>
@@ -48,13 +48,13 @@
           <input matInput formControlName="fixed"/>
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Choose a date</mat-label>
-          <input matInput [matDatepicker]="picker">
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+<!--        <mat-form-field>-->
+<!--          <mat-label>Choose a date</mat-label>-->
+<!--          <input matInput [matDatepicker]="picker">-->
+<!--          <mat-hint>MM/DD/YYYY</mat-hint>-->
+<!--          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--          <mat-datepicker #picker></mat-datepicker>-->
+<!--        </mat-form-field>-->
 
 
         <button mat-raised-button type="submit" color="primary">Save</button>

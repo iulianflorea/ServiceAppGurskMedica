@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, isStandalone} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {EquipmentDto} from "../dtos/equipmentDto";
 import {CustomerDto} from "../dtos/customerDto";
 import {EmployeeDto} from "../dtos/employeeDto";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {getXHRResponse} from "rxjs/internal/ajax/getXHRResponse";
 
 @Component({
   selector: 'app-intervention-sheet-form',
@@ -14,7 +15,7 @@ import {Router} from "@angular/router";
 export class InterventionSheetFormComponent {
   equipmentSelected: any;
   equipmentList: EquipmentDto[] = [];
-  dateOfIntervention: Date = new Date();
+  // dateOfIntervention: Date = new Date();
   customerSelected: any;
   customerList: CustomerDto[] = [];
   employeeSelected: any;
@@ -23,7 +24,7 @@ export class InterventionSheetFormComponent {
 
 
   interventionSheetForm : FormGroup = new FormGroup({
-    typeOfIntervention: new FormControl(),
+    // typeOfIntervention: new FormControl(),
     serialNumber: new FormControl(),
     noticed: new FormControl(),
     fixed: new FormControl(),
@@ -34,28 +35,54 @@ export class InterventionSheetFormComponent {
   }
 
   ngOnInit() {
-    this.getEquipmentList();
+    // this.getEquipmentList();
+    this.getCustomerList();
+    this.getEmployeeList();
+
 
   }
 
-  getEquipmentList() {
-    this.httpClient.get("/api/equipment-list").subscribe((response) =>{
-      console.log(response);
-      this.equipmentList = response as EquipmentDto[];
-    })
-  }
+  // getEquipmentList() {
+  //   this.httpClient.get("/api/equipment/equipment-list").subscribe((response) =>{
+  //     console.log(response);
+  //     this.equipmentList = response as EquipmentDto[];
+  //   })
+  // }
 
   getCustomerList() {
-    this.httpClient.get("/api/customer-list").subscribe((response) =>{
+    this.httpClient.get("/api/customer/customer-list").subscribe((response) =>{
       console.log(response);
       this.customerList = response as CustomerDto[];
     })
   }
 
+  getEmployeeList() {
+    this.httpClient.get("/api/employee/find-list").subscribe((response) =>{
+      console.log(response);
+      this.employeeList = response as EmployeeDto[];
+    })
+  }
+
+  saveInterventionSheet() {
+    var interventionSheet = {
+      typeOfIntervention: this.interventionSheetForm.value.typeOfIntervention,
+      // dateOfIntervention: this.dateOfIntervention,
+      serialNumber: this.interventionSheetForm.value.serialNumber,
+      noticed: this.interventionSheetForm.value.noticed,
+      fixed: this.interventionSheetForm.value.fixed,
+      engineerNote: this.interventionSheetForm.value.engineerNote,
+      // equipmentId: this.equipmentSelected,
+      customerId: this.customerSelected,
+      employeeId: this.employeeSelected
+    }
+    this.httpClient.post("/api/intervention-sheet", interventionSheet).subscribe((response) =>{
+      console.log(response);
+      alert("Intervention sheet was saved");
+
+    })
+
+  }
 
 
-
-
-
-
+  protected readonly isStandalone = isStandalone;
 }

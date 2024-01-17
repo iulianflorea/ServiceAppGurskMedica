@@ -34,12 +34,12 @@ public class InterventionSheetService {
 
     public InterventionSheetDto create(InterventionSheetDto interventionSheetDto) {
         InterventionSheet interventionSheetToBeSaved = interventionSheetMapper.toInterventionSheet(interventionSheetDto);
-        Equipment equipment = equipmentRepository.findById(interventionSheetDto.getEquipmentId().getId()).orElseThrow();
-        Customer customer = customerRepository.findById(interventionSheetDto.getCustomerId().getId()).orElseThrow();
-        Employee employee = employeeRepository.findById(interventionSheetDto.getEmployeeId().getId()).orElseThrow();
-        interventionSheetToBeSaved.setEquipmentId(equipment);
-        interventionSheetToBeSaved.setCustomerId(customer);
-        interventionSheetToBeSaved.setEmployeeId(employee);
+//        Equipment equipment = equipmentRepository.findById(interventionSheetDto.getEquipmentId()).orElseThrow();
+        Customer customer = customerRepository.findById(interventionSheetDto.getCustomerId()).orElseThrow();
+        Employee employee = employeeRepository.findById(interventionSheetDto.getEmployeeId()).orElseThrow();
+//        interventionSheetToBeSaved.setEquipmentId(equipment.getId());
+        interventionSheetToBeSaved.setCustomerId(customer.getId());
+        interventionSheetToBeSaved.setEmployeeId(employee.getId());
         InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheetToBeSaved);
         return interventionSheetMapper.toDto(interventionSheetSaved);
     }
