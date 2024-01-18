@@ -14,8 +14,10 @@ public class Equipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String model;
-    @ManyToOne
-    @JoinColumn(name = "producer_id")
-    private Producer producerId;
+    @Column(name = "producer_id")
+    private Long producerId;
+    @ManyToOne(targetEntity = Producer.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+    private Producer producer;
 
 }
