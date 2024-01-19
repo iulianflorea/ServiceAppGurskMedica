@@ -35,5 +35,17 @@ public class EquipmentService {
         return equipmentMapper.toDtoList(equipmentList);
     }
 
+    public EquipmentDto update(EquipmentDto equipmentDto) {
+        Equipment equipmentToBeUpdate = equipmentRepository.findById(equipmentDto.getId()).orElseThrow();
+        equipmentToBeUpdate.setModel(equipmentDto.getModel());
+        equipmentToBeUpdate.setProducerId(equipmentDto.getProducerId());
+        Equipment equipmentUpdated = equipmentRepository.save(equipmentToBeUpdate);
+        return equipmentMapper.toDto(equipmentUpdated);
+    }
+
+    public void delete(Long id) {
+        equipmentRepository.deleteById(id);
+    }
+
 
 }

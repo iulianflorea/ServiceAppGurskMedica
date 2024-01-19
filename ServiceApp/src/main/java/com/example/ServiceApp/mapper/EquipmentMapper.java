@@ -1,6 +1,5 @@
 package com.example.ServiceApp.mapper;
 
-import com.example.ServiceApp.dto.EmployeeDto;
 import com.example.ServiceApp.dto.EquipmentDto;
 import com.example.ServiceApp.entity.Equipment;
 import org.springframework.stereotype.Component;

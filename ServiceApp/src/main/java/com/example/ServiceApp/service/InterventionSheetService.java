@@ -1,15 +1,14 @@
 package com.example.ServiceApp.service;
 
 import com.example.ServiceApp.dto.InterventionSheetDto;
-import com.example.ServiceApp.entity.Customer;
-import com.example.ServiceApp.entity.Employee;
-import com.example.ServiceApp.entity.Equipment;
-import com.example.ServiceApp.entity.InterventionSheet;
+import com.example.ServiceApp.entity.*;
 import com.example.ServiceApp.mapper.InterventionSheetMapper;
 import com.example.ServiceApp.repository.CustomerRepository;
 import com.example.ServiceApp.repository.EmployeeRepository;
 import com.example.ServiceApp.repository.EquipmentRepository;
 import com.example.ServiceApp.repository.InterventionSheetRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public class InterventionSheetService {
     private final EmployeeRepository employeeRepository;
 
 
-    public InterventionSheetService(InterventionSheetRepository interventionSheetRepository, InterventionSheetMapper interventionSheetMapper, EquipmentRepository equipmentRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository) {
+    public InterventionSheetService(InterventionSheetRepository interventionSheetRepository, InterventionSheetMapper interventionSheetMapper, EquipmentRepository equipmentRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository) throws JsonProcessingException {
         this.interventionSheetRepository = interventionSheetRepository;
         this.interventionSheetMapper = interventionSheetMapper;
         this.equipmentRepository = equipmentRepository;
@@ -34,10 +33,10 @@ public class InterventionSheetService {
 
     public InterventionSheetDto create(InterventionSheetDto interventionSheetDto) {
         InterventionSheet interventionSheetToBeSaved = interventionSheetMapper.toInterventionSheet(interventionSheetDto);
-//        Equipment equipment = equipmentRepository.findById(interventionSheetDto.getEquipmentId()).orElseThrow();
+        Equipment equipment = equipmentRepository.findById(interventionSheetDto.getEquipmentId()).orElseThrow();
         Customer customer = customerRepository.findById(interventionSheetDto.getCustomerId()).orElseThrow();
         Employee employee = employeeRepository.findById(interventionSheetDto.getEmployeeId()).orElseThrow();
-//        interventionSheetToBeSaved.setEquipmentId(equipment.getId());
+        interventionSheetToBeSaved.setEquipmentId(equipment.getId());
         interventionSheetToBeSaved.setCustomerId(customer.getId());
         interventionSheetToBeSaved.setEmployeeId(employee.getId());
         InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheetToBeSaved);
@@ -72,5 +71,8 @@ public class InterventionSheetService {
     public void delete (Long id) {
         interventionSheetRepository.deleteById(id);
     }
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String enumAsJson = objectMapper.writeValueAsString(TypeOfIntervention.values());
 
 }

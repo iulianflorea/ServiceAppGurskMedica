@@ -17,6 +17,7 @@ import { InterventionSheetFormComponent } from './intervention-sheet-form/interv
 import {MatSelectModule} from "@angular/material/select";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +25,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     HeaderComponent,
     UserLoginComponent,
     HomeComponent,
-    InterventionSheetFormComponent
+    InterventionSheetFormComponent,
   ],
   imports: [
     BrowserModule,
