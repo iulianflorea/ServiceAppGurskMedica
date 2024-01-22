@@ -1,14 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {EquipmentDto} from "../dtos/equipmentDto";
 import {CustomerDto} from "../dtos/customerDto";
 import {EmployeeDto} from "../dtos/employeeDto";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+
+
+
+
 @Component({
   selector: 'app-intervention-sheet-form',
   templateUrl: './intervention-sheet-form.component.html',
-  styleUrls: ['./intervention-sheet-form.component.css']
+  styleUrls: ['./intervention-sheet-form.component.css'],
+
 })
 export class InterventionSheetFormComponent implements OnInit{
   equipmentSelected: any;

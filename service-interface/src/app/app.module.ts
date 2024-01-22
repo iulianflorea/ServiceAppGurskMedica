@@ -16,6 +16,9 @@ import { HomeComponent } from './home/home.component';
 import { InterventionSheetFormComponent } from './intervention-sheet-form/intervention-sheet-form.component';
 import {MatSelectModule} from "@angular/material/select";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import { DatePickerComponent } from './date-picker/date-picker.component';
+import {MatNativeDateModule} from "@angular/material/core";
+import { InterventionSheetListComponent } from './intervention-sheet-list/intervention-sheet-list.component';
 
 
 @NgModule({
@@ -26,6 +29,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     UserLoginComponent,
     HomeComponent,
     InterventionSheetFormComponent,
+
+
   ],
   imports: [
     BrowserModule,
@@ -39,7 +44,10 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     HttpClientModule,
     FormsModule,
     MatSelectModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatNativeDateModule,
+    DatePickerComponent,
+    InterventionSheetListComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
