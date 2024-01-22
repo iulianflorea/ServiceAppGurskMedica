@@ -1,6 +1,7 @@
 package com.example.ServiceApp.mapper;
 
 import com.example.ServiceApp.dto.InterventionSheetDto;
+import com.example.ServiceApp.entity.Customer;
 import com.example.ServiceApp.entity.InterventionSheet;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -39,7 +40,11 @@ public class InterventionSheetMapper {
                 .noticed(interventionSheet.getNoticed())
                 .fixed(interventionSheet.getFixed())
                 .engineerNote(interventionSheet.getEngineerNote())
+                .customerName(interventionSheet.getCustomer().getName())
+                .employeeName(interventionSheet.getEmployee().getName())
+                .equipmentName(interventionSheet.getEquipment().getModel())
                 .build();
+
     }
 
     public List<InterventionSheetDto> toDtoList(List<InterventionSheet> interventionSheetList) {

@@ -5,6 +5,7 @@ import com.example.ServiceApp.entity.Employee;
 import com.example.ServiceApp.entity.Equipment;
 import com.example.ServiceApp.entity.TypeOfIntervention;
 import lombok.*;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.util.Date;
 
@@ -24,4 +25,7 @@ public class InterventionSheetDto {
     private String noticed;
     private String fixed;
     private String engineerNote;
+    private String customerName;
+    private String equipmentName;
+    private String employeeName;
 }

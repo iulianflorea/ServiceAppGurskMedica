@@ -9,4 +9,8 @@ export class InterventionSheetDto {
   noticed?: string;
   fixed?: string;
   engineerNote?: string;
+  customerName?: string;
+  employeeName?: string;
+  equipmentName?: string;
+
 }

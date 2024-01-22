@@ -17,7 +17,7 @@ public class Equipment {
     @Column(name = "producer_id")
     private Long producerId;
     @ManyToOne(targetEntity = Producer.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+    @JoinColumn(name = "producer_id", insertable = false, updatable = false)
     private Producer producer;
 
 }

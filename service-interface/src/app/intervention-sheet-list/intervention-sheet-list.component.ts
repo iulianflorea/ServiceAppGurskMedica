@@ -18,7 +18,7 @@ import {CustomerDto} from "../dtos/customerDto";
     imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe]
 })
 export class InterventionSheetListComponent {
-    displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentId', 'serialNumber', 'dateOfIntervention', 'customerId', 'employeeId', 'noticed', 'fixed', 'engineerNote'];
+    displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote'];
     dataSource: InterventionSheetDto[] = [];
     customerSource: any;
 
@@ -40,6 +40,8 @@ export class InterventionSheetListComponent {
             this.customerSource = response;
         })
     }
+
+
 
 
 }
