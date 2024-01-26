@@ -7,6 +7,7 @@ import com.example.ServiceApp.entity.TypeOfIntervention;
 import lombok.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class InterventionSheetDto {
     private TypeOfIntervention typeOfIntervention;
     private Long equipmentId;
     private String serialNumber;
-    private Date dateOfIntervention;
+    private LocalDate dateOfIntervention;
     private Long customerId;
     private Long employeeId;
     private String noticed;

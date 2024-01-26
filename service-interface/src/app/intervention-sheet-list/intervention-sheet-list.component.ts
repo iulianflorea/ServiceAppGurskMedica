@@ -5,7 +5,7 @@ import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {HttpClient} from "@angular/common/http";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 
 @Component({
@@ -26,7 +26,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
   displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'delete', 'update'];
   dataSource: InterventionSheetDto[] = [];
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
-  interventionSheet: InterventionSheetDto = new InterventionSheetDto();
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -34,7 +34,8 @@ export class InterventionSheetListComponent implements AfterViewInit {
     this.dataSource2.paginator = this.paginator;
   }
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -61,11 +62,13 @@ export class InterventionSheetListComponent implements AfterViewInit {
     const id = interventionSheet.id;
     this.httpClient.get("/api/intervention-sheet/" + id).subscribe((response) => {
       console.log(response);
-      this.interventionSheet = response as InterventionSheetDto;
+
     })
   }
 
   update(interventionSheet: InterventionSheetDto) {
+
+
     this.httpClient.put("/api/intervention-sheet/update", interventionSheet).subscribe((response) =>{
       console.log(response);
     })

@@ -11,6 +11,7 @@ const routes: Routes = [
   {path: "register", component: UserRegisterComponent},
   {path: "login", component: UserLoginComponent},
   {path: "home", component: HomeComponent},
+  {path: "intervention-sheet/:id", component: InterventionSheetFormComponent},
   {path: "intervention-sheet", component: InterventionSheetFormComponent},
   {path: "intervention-sheet-list", component: InterventionSheetListComponent},
   {path: "intervention-sheet-update", component: InterventionSheetUpdateComponent}

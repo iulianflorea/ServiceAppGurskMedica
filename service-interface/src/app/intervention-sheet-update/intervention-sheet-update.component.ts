@@ -23,7 +23,7 @@ export class InterventionSheetUpdateComponent implements OnInit{
   employeeList: EmployeeDto[] = [];
   typeOfInterventionSelected: any;
   typeOfInterventionList: string[] = [];
-  interventionSheetUpdate: InterventionSheetDto = new InterventionSheetDto;
+
 
 
   interventionSheetForm: FormGroup = new FormGroup({
@@ -98,7 +98,7 @@ export class InterventionSheetUpdateComponent implements OnInit{
     const id = interventionSheet.id;
     this.httpClient.get("/api/intervention-sheet/" + id).subscribe((response) => {
       console.log(response);
-      this.interventionSheetUpdate = response as InterventionSheetDto;
+
     })
   }
 }

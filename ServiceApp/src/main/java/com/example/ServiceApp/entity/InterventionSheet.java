@@ -3,6 +3,7 @@ package com.example.ServiceApp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class InterventionSheet {
     @JoinColumn(name = "equipment_id", insertable = false, updatable = false)
     private Equipment equipment;
     private String serialNumber;
-    private Date dateOfIntervention;
+    private LocalDate dateOfIntervention;
     @Column(name = "customer_id")
     private Long customerId;
     @ManyToOne(targetEntity = Customer.class, fetch = FetchType.EAGER)

@@ -45,25 +45,38 @@
 
           <mat-form-field>
             <mat-label>Engineer Note</mat-label>
-            <input matInput formControlName="engineerNote"/>
+            <input matInput [(ngModel)]="engineerNote" [ngModelOptions]="{standalone: true}"/>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Serial Number</mat-label>
-            <input matInput formControlName="serialNumber"/>
+            <input matInput [(ngModel)]="serialNumber" [ngModelOptions]="{standalone: true}"/>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Noticed</mat-label>
-            <input matInput formControlName="noticed"/>
+            <input matInput [(ngModel)]="noticed" [ngModelOptions]="{standalone: true}"/>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Fixed</mat-label>
-            <input matInput formControlName="fixed"/>
+            <input matInput [(ngModel)]="fixed" [ngModelOptions]="{standalone: true}"/>
           </mat-form-field>
 
-          <app-date-picker></app-date-picker>
+          <mat-form-field appearance="fill">
+            <mat-label>Date of intervention</mat-label>
+            <input matInput placeholder="YYYY-MM-DD" name="dataOfIntervention" [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+<!--          <mat-form-field appearance="fill">-->
+<!--            <mat-label>Subject</mat-label>-->
+<!--            <textarea required minlength="6" maxlength="100" matInput id="subject"-->
+<!--                      [(ngModel)]="taskCreateDto.subject" name="sub"><>-->
+<!--          </mat-form-field>-->
+
+<!--          <app-date-picker></app-date-picker>-->
+
+
 
           <button mat-raised-button type="submit" color="primary">Save</button>
         </form>
