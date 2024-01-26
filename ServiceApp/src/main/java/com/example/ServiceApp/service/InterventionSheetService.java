@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
+import javax.naming.directory.SearchResult;
 import java.util.List;
 
 @Service
@@ -41,6 +42,7 @@ public class InterventionSheetService {
         interventionSheetToBeSaved.setCustomerId(customer.getId());
         interventionSheetToBeSaved.setEmployeeId(employee.getId());
         InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheetToBeSaved);
+        System.out.println(interventionSheetDto.getDateOfIntervention());
         return interventionSheetMapper.toDto(interventionSheetSaved);
     }
 
@@ -72,6 +74,7 @@ public class InterventionSheetService {
     public void delete (Long id) {
         interventionSheetRepository.deleteById(id);
     }
+
 
     ObjectMapper objectMapper = new ObjectMapper();
     String enumAsJson = objectMapper.writeValueAsString(TypeOfIntervention.values());

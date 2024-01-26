@@ -1,47 +1,75 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {DatePipe} from "@angular/common";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {MatSort, MatSortModule, SortDirection} from "@angular/material/sort";
-import {MatTableModule} from "@angular/material/table";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {HttpClient} from "@angular/common/http";
-import {InterventionSheetFormComponent} from "../intervention-sheet-form/intervention-sheet-form.component";
-import {CustomerDto} from "../dtos/customerDto";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
+import {RouterLink} from "@angular/router";
 
 
 @Component({
-    selector: 'app-intervention-sheet-list',
-    templateUrl: './intervention-sheet-list.component.html',
-    styleUrls: ['./intervention-sheet-list.component.css'],
-    standalone: true,
-    imports: [MatProgressSpinnerModule, MatTableModule, MatSortModule, MatPaginatorModule, DatePipe]
+  selector: 'app-intervention-sheet-list',
+  templateUrl: './intervention-sheet-list.component.html',
+  styleUrls: ['./intervention-sheet-list.component.css'],
+  imports: [
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatButtonModule,
+    RouterLink
+  ],
+  standalone: true
 })
-export class InterventionSheetListComponent {
-    displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote'];
-    dataSource: InterventionSheetDto[] = [];
-    customerSource: any;
+export class InterventionSheetListComponent implements AfterViewInit {
 
-    constructor(private httpClient: HttpClient) {
+  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'delete', 'update'];
+  dataSource: InterventionSheetDto[] = [];
+  dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
+  interventionSheet: InterventionSheetDto = new InterventionSheetDto();
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource2.paginator = this.paginator;
+  }
+
+  constructor(private httpClient: HttpClient) {
+  }
+
+  ngOnInit() {
+    this.httpClient.get("/api/intervention-sheet/find-all").subscribe((response) => {
+      console.log(response);
+      this.dataSource = response as InterventionSheetDto[];
+      this.dataSource2.data = this.dataSource;
+    })
+
+  }
+
+  delete(interventionSheet: InterventionSheetDto) {
+    const id = interventionSheet.id;
+    if (confirm("Sure you want to delete it?")) {
+      this.httpClient.delete("/api/intervention-sheet/" + id).subscribe((response) => {
+        console.log(response);
+        alert("Intervention was deleted");
+        this.ngOnInit();
+      })
     }
+  }
 
-    ngOnInit() {
-        this.httpClient.get("/api/intervention-sheet/find-all").subscribe((response) => {
-            console.log(response);
-            this.dataSource = response as InterventionSheetDto[];
-        })
+  getById(interventionSheet: InterventionSheetDto) {
+    const id = interventionSheet.id;
+    this.httpClient.get("/api/intervention-sheet/" + id).subscribe((response) => {
+      console.log(response);
+      this.interventionSheet = response as InterventionSheetDto;
+    })
+  }
 
-    }
-
-    getCustomerById(customer: number) {
-        const id = customer;
-        this.httpClient.get("/api/customer/" + id).subscribe((response) => {
-            console.log(response);
-            this.customerSource = response;
-        })
-    }
-
-
+  update(interventionSheet: InterventionSheetDto) {
+    this.httpClient.put("/api/intervention-sheet/update", interventionSheet).subscribe((response) =>{
+      console.log(response);
+    })
+  }
 
 
 }

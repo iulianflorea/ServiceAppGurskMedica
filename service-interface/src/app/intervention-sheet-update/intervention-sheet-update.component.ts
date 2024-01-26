@@ -1,21 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {EquipmentDto} from "../dtos/equipmentDto";
 import {CustomerDto} from "../dtos/customerDto";
 import {EmployeeDto} from "../dtos/employeeDto";
+import {InterventionSheetDto} from "../dtos/interventionSheetDto";
+import {FormControl, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {InterventionSheetListComponent} from "../intervention-sheet-list/intervention-sheet-list.component";
 
-
 @Component({
-  selector: 'app-intervention-sheet-form',
-  templateUrl: './intervention-sheet-form.component.html',
-  styleUrls: ['./intervention-sheet-form.component.css'],
-
+  selector: 'app-intervention-sheet-update',
+  templateUrl: './intervention-sheet-update.component.html',
+  styleUrls: ['./intervention-sheet-update.component.css']
 })
-export class InterventionSheetFormComponent implements OnInit {
+export class InterventionSheetUpdateComponent implements OnInit{
   equipmentSelected: any;
   equipmentList: EquipmentDto[] = [];
   dateOfIntervention: Date = new Date();
@@ -35,7 +33,7 @@ export class InterventionSheetFormComponent implements OnInit {
     engineerNote: new FormControl()
   });
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(private httpClient: HttpClient) {
   }
 
   ngOnInit() {
@@ -90,10 +88,17 @@ export class InterventionSheetFormComponent implements OnInit {
     })
   }
 
-update(interventionSheet: InterventionSheetDto) {
+  update(interventionSheet: InterventionSheetDto) {
+    this.httpClient.put("/api/intervention-sheet/update", interventionSheet).subscribe((response) =>{
+      console.log(response);
+    })
+  }
 
-}
-
-
-
+  getById(interventionSheet: InterventionSheetDto) {
+    const id = interventionSheet.id;
+    this.httpClient.get("/api/intervention-sheet/" + id).subscribe((response) => {
+      console.log(response);
+      this.interventionSheetUpdate = response as InterventionSheetDto;
+    })
+  }
 }
