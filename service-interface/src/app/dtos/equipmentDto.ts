@@ -4,4 +4,5 @@ export class EquipmentDto {
   id?: number;
   model?: string;
   producerId?: ProducerDto;
+  producerName?: string;
 }

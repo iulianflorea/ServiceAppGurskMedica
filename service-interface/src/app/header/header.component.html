@@ -18,11 +18,13 @@
 
       <button *ngIf="!isUserLoggedIn()" routerLink="/register" mat-button color="primary"> register</button>
 
-      <button *ngIf="isUserLoggedIn()" routerLink="/classes" mat-button color="primary">Clienti</button>
+      <button *ngIf="isUserLoggedIn()" routerLink="/customer-list" mat-button color="primary">Customers</button>
 
-      <button *ngIf="isUserLoggedIn()" routerLink="/students" mat-button color="primary">Echipament</button>
+      <button *ngIf="isUserLoggedIn()" routerLink="/product-list" mat-button color="primary">Products</button>
 
-      <button *ngIf="isUserLoggedIn()" routerLink="/intervention-sheet-list" mat-button color="primary">Interventii</button>
+      <button *ngIf="isUserLoggedIn()" routerLink="/students" mat-button color="primary">Equipments</button>
+
+      <button *ngIf="isUserLoggedIn()" routerLink="/intervention-sheet-list" mat-button color="primary">Interventions</button>
 
     </div>
   </div>

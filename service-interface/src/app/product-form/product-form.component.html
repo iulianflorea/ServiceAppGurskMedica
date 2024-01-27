@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="container-form">
+    <div class="">
+      <div class="title-form">
+        <h1>Create product</h1>
+      </div>
+      <div>
+        <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="intervention-sheet-form">
+
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Code</mat-label>
+            <input matInput [(ngModel)]="cod" [ngModelOptions]="{standalone: true}"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Producer</mat-label>
+            <mat-select [(ngModel)]="producerSelected" [ngModelOptions]="{standalone: true}">
+              <mat-option *ngFor="let producer of producerList" [value]="producer.id">
+                {{producer.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Quantity</mat-label>
+            <input matInput [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}"/>
+          </mat-form-field>
+
+          <button mat-raised-button type="submit" color="primary">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

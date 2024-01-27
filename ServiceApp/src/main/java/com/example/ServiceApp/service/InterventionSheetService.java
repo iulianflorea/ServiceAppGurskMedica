@@ -41,9 +41,14 @@ public class InterventionSheetService {
         interventionSheetToBeSaved.setEquipmentId(equipment.getId());
         interventionSheetToBeSaved.setCustomerId(customer.getId());
         interventionSheetToBeSaved.setEmployeeId(employee.getId());
-        InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheetToBeSaved);
-        System.out.println(interventionSheetDto.getDateOfIntervention());
-        return interventionSheetMapper.toDto(interventionSheetSaved);
+        if (interventionSheetDto.getId() == null) {
+            InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheetToBeSaved);
+            System.out.println(interventionSheetDto.getDateOfIntervention());
+            return interventionSheetMapper.toDto(interventionSheetSaved);
+        } else {
+            update(interventionSheetDto);
+        }
+        return interventionSheetMapper.toDto(interventionSheetToBeSaved);
     }
 
     public InterventionSheetDto findById(Long id) {
@@ -71,7 +76,7 @@ public class InterventionSheetService {
         return interventionSheetMapper.toDto(interventionSheetSaved);
     }
 
-    public void delete (Long id) {
+    public void delete(Long id) {
         interventionSheetRepository.deleteById(id);
     }
 

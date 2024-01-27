@@ -14,5 +14,6 @@ public class ProductDto {
     private String cod;
     private Integer quantity;
     private Long producer;
+    private String producerName;
 }
 

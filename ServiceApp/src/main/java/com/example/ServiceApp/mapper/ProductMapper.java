@@ -19,6 +19,7 @@ public class ProductMapper {
                 .name(productDto.getName())
                 .cod(productDto.getCod())
                 .quantity(productDto.getQuantity())
+                .producerId(productDto.getProducer())
                 .build();
     }
 
@@ -28,8 +29,14 @@ public class ProductMapper {
                 .cod(product.getCod())
                 .name(product.getName())
                 .quantity(product.getQuantity())
-                .producer(product.getProducerId().getId())
+                .producer(product.getProducerId())
+                .producerName(getProducerName(product))
                 .build();
+    }
+
+    private String getProducerName(Product product) {
+        Producer producer = product.getProducer();
+        return (producer != null) ? producer.getName() : null;
     }
 
     public List<ProductDto> toDtoList(List<Product> productList) {

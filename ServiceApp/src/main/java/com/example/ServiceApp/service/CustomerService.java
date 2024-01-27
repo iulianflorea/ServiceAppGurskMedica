@@ -22,8 +22,13 @@ public class CustomerService {
 
     public CustomerDto create(CustomerDto customerDto) {
         Customer customerToBeSaved = customerMapper.toCustomer(customerDto);
-        Customer customerSaved = customerRepository.save(customerToBeSaved);
-        return customerMapper.toDto(customerSaved);
+        if (customerDto.getId() == null) {
+            Customer customerSaved = customerRepository.save(customerToBeSaved);
+            return customerMapper.toDto(customerSaved);
+        } else {
+            update(customerDto);
+        }
+        return customerMapper.toDto(customerToBeSaved);
     }
 
     public CustomerDto findById(Long id) {

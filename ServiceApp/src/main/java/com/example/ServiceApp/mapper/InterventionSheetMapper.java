@@ -30,23 +30,6 @@ public class InterventionSheetMapper {
                 .build();
     }
 
-//    public InterventionSheetDto toDto(InterventionSheet interventionSheet) {
-//        return InterventionSheetDto.builder()
-//                .id(interventionSheet.getId())
-//                .typeOfIntervention(interventionSheet.getTypeOfIntervention())
-//                .equipmentId(interventionSheet.getEquipmentId())
-//                .serialNumber(interventionSheet.getSerialNumber())
-//                .dateOfIntervention(interventionSheet.getDateOfIntervention())
-//                .customerId(interventionSheet.getCustomerId())
-//                .employeeId(interventionSheet.getEmployeeId())
-//                .noticed(interventionSheet.getNoticed())
-//                .fixed(interventionSheet.getFixed())
-//                .engineerNote(interventionSheet.getEngineerNote())
-//                .customerName(interventionSheet.getCustomer().getName())
-//                .employeeName(interventionSheet.getEmployee().getName())
-//                .equipmentName(interventionSheet.getEquipment().getModel())
-//                .build();
-//    }
 
 
     public InterventionSheetDto toDto(InterventionSheet interventionSheet) {

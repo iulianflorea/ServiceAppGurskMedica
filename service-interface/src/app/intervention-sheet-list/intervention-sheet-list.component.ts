@@ -23,7 +23,7 @@ import {Router, RouterLink} from "@angular/router";
 })
 export class InterventionSheetListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'delete', 'update'];
+  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'update', 'delete'];
   dataSource: InterventionSheetDto[] = [];
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
 
@@ -52,7 +52,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
     if (confirm("Sure you want to delete it?")) {
       this.httpClient.delete("/api/intervention-sheet/" + id).subscribe((response) => {
         console.log(response);
-        alert("Intervention was deleted");
+        alert(" The intervention was deleted");
         this.ngOnInit();
       })
     }
@@ -67,7 +67,6 @@ export class InterventionSheetListComponent implements AfterViewInit {
   }
 
   update(interventionSheet: InterventionSheetDto) {
-
 
     this.httpClient.put("/api/intervention-sheet/update", interventionSheet).subscribe((response) =>{
       console.log(response);

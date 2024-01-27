@@ -24,8 +24,11 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import {MatDividerModule} from "@angular/material/divider";
-import {InterventionSheetUpdateComponent} from './intervention-sheet-update/intervention-sheet-update.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
+import { CustomerFormComponent } from './customer-form/customer-form.component';
+import { CustomerListComponent } from './customer-list/customer-list.component';
+import { ProductFormComponent } from './product-form/product-form.component';
+import { ProductListComponent } from './product-list/product-list.component';
 
 
 @NgModule({
@@ -36,7 +39,10 @@ import {MatFormFieldModule} from "@angular/material/form-field";
         UserLoginComponent,
         HomeComponent,
         InterventionSheetFormComponent,
-        InterventionSheetUpdateComponent,
+        CustomerFormComponent,
+        CustomerListComponent,
+        ProductFormComponent,
+        ProductListComponent,
     ],
     imports: [
         BrowserModule,
@@ -62,9 +68,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
         MatFormFieldModule
     ],
     providers: [],
-    exports: [
-        InterventionSheetUpdateComponent
-    ],
+    exports: [],
     bootstrap: [AppComponent]
 })
 export class AppModule {

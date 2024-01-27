@@ -18,8 +18,10 @@ public class Product {
     private String name;
     private String cod;
     private Integer quantity;
-    @ManyToOne
-    @JoinColumn(name = "producer_id")
-    private Producer producerId;
+    @Column(name = "producer_id")
+    private Long producerId;
+    @ManyToOne(targetEntity = Producer.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "producer_id", insertable = false, updatable = false)
+    private Producer producer;
 
 }

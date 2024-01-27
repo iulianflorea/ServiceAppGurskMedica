@@ -31,13 +31,13 @@ public class CustomerController {
         return customerService.findAll();
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public CustomerDto update(@RequestBody CustomerDto customerDto) {
         return customerService.update(customerDto);
     }
 
-    @DeleteMapping
-    public void delete(Long id) {
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
         customerService.delete(id);
     }
 }
