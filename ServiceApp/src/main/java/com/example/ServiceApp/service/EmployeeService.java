@@ -21,8 +21,13 @@ public class EmployeeService {
 
     public EmployeeDto create (EmployeeDto employeeDto) {
         Employee employeeToBeSaved = employeeMapper.toEmployee(employeeDto);
-        Employee employeeSaved = employeeRepository.save(employeeToBeSaved);
-        return employeeMapper.toDto(employeeSaved);
+        if(employeeDto.getId() == null) {
+            Employee employeeSaved = employeeRepository.save(employeeToBeSaved);
+            return employeeMapper.toDto(employeeSaved);
+        } else {
+            update(employeeDto);
+        }
+        return employeeMapper.toDto(employeeToBeSaved);
     }
 
     public EmployeeDto findById(Long id) {

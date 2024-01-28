@@ -80,7 +80,7 @@ export class InterventionSheetFormComponent implements OnInit {
   }
 
   getEmployeeList() {
-    this.httpClient.get("/api/employee/find-list").subscribe((response) => {
+    this.httpClient.get("/api/employee/find-all").subscribe((response) => {
       console.log(response);
       this.employeeList = response as EmployeeDto[];
     })

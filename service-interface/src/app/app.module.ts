@@ -29,6 +29,10 @@ import { CustomerFormComponent } from './customer-form/customer-form.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { ProductFormComponent } from './product-form/product-form.component';
 import { ProductListComponent } from './product-list/product-list.component';
+import { EquipmentFormComponent } from './equipment-form/equipment-form.component';
+import { EquipmentListComponent } from './equipment-list/equipment-list.component';
+import { EmployeeFormComponent } from './employee-form/employee-form.component';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
 
 
 @NgModule({
@@ -43,6 +47,10 @@ import { ProductListComponent } from './product-list/product-list.component';
         CustomerListComponent,
         ProductFormComponent,
         ProductListComponent,
+        EquipmentFormComponent,
+        EquipmentListComponent,
+        EmployeeFormComponent,
+        EmployeeListComponent,
     ],
     imports: [
         BrowserModule,

@@ -21,8 +21,13 @@ public class EquipmentService {
 
     public EquipmentDto create(EquipmentDto equipmentDto) {
         Equipment equipmentToBeSaved = equipmentMapper.toEntity(equipmentDto);
-        Equipment equipmentSaved = equipmentRepository.save(equipmentToBeSaved);
-        return equipmentMapper.toDto(equipmentSaved);
+        if (equipmentDto.getId() == null) {
+            Equipment equipmentSaved = equipmentRepository.save(equipmentToBeSaved);
+            return equipmentMapper.toDto(equipmentSaved);
+        } else {
+            update(equipmentDto);
+        }
+        return equipmentMapper.toDto(equipmentToBeSaved);
     }
 
     public EquipmentDto findById(Long id) {

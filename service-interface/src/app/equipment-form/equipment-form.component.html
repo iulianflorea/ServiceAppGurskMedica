@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="container-form">
+    <div class="">
+      <div class="title-form">
+        <h1>Create equipment</h1>
+      </div>
+      <div>
+        <form [formGroup]="equipmentForm" (ngSubmit)="saveEquipment()" class="intervention-sheet-form">
+
+          <mat-form-field>
+            <mat-label>Model</mat-label>
+            <input matInput [(ngModel)]="model" [ngModelOptions]="{standalone: true}"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Producer</mat-label>
+            <mat-select [(ngModel)]="producerSelected" [ngModelOptions]="{standalone: true}">
+              <mat-option *ngFor="let producer of producerList" [value]="producer.id">
+                {{producer.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-raised-button type="submit" color="primary">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

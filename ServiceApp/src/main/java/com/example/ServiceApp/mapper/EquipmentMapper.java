@@ -2,8 +2,10 @@ package com.example.ServiceApp.mapper;
 
 import com.example.ServiceApp.dto.EquipmentDto;
 import com.example.ServiceApp.entity.Equipment;
+import com.example.ServiceApp.entity.Producer;
 import org.springframework.stereotype.Component;
 
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +24,15 @@ public class EquipmentMapper {
                 .id(equipment.getId())
                 .model(equipment.getModel())
                 .producerId(equipment.getProducerId())
+                .producerName(getProducerName(equipment))
                 .build();
     }
+
+    private String getProducerName(Equipment equipment) {
+        Producer producer = equipment.getProducer();
+        return (producer != null) ? producer.getName() : null;
+    }
+
 
     public List<EquipmentDto> toDtoList(List<Equipment> equipmentList) {
         List<EquipmentDto> equipmentDtoList = new ArrayList<>();

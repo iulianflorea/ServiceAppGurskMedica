@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="container-form">
+    <div class="">
+      <div class="title-form">
+        <h1>Create Employee</h1>
+      </div>
+      <div>
+        <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()" class="intervention-sheet-form">
+
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>CNP</mat-label>
+            <input matInput [(ngModel)]="cnp" [ngModelOptions]="{standalone: true}"/>
+          </mat-form-field>
+
+          <button mat-raised-button type="submit" color="primary">Save</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

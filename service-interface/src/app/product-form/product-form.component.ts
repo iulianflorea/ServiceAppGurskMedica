@@ -18,7 +18,7 @@ export class ProductFormComponent implements OnInit {
   quantity: any;
   producerList: ProducerDto[] = [];
   producerSelected: any;
-  producerName: any;
+
 
 
   productForm: FormGroup = new FormGroup({

@@ -20,12 +20,12 @@ public class EmployeeController {
     public EmployeeDto create(@RequestBody EmployeeDto employeeDto) {
         return employeeService.create(employeeDto);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/find-by-id/{id}")
     public EmployeeDto findById(@PathVariable Long id) {
        return employeeService.findById(id);
     }
 
-    @GetMapping("/find-list")
+    @GetMapping("/find-all")
     public List<EmployeeDto> findAll() {
         return employeeService.findAll();
     }
@@ -35,7 +35,7 @@ public class EmployeeController {
         return employeeService.update(employeeDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         employeeService.delete(id);
     }

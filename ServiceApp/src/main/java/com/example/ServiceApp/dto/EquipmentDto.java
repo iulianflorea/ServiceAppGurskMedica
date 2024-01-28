@@ -12,4 +12,5 @@ public class EquipmentDto {
     private Long id;
     private String model;
     private Long producerId;
+    private String producerName;
 }

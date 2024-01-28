@@ -21,7 +21,7 @@ public class EquipmentController {
         return equipmentService.create(equipmentDto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("find-by-id/{id}")
     public EquipmentDto findById(@PathVariable Long id) {
         return equipmentService.findById(id);
     }
@@ -36,7 +36,7 @@ public class EquipmentController {
         return equipmentService.update(equipmentDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         equipmentService.delete(id);
     }

@@ -15,7 +15,6 @@ export class CustomerFormComponent implements OnInit {
   cui: any;
   address: any;
   telephone: any;
-  customer: CustomerDto = new CustomerDto();
 
   customerForm: FormGroup = new FormGroup({
     name: new FormControl,
@@ -39,7 +38,6 @@ export class CustomerFormComponent implements OnInit {
         this.cui = response.cui;
         this.address = response.address;
         this.telephone = response.telephone;
-        this.customer = response as CustomerDto;
       })
     }
 
@@ -60,10 +58,10 @@ export class CustomerFormComponent implements OnInit {
     })
   }
 
-  update(customer: CustomerDto) {
-    this.httpClient.put("/api/customer/update", customer).subscribe((response) => {
-      console.log(response);
-    })
-  }
+  // update(customer: CustomerDto) {
+  //   this.httpClient.put("/api/customer/update", customer).subscribe((response) => {
+  //     console.log(response);
+  //   })
+  // }
 
 }
