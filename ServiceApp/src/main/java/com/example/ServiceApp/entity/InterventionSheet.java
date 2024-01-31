@@ -31,7 +31,7 @@ public class InterventionSheet {
     @ManyToOne(targetEntity = Customer.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private Customer customer;
-
+    private Integer yearsOfWarranty;
     @Column(name = "employee_id")
     private Long employeeId;
     @ManyToOne(targetEntity = Employee.class, fetch = FetchType.EAGER)
@@ -40,5 +40,5 @@ public class InterventionSheet {
     private String noticed;
     private String fixed;
     private String engineerNote;
-
+    private LocalDate dataOfExpireWarranty;
 }

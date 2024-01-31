@@ -4,6 +4,8 @@ export class InterventionSheetDto {
   equipmentId?: number;
   serialNumber?: string;
   dateOfIntervention?: string;
+  dateOfExpireWarranty?: string
+  yearsOfWarranty?: number;
   customerId?: number;
   employeeId?: number;
   noticed?: string;

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,8 @@ public class InterventionSheetController {
     public InterventionSheetController(InterventionSheetService interventionSheetService) {
         this.interventionSheetService = interventionSheetService;
     }
-@PostMapping
+
+    @PostMapping
     public InterventionSheetDto create(@RequestBody InterventionSheetDto interventionSheetDto) {
         return interventionSheetService.create(interventionSheetDto);
     }
@@ -30,7 +32,7 @@ public class InterventionSheetController {
     }
 
     @GetMapping("/find-all")
-    public List<InterventionSheetDto> findAll(){
+    public List<InterventionSheetDto> findAll() {
         return interventionSheetService.findAll();
     }
 
@@ -44,9 +46,9 @@ public class InterventionSheetController {
         interventionSheetService.delete(id);
     }
 
-@GetMapping("/type")
+    @GetMapping("/type")
     public ResponseEntity<String> getStatusList() throws JsonProcessingException {
-        ObjectMapper objectMapper =new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         String enumAsjson = objectMapper.writeValueAsString(TypeOfIntervention.values());
         return ResponseEntity.ok(enumAsjson);
     }

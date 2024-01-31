@@ -21,6 +21,8 @@ public class InterventionSheetDto {
     private Long equipmentId;
     private String serialNumber;
     private LocalDate dateOfIntervention;
+    private LocalDate dateOfExpireWarranty;
+    private Integer yearsOfWarranty;
     private Long customerId;
     private Long employeeId;
     private String noticed;

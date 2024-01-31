@@ -6,28 +6,38 @@
     <table mat-table [dataSource]="dataSource2">
 
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> No.</th>
+        <th mat-header-cell *matHeaderCellDef>No.</th>
         <td mat-cell *matCellDef="let element"> {{element.id}} </td>
       </ng-container>
 
       <ng-container matColumnDef="typeOfIntervention">
-        <th mat-header-cell *matHeaderCellDef> Type of intervention</th>
+        <th mat-header-cell *matHeaderCellDef>Type of intervention</th>
         <td mat-cell *matCellDef="let element"> {{element.typeOfIntervention}} </td>
       </ng-container>
 
       <ng-container matColumnDef="equipmentName">
-        <th mat-header-cell *matHeaderCellDef> Equipment name</th>
+        <th mat-header-cell *matHeaderCellDef>Equipment name</th>
         <td mat-cell *matCellDef="let element"> {{element.equipmentName}} </td>
       </ng-container>
 
       <ng-container matColumnDef="serialNumber">
-        <th mat-header-cell *matHeaderCellDef> Serial number</th>
+        <th mat-header-cell *matHeaderCellDef>Serial number</th>
         <td mat-cell *matCellDef="let element"> {{element.serialNumber}} </td>
       </ng-container>
 
       <ng-container matColumnDef="dateOfIntervention">
-        <th mat-header-cell *matHeaderCellDef> Date of intervention</th>
+        <th mat-header-cell *matHeaderCellDef>Date of intervention</th>
         <td mat-cell *matCellDef="let element"> {{element.dateOfIntervention}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataOfExpireWarranty">
+        <th mat-header-cell *matHeaderCellDef>Date of expire warranty</th>
+        <td mat-cell *matCellDef="let element"> {{element.dateOfExpireWarranty}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="yearsOfWarranty">
+        <th mat-header-cell *matHeaderCellDef>Years of warranty</th>
+        <td mat-cell *matCellDef="let element"> {{element.yearsOfWarranty}} </td>
       </ng-container>
 
       <ng-container matColumnDef="customerName">

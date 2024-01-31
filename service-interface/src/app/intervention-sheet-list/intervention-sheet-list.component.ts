@@ -23,7 +23,7 @@ import {Router, RouterLink} from "@angular/router";
 })
 export class InterventionSheetListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'update', 'delete'];
+  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'dataOfExpireWarranty', 'yearsOfWarranty', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'update', 'delete'];
   dataSource: InterventionSheetDto[] = [];
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
 

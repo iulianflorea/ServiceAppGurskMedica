@@ -19,6 +19,8 @@ export class InterventionSheetFormComponent implements OnInit {
   equipmentSelected: any;
   equipmentList: EquipmentDto[] = [];
   dateOfIntervention: string | undefined = "";
+  dateOfExpireWarranty: string | undefined = "";
+  yearsOfWarranty: any;
   customerSelected: any;
   customerList: CustomerDto[] = [];
   employeeSelected: any;
@@ -35,7 +37,8 @@ export class InterventionSheetFormComponent implements OnInit {
     serialNumber: new FormControl(),
     noticed: new FormControl(),
     fixed: new FormControl(),
-    engineerNote: new FormControl()
+    engineerNote: new FormControl(),
+    yearsOfWarranty: new FormControl()
   });
 
   constructor(private httpClient: HttpClient, private router: Router, private route: ActivatedRoute) {
@@ -60,7 +63,9 @@ export class InterventionSheetFormComponent implements OnInit {
         this.noticed = response.noticed;
         this.fixed = response.fixed;
         this.engineerNote = response.engineerNote;
-        this.dateOfIntervention = response.dateOfIntervention
+        this.dateOfIntervention = response.dateOfIntervention;
+        this.dateOfExpireWarranty = response.dateOfExpireWarranty;
+        this.yearsOfWarranty = response.yearsOfWarranty;
       })
     }
   }
@@ -97,6 +102,8 @@ export class InterventionSheetFormComponent implements OnInit {
       id: this.id,
       typeOfIntervention: this.typeOfInterventionSelected,
       dateOfIntervention: this.dateOfIntervention,
+      dateOfExpireWarranty: this.dateOfExpireWarranty,
+      yearsOfWarranty: this.yearsOfWarranty,
       serialNumber: this.serialNumber,
       noticed: this.noticed,
       fixed: this.fixed,
