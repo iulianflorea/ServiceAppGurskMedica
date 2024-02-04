@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Injectable, ViewChild} from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
@@ -6,6 +6,10 @@ import {HttpClient} from "@angular/common/http";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {Router, RouterLink} from "@angular/router";
+import {Observable} from "rxjs";
+import {FormsModule} from "@angular/forms";
+import {NgForOf, NgIf} from "@angular/common";
+import {MatInputModule} from "@angular/material/input";
 
 
 @Component({
@@ -17,15 +21,24 @@ import {Router, RouterLink} from "@angular/router";
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
-    RouterLink
+    RouterLink,
+    FormsModule,
+    NgForOf,
+    NgIf,
+    MatInputModule
   ],
   standalone: true
+})
+@Injectable({
+  providedIn: 'root'
 })
 export class InterventionSheetListComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'dataOfExpireWarranty', 'yearsOfWarranty', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'update', 'delete'];
   dataSource: InterventionSheetDto[] = [];
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
+  keyword: string = '';
+  searchResult: InterventionSheetDto[] = [];
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -72,6 +85,19 @@ export class InterventionSheetListComponent implements AfterViewInit {
       console.log(response);
     })
   }
+
+  // @ts-ignore
+  searchInterventionSheet(keyword:string): Observable<InterventionSheetDto[]> {
+    return this.httpClient.get<InterventionSheetDto[]>(`/api/intervention-sheet/search?keyword=${keyword}`);
+  }
+
+  search() {
+    this.searchInterventionSheet(this.keyword).subscribe(data =>this.searchResult = data);
+  }
+
+
+
+
 
 
 }

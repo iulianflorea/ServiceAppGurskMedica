@@ -1,5 +1,19 @@
+<mat-form-field>
+  <mat-label>Enter serial number</mat-label>
+  <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
+</mat-form-field>
+<button mat-raised-button (click)="search()" type="submit" color="primary">Search</button>
+<div *ngFor="let result of searchResult">
+  {{result}}
+</div>
+
+
 <div class="containerList">
-  <button mat-mini-fab color="accent" routerLink="/intervention-sheet" aria-label="Example icon button with a plus one icon">
+
+
+  <button mat-mini-fab color="accent" routerLink="/intervention-sheet"
+          aria-label="Example icon button with a plus one icon">
+
     <mat-icon>plus_one</mat-icon>
   </button>
   <div class="mat-elevation-z8">

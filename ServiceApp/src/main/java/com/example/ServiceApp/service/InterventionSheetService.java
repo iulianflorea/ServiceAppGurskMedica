@@ -89,6 +89,12 @@ public class InterventionSheetService {
         return dataAchizitie.plusYears(durataGarantie);
     }
 
+    public List<InterventionSheet> searchSerialNumber(String keyword) {
+        return interventionSheetRepository.findBySerialNumber(keyword);
+    }
+
+
+
 
     ObjectMapper objectMapper = new ObjectMapper();
     String enumAsJson = objectMapper.writeValueAsString(TypeOfIntervention.values());
