@@ -7,7 +7,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {Router, RouterLink} from "@angular/router";
 import {Observable} from "rxjs";
-import {FormsModule} from "@angular/forms";
+import {FormGroup, FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {MatInputModule} from "@angular/material/input";
 
@@ -59,6 +59,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
     })
 
   }
+
 
   delete(interventionSheet: InterventionSheetDto) {
     const id = interventionSheet.id;
