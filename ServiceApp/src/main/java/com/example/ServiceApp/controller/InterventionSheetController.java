@@ -57,8 +57,8 @@ public class InterventionSheetController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<InterventionSheet>> searchInterventionSheet(@RequestParam String keyword) {
-        List<InterventionSheet> interventionSheetList = interventionSheetService.searchSerialNumber(keyword);
+    public ResponseEntity<List<InterventionSheetDto>> searchInterventionSheet(@RequestParam String keyword) {
+        List<InterventionSheetDto> interventionSheetList = interventionSheetService.searchSerialNumber(keyword);
         return new ResponseEntity<>(interventionSheetList, HttpStatus.OK);
     }
 }

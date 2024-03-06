@@ -93,6 +93,13 @@ export class InterventionSheetListComponent implements AfterViewInit {
   }
 
   search() {
+    this.searchResult = [];
+    if(this.keyword) {
+      this.httpClient.get(`/api/intervention-sheet/search?keyword=${this.keyword}`).subscribe((data: any) => {
+        console.log(data);
+        this.dataSource2 = data;
+      })
+    }
     this.searchInterventionSheet(this.keyword).subscribe(data =>this.searchResult = data);
   }
 

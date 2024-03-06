@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface InterventionSheetRepository extends JpaRepository<InterventionSheet, Long> {
 
-    List<InterventionSheet> findBySerialNumber(String keyword);
+    List<InterventionSheet> findBySerialNumberOrNoticedOrCustomerNameOrEmployeeName(String sn, String noticed, String customer, String employee);
 
 }

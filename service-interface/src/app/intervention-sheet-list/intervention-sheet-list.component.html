@@ -1,12 +1,11 @@
 <mat-form-field>
   <mat-label>Enter serial number</mat-label>
   <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
+  <button mat-raised-button (click)="search()" type="submit" color="primary">Search</button>
 </mat-form-field>
-<button mat-raised-button (click)="search()" type="submit" color="primary">Search</button>
 <div *ngFor="let result of searchResult">
-  {{result}},
-</div>
 
+</div>
 
 <div class="containerList">
 
