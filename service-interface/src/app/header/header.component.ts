@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -7,12 +9,11 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
-  isUserLoggedIn(): boolean{
-    return localStorage.getItem("loggedInUserEmail") != null
-      && localStorage.getItem("loggedInUserPass") != null;
+  constructor(private httpClient: HttpClient, private router: Router) {
   }
-  logoutUser(){
-    localStorage.removeItem("loggedInUserEmail");
-    localStorage.removeItem("loggedInUserPass");
+  logout() {
+    localStorage.clear();
+    this.router.navigate(["/login"]);
   }
+
 }

@@ -1,42 +1,42 @@
 package com.example.ServiceApp.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-//(Spring stie sa lucreze doar cu UserDetails,
-// asa ca noi a trebuie sa ne facem o clasa pentru user-ul nostru,AppUser,care sa implementeze UserDetails)
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.List;
 
-@Entity
-@Table(name = "app_user")
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-public class AppUser implements UserDetails {
-
+@NoArgsConstructor
+@Data
+@Builder
+@Entity
+@Table(name ="user")
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
+    private String firstname;
+    private String lastname;
     private String email;
-
-    private String pass;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority("USER");
-        return Collections.singleton(userAuthority);
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
     public String getPassword() {
-        return pass;
+        return password;
     }
 
     @Override
@@ -64,3 +64,4 @@ public class AppUser implements UserDetails {
         return true;
     }
 }
+

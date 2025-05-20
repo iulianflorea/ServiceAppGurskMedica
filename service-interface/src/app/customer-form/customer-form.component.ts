@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CustomerDto} from "../dtos/customerDto";
+import {UserDto} from "../dtos/userDto";
 
 @Component({
   selector: 'app-customer-form',
@@ -58,10 +59,6 @@ export class CustomerFormComponent implements OnInit {
     })
   }
 
-  // update(customer: CustomerDto) {
-  //   this.httpClient.put("/api/customer/update", customer).subscribe((response) => {
-  //     console.log(response);
-  //   })
-  // }
+
 
 }

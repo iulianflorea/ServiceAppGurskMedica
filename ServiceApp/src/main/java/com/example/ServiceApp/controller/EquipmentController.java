@@ -10,8 +10,6 @@ import java.util.List;
 @RequestMapping("/equipment")
 public class EquipmentController {
 
-
-
     private final EquipmentService equipmentService;
 
     public EquipmentController(EquipmentService equipmentService) {
