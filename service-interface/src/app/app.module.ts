@@ -9,7 +9,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCardModule} from "@angular/material/card";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from './home/home.component';
 import {InterventionSheetFormComponent} from './intervention-sheet-form/intervention-sheet-form.component';
 import {MatSelectModule} from "@angular/material/select";
@@ -33,6 +33,7 @@ import {EmployeeFormComponent} from './employee-form/employee-form.component';
 import {EmployeeListComponent} from './employee-list/employee-list.component';
 import {LoginComponent} from "./login/login.component";
 import {AuthGuardComponent} from "./auth-guard/auth-guard.component";
+import {AuthInterceptor} from "./header/auth-interceptor";
 
 
 
@@ -76,7 +77,13 @@ import {AuthGuardComponent} from "./auth-guard/auth-guard.component";
     MatDividerModule,
     MatFormFieldModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   exports: [],
   bootstrap: [AppComponent]
 })

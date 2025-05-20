@@ -57,3 +57,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+//curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdWxpYW5AZ21haWwuY29tIiwiaWF0IjoxNzQ3NzI2NzYzLCJleHAiOjE3NDc4MTMxNjN9.pWnJQ-UmN5mOKDW8rIKym7X7g1yItxCd-wJzJ9rznFE" http://localhost:8080/customer/customer-list
