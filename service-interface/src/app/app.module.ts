@@ -10,7 +10,6 @@ import {MatInputModule} from "@angular/material/input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCardModule} from "@angular/material/card";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {HomeComponent} from './home/home.component';
 import {InterventionSheetFormComponent} from './intervention-sheet-form/intervention-sheet-form.component';
 import {MatSelectModule} from "@angular/material/select";
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -37,11 +36,12 @@ import {AuthInterceptor} from "./header/auth-interceptor";
 
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    HomeComponent,
     InterventionSheetFormComponent,
     CustomerFormComponent,
     CustomerListComponent,

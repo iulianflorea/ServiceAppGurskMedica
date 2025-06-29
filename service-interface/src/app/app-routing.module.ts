@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {HomeComponent} from "./home/home.component";
 import {InterventionSheetFormComponent} from "./intervention-sheet-form/intervention-sheet-form.component";
 import {InterventionSheetListComponent} from "./intervention-sheet-list/intervention-sheet-list.component";
 import {CustomerFormComponent} from "./customer-form/customer-form.component";
@@ -13,12 +12,13 @@ import {EmployeeFormComponent} from "./employee-form/employee-form.component";
 import {EmployeeListComponent} from "./employee-list/employee-list.component";
 import {RegisterComponent} from "./register/register.component";
 import {LoginComponent} from "./login/login.component";
+import {AuthGuardComponent} from "./auth-guard/auth-guard.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 
 const routes: Routes = [
   {path: "register", component: RegisterComponent},
   {path: "login", component: LoginComponent},
-  {path: "home", component: HomeComponent},
   {path: "intervention-sheet/:id", component: InterventionSheetFormComponent},
   {path: "intervention-sheet", component: InterventionSheetFormComponent},
   {path: "intervention-sheet-list", component: InterventionSheetListComponent},
@@ -34,6 +34,7 @@ const routes: Routes = [
   {path: "employee-form", component: EmployeeFormComponent},
   {path: "employee-form/:id", component: EmployeeFormComponent},
   {path: "employee-list", component: EmployeeListComponent},
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardComponent]}
 
 
 ];

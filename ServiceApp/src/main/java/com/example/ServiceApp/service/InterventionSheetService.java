@@ -10,11 +10,15 @@ import com.example.ServiceApp.repository.EquipmentRepository;
 import com.example.ServiceApp.repository.InterventionSheetRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
 import javax.naming.directory.SearchResult;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -89,12 +93,81 @@ public class InterventionSheetService {
         return dataAchizitie.plusYears(durataGarantie);
     }
 
-    public List<InterventionSheetDto> searchSerialNumber(String keyword) {
-        List<InterventionSheet> interventionSheetList =  interventionSheetRepository.findBySerialNumberOrNoticedOrCustomerNameOrEmployeeName(keyword, keyword, keyword, keyword);
+//    public List<InterventionSheetDto> search(String keyword) {
+//
+//        LocalDate dateOfIntervention = null;
+//        LocalDate dataOfExpireWarranty = null;
+//        Integer yearsOfWarranty = null;
+//
+//        // Încearcă să parsezi keyword ca LocalDate
+//        try {
+//            dateOfIntervention = LocalDate.parse(keyword);
+//            dataOfExpireWarranty = dateOfIntervention;
+//        } catch (DateTimeParseException e) {
+//            // Dacă nu poate fi convertit în LocalDate, lăsăm valorile ca null
+//        }
+//        List<InterventionSheet> interventionSheetList =  interventionSheetRepository.searchIntervention(keyword, dateOfIntervention, dataOfExpireWarranty, yearsOfWarranty);
+//
+//        return interventionSheetMapper.toDtoList(interventionSheetList);
+//    }
+
+//    public List<InterventionSheetDto> search(String keyword) {
+//        LocalDate dateOfIntervention = null;
+//        LocalDate dataOfExpireWarranty = null;
+//        Integer yearsOfWarranty = null;
+//
+//        // Încearcă să parsezi keyword ca LocalDate
+//        try {
+//            dateOfIntervention = LocalDate.parse(keyword);
+//            dataOfExpireWarranty = dateOfIntervention;
+//        } catch (DateTimeParseException ignored) {}
+//
+//        // Verificăm că este numeric și scurt (ex. 1–10), nu serial number
+//        if (keyword.matches("^\\d{1,2}$")) {
+//            yearsOfWarranty = Integer.parseInt(keyword);
+//        }
+//
+//        List<InterventionSheet> interventionSheetList = interventionSheetRepository.searchIntervention(
+//                keyword,
+//                dateOfIntervention,
+//                dataOfExpireWarranty,
+//                yearsOfWarranty
+//        );
+//
+//        return interventionSheetMapper.toDtoList(interventionSheetList);
+//    }
+
+    public List<InterventionSheetDto> search(String keyword) {
+        List<InterventionSheet> interventionSheetList = interventionSheetRepository.searchIntervention(keyword);
         return interventionSheetMapper.toDtoList(interventionSheetList);
     }
 
 
+    public List<InterventionSheetDto> getTasksLoggedUser(String jwtToken) {
+        String userId = parseJWT(jwtToken);
+        List<InterventionSheet> allTasks = interventionSheetRepository.findAll();
+        List<InterventionSheet> userInterventions = new ArrayList<>();
+        for (InterventionSheet interventionSheet : allTasks) {
+            if (interventionSheet.getEmployee().getName().equals(userId)) {
+                userInterventions.add(interventionSheet);
+            }
+        }
+        return interventionSheetMapper.toDtoList(userInterventions);
+    }
+
+    private String parseJWT(String jwtToken) {
+        String secretKey = "MzBxJaeWRwNubD+ZS4/zVgK9GPqH8A3Nns2gXmPvMUfAsqtsowARlphR8Z4FwYoKPDl0Sk/ahgauCJGu7bGz4Q==";
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(jwtToken)
+                    .getBody();
+            String userId = claims.getSubject();
+            return userId;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 
     ObjectMapper objectMapper = new ObjectMapper();

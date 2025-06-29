@@ -7,6 +7,7 @@ import com.example.ServiceApp.service.InterventionSheetService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +58,14 @@ public class InterventionSheetController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<InterventionSheetDto>> searchInterventionSheet(@RequestParam String keyword) {
-        List<InterventionSheetDto> interventionSheetList = interventionSheetService.searchSerialNumber(keyword);
+    public ResponseEntity<List<InterventionSheetDto>> search(@RequestParam String keyword) {
+        List<InterventionSheetDto> interventionSheetList = interventionSheetService.search(keyword);
         return new ResponseEntity<>(interventionSheetList, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/employeeIntervention/{token}")
+    public List<InterventionSheetDto> getTasksLoggedUser(@PathVariable String token) {
+        return interventionSheetService.getTasksLoggedUser(token);
     }
 }

@@ -25,6 +25,7 @@ public class InterventionSheet {
     @JoinColumn(name = "equipment_id", insertable = false, updatable = false)
     private Equipment equipment;
     private String serialNumber;
+    @Column(name = "date_of_intervention")
     private LocalDate dateOfIntervention;
     @Column(name = "customer_id")
     private Long customerId;
