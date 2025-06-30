@@ -13,6 +13,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSort} from "@angular/material/sort";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {PopUpTaskComponent} from "../pop-up-task/pop-up-task.component";
+import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 
 
 @Component({
@@ -45,6 +46,8 @@ export class InterventionSheetListComponent implements AfterViewInit {
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
   keyword: string = '';
   searchResult: InterventionSheetDto[] = [];
+
+
 
 
   @Input() item: any;

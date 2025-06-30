@@ -1,4 +1,12 @@
 <div class="containerList">
+
+  <form (submit)="search()" class="form-row">
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
+    </mat-form-field>
+  </form>
+
   <button mat-mini-fab color="accent" routerLink="/customer-form" aria-label="Example icon button with a plus one icon">
     <mat-icon>plus_one</mat-icon>
   </button>

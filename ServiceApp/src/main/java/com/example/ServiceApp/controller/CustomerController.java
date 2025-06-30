@@ -1,7 +1,10 @@
 package com.example.ServiceApp.controller;
 
 import com.example.ServiceApp.dto.CustomerDto;
+import com.example.ServiceApp.dto.ProductDto;
 import com.example.ServiceApp.service.CustomerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,5 +42,11 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         customerService.delete(id);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CustomerDto>> search(@RequestParam String keyword) {
+        List<CustomerDto> customerDtoList = customerService.search(keyword);
+        return new ResponseEntity<>(customerDtoList, HttpStatus.OK);
     }
 }

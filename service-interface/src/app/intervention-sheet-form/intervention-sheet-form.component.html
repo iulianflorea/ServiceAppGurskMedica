@@ -2,7 +2,8 @@
   <div class="container-form">
     <div class="">
       <div class="title-form">
-        <h1>Create intervention sheet</h1>
+        <h1 *ngIf="id">Update intervention</h1>
+        <h1 *ngIf="!id">Create intervention</h1>
       </div>
       <div>
         <form [formGroup]="interventionSheetForm" (ngSubmit)="saveInterventionSheet()" class="intervention-sheet-form">
@@ -44,7 +45,7 @@
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>Years Of Warranty</mat-label>
+            <mat-label>Months Of Warranty</mat-label>
             <input matInput [(ngModel)]="yearsOfWarranty" [ngModelOptions]="{standalone: true}"/>
           </mat-form-field>
 
@@ -68,20 +69,21 @@
             <input matInput [(ngModel)]="fixed" [ngModelOptions]="{standalone: true}"/>
           </mat-form-field>
 
-          <mat-form-field appearance="fill">
-            <mat-label>Date of intervention</mat-label>
-            <input matInput placeholder="YYYY-MM-DD" name="dataOfIntervention" [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}">
-          </mat-form-field>
-
 <!--          <mat-form-field appearance="fill">-->
-<!--            <mat-label>Subject</mat-label>-->
-<!--            <textarea required minlength="6" maxlength="100" matInput id="subject"-->
-<!--                      [(ngModel)]="taskCreateDto.subject" name="sub"><>-->
+<!--            <mat-label>Date of intervention</mat-label>-->
+<!--            <input matInput placeholder="YYYY-MM-DD" name="dataOfIntervention" [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}">-->
 <!--          </mat-form-field>-->
 
-<!--          <app-date-picker></app-date-picker>-->
+          <mat-form-field class="example-full-width">
+            <mat-label>Date of intervention</mat-label>
+            <input matInput [matDatepicker]="picker"  [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}" name="selectedDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #picker></mat-datepicker>
+          </mat-form-field>
 
-
+          <app-signature-pad></app-signature-pad>
+          <button type="button" (click)="captureSignature()">Salvează Semnătura</button>
 
           <button mat-raised-button type="submit" color="primary">Save</button>
         </form>

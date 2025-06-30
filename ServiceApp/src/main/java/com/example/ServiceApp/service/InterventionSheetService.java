@@ -47,6 +47,7 @@ public class InterventionSheetService {
         interventionSheetToBeSaved.setEquipmentId(equipment.getId());
         interventionSheetToBeSaved.setCustomerId(customer.getId());
         interventionSheetToBeSaved.setEmployeeId(employee.getId());
+        interventionSheetToBeSaved.setSignatureBase64(interventionSheetDto.getSignatureBase64());
         interventionSheetToBeSaved.setDataOfExpireWarranty(calculeazaExpirareaGarantiei(interventionSheetDto.getDateOfIntervention(),interventionSheetDto.getYearsOfWarranty()));
         if (interventionSheetDto.getId() == null) {
             InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheetToBeSaved);
@@ -90,7 +91,7 @@ public class InterventionSheetService {
 
 
     public static LocalDate calculeazaExpirareaGarantiei(LocalDate dataAchizitie, int durataGarantie) {
-        return dataAchizitie.plusYears(durataGarantie);
+        return dataAchizitie.plusMonths(durataGarantie);
     }
 
 //    public List<InterventionSheetDto> search(String keyword) {

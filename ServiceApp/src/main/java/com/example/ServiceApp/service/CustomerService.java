@@ -1,7 +1,9 @@
 package com.example.ServiceApp.service;
 
 import com.example.ServiceApp.dto.CustomerDto;
+import com.example.ServiceApp.dto.ProductDto;
 import com.example.ServiceApp.entity.Customer;
+import com.example.ServiceApp.entity.Product;
 import com.example.ServiceApp.mapper.CustomerMapper;
 import com.example.ServiceApp.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,12 @@ public class CustomerService {
     public void delete(Long id) {
         Customer customer = customerRepository.findById(id).orElseThrow();
         customerRepository.delete(customer);
+    }
+
+
+    public List<CustomerDto> search(String keyword) {
+        List<Customer> customerList = customerRepository.searchCustomer(keyword);
+        return customerMapper.toDtoList(customerList);
     }
 
 }

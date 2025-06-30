@@ -1,5 +1,14 @@
 <div class="containerList">
-  <button mat-mini-fab color="accent" routerLink="/product-form" aria-label="Example icon button with a plus one icon">
+
+  <form (submit)="search()" class="form-row">
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
+    </mat-form-field>
+  </form>
+
+  <button mat-mini-fab color="accent" routerLink="/product-form"
+          aria-label="Example icon button with a plus one icon">
     <mat-icon>plus_one</mat-icon>
   </button>
   <div class="mat-elevation-z8">
@@ -55,4 +64,5 @@
                    aria-label="Select page of periodic elements">
     </mat-paginator>
   </div>
+
 </div>

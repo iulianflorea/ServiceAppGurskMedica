@@ -29,6 +29,7 @@ public class InterventionSheetMapper {
                 .noticed(interventionSheetDto.getNoticed())
                 .fixed(interventionSheetDto.getFixed())
                 .engineerNote(interventionSheetDto.getEngineerNote())
+                .signatureBase64(interventionSheetDto.getSignatureBase64())
                 .build();
     }
 
@@ -51,6 +52,7 @@ public class InterventionSheetMapper {
                 .customerName(getCustomerName(interventionSheet))
                 .employeeName(getEmployeeName(interventionSheet))
                 .equipmentName(getEquipmentName(interventionSheet))
+                .signatureBase64(interventionSheet.getSignatureBase64())
                 .build();
     }
 

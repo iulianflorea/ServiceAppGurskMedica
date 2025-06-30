@@ -33,6 +33,7 @@ import {EmployeeListComponent} from './employee-list/employee-list.component';
 import {LoginComponent} from "./login/login.component";
 import {AuthGuardComponent} from "./auth-guard/auth-guard.component";
 import {AuthInterceptor} from "./header/auth-interceptor";
+import { SignaturePadComponent } from './signature-pad/signature-pad.component';
 
 
 
@@ -53,6 +54,7 @@ import {AuthInterceptor} from "./header/auth-interceptor";
     EmployeeListComponent,
     LoginComponent,
     AuthGuardComponent,
+    SignaturePadComponent,
   ],
   imports: [
     BrowserModule,

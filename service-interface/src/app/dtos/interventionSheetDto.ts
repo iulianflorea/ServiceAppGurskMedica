@@ -14,9 +14,10 @@ export class InterventionSheetDto {
   customerName?: string;
   employeeName?: string;
   equipmentName?: string;
+  signatureBase64?: string;
 
 
-  constructor(id: number, typeOfIntervention: string, equipmentId: number, serialNumber: string, dateOfIntervention: string, customerId: number, employeeId: number, noticed: string, fixed: string, engineerNote: string, customerName: string, employeeName: string, equipmentName: string) {
+  constructor(id: number, typeOfIntervention: string, equipmentId: number, serialNumber: string, dateOfIntervention: string, customerId: number, employeeId: number, noticed: string, fixed: string, engineerNote: string, customerName: string, employeeName: string, equipmentName: string, signatureBase64: string) {
     this.id = id;
     this.typeOfIntervention = typeOfIntervention;
     this.equipmentId = equipmentId;
@@ -30,6 +31,7 @@ export class InterventionSheetDto {
     this.customerName = customerName;
     this.employeeName = employeeName;
     this.equipmentName = equipmentName;
+    this.signatureBase64 = signatureBase64;
   }
 
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {EquipmentDto} from "../dtos/equipmentDto";
 import {CustomerDto} from "../dtos/customerDto";
@@ -6,6 +6,7 @@ import {EmployeeDto} from "../dtos/employeeDto";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
+import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 
 
 @Component({
@@ -31,6 +32,11 @@ export class InterventionSheetFormComponent implements OnInit {
   noticed: any;
   fixed: any;
   engineerNote: any;
+
+  @ViewChild(SignaturePadComponent) signaturePadComponent!: SignaturePadComponent;
+  signatureBase64: string = '';
+
+
 
 
   interventionSheetForm: FormGroup = new FormGroup({
@@ -98,10 +104,11 @@ export class InterventionSheetFormComponent implements OnInit {
   }
 
   saveInterventionSheet() {
+    this.captureSignature();
     var interventionSheet = {
       id: this.id,
       typeOfIntervention: this.typeOfInterventionSelected,
-      dateOfIntervention: this.dateOfIntervention,
+      dateOfIntervention: this.dateOfIntervention ? this.convertDatePiker(new Date(this.dateOfIntervention)) : null,
       dateOfExpireWarranty: this.dateOfExpireWarranty,
       yearsOfWarranty: this.yearsOfWarranty,
       serialNumber: this.serialNumber,
@@ -110,7 +117,8 @@ export class InterventionSheetFormComponent implements OnInit {
       engineerNote: this.engineerNote,
       equipmentId: this.equipmentSelected,
       customerId: this.customerSelected,
-      employeeId: this.employeeSelected
+      employeeId: this.employeeSelected,
+      signatureBase64: this.signatureBase64
     }
     this.httpClient.post("/api/intervention-sheet", interventionSheet).subscribe((response) => {
       console.log(response);
@@ -125,5 +133,22 @@ export class InterventionSheetFormComponent implements OnInit {
       console.log(response);
     })
   }
+
+  convertDatePiker(date?: any) {
+    if (!date || isNaN(new Date(date).getTime())) {
+      console.error("convertDatePiker: Invalid date", date);
+      return null;
+    }
+    date = new Date(date);
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return date.toISOString().substring(0, 10);
+  }
+
+  captureSignature() {
+    if (this.signaturePadComponent && !this.signaturePadComponent.isEmpty()) {
+      this.signatureBase64 = this.signaturePadComponent.getSignatureImage();
+    }
+  }
+
 
 }

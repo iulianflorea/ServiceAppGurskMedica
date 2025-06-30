@@ -31,4 +31,5 @@ public class InterventionSheetDto {
     private String customerName;
     private String equipmentName;
     private String employeeName;
+    private String signatureBase64;
 }

@@ -1,7 +1,9 @@
 package com.example.ServiceApp.service;
 
+import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.dto.ProducerDto;
 import com.example.ServiceApp.dto.ProductDto;
+import com.example.ServiceApp.entity.InterventionSheet;
 import com.example.ServiceApp.entity.Producer;
 import com.example.ServiceApp.entity.Product;
 import com.example.ServiceApp.mapper.ProducerMapper;
@@ -66,6 +68,12 @@ public class ProductService {
 
     public void delete(Long id) {
         productRepository.deleteById(id);
+    }
+
+
+    public List<ProductDto> search(String keyword) {
+        List<Product> productList = productRepository.searchProduct(keyword);
+        return productMapper.toDtoList(productList);
     }
 
 

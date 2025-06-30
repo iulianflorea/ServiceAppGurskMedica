@@ -1,10 +1,13 @@
 package com.example.ServiceApp.controller;
 
+import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.dto.ProducerDto;
 import com.example.ServiceApp.dto.ProductDto;
 import com.example.ServiceApp.entity.Producer;
 import com.example.ServiceApp.entity.Product;
 import com.example.ServiceApp.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,5 +44,11 @@ public class ProductController {
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         productService.delete(id);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDto>> search(@RequestParam String keyword) {
+        List<ProductDto> productDtoList = productService.search(keyword);
+        return new ResponseEntity<>(productDtoList, HttpStatus.OK);
     }
 }

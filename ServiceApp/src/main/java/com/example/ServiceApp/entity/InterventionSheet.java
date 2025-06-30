@@ -41,5 +41,7 @@ public class InterventionSheet {
     private String noticed;
     private String fixed;
     private String engineerNote;
+    @Lob
+    private String signatureBase64;
     private LocalDate dataOfExpireWarranty;
 }

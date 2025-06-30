@@ -3,6 +3,8 @@ import {CustomerDto} from "../dtos/customerDto";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {HttpClient} from "@angular/common/http";
+import {InterventionSheetDto} from "../dtos/interventionSheetDto";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-customer-list',
@@ -14,6 +16,8 @@ export class CustomerListComponent implements AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'cui', 'address', 'telephone', 'update', 'delete'];
   dataSource: CustomerDto[] = [];
   dataSource2 = new MatTableDataSource<CustomerDto>(this.dataSource);
+  keyword: string = '';
+  searchResult: CustomerDto[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -41,5 +45,22 @@ export class CustomerListComponent implements AfterViewInit {
         this.ngOnInit();
       })
     }
+  }
+
+
+  search() {
+    this.searchResult = [];
+    if (this.keyword) {
+      this.httpClient.get(`/api/customer/search?keyword=${this.keyword}`).subscribe((data: any) => {
+        console.log(data);
+        this.dataSource2 = data;
+      })
+    }
+    this.searchCustomer(this.keyword).subscribe(data => this.searchResult = data);
+  }
+
+
+  searchCustomer(keyword: string): Observable<CustomerDto[]> {
+    return this.httpClient.get<CustomerDto[]>(`/api/customer/search?keyword=${keyword}`);
   }
 }

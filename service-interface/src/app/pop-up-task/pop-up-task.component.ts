@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {UserDto} from "../dtos/userDto";
@@ -7,6 +7,11 @@ import {MatTableModule} from "@angular/material/table";
 import {MatIconModule} from "@angular/material/icon";
 import {DashboardComponent} from "../dashboard/dashboard.component";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
+import {InterventionSheetListComponent} from "../intervention-sheet-list/intervention-sheet-list.component";
+import {CommonModule} from "@angular/common";
+// @ts-ignore
+import html2pdf from "html2pdf.js";
+
 
 
 
@@ -14,6 +19,7 @@ import {InterventionSheetDto} from "../dtos/interventionSheetDto";
   selector: 'app-pop-up-task',
   standalone: true,
   imports: [
+    CommonModule,
     MatButtonModule,
     MatTableModule,
     RouterLink,
@@ -35,6 +41,7 @@ export class PopUpTaskComponent {
   noticed: any;
   fixed: any;
   engineerNote: any;
+  signatureBase64: any;
   userList: UserDto[] = [];
 
   @Input() item: any;
@@ -45,6 +52,83 @@ export class PopUpTaskComponent {
   ngOnInit() {
 
   }
+
+
+  @ViewChild('printSection') printSection!: ElementRef;
+
+  print() {
+    const printContents = this.printSection.nativeElement.innerHTML;
+    const popupWindow = window.open('', '_blank', 'width=800,height=600');
+    if (popupWindow) {
+      popupWindow.document.open();
+      popupWindow.document.write(`
+      <html>
+        <head>
+          <title>Fișă intervenție</title>
+          <style>
+
+          @media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+              position: relative;
+            }
+            h2 {
+              text-align: center;
+            }
+            img {
+              max-width: 200px;
+              height: auto;
+            }
+            .signature {
+              margin-top: 100px;
+              display: flex;
+              justify-content: flex-end;
+            }
+            .signature p {
+              margin-bottom: 5px;
+              text-align: center;
+            }
+          </style>
+        </head>
+        <body onload="window.print(); window.close();">
+          ${printContents}
+        </body>
+      </html>
+    `);
+      popupWindow.document.close();
+    }
+  }
+
+
+  exportPdf() {
+    const element = this.printSection.nativeElement;
+
+    // Ascunde butoanele înainte de conversie PDF
+    const buttons = element.querySelectorAll('.no-print');
+    buttons.forEach((btn: HTMLElement) => btn.style.display = 'none');
+
+    const options = {
+      margin: 10,
+      filename: 'interventie.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().from(element).set(options).save().then(() => {
+      // Revine la vizibilitatea butoanelor după salvare
+      buttons.forEach((btn: HTMLElement) => btn.style.display = '');
+    });
+  }
+
+
+
 
 
   closeModal() {
