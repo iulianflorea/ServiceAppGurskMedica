@@ -1,7 +1,14 @@
-<div class="containerList">
-  <button mat-mini-fab color="accent" routerLink="/equipment-form" aria-label="Example icon button with a plus one icon">
+
+<div class="equipment-container">
+
+
+  <!-- Button to add new sheet -->
+  <button mat-mini-fab color="accent" routerLink="/equipment-form"
+          aria-label="Add new intervention sheet" class="add-button">
     <mat-icon>plus_one</mat-icon>
   </button>
+
+  <!-- Table -->
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource2">
 
@@ -35,7 +42,6 @@
             <button mat-raised-button>Edit</button>
           </a>
       </ng-container>
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
@@ -46,3 +52,4 @@
     </mat-paginator>
   </div>
 </div>
+

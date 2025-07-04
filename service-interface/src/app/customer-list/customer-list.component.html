@@ -1,15 +1,21 @@
-<div class="containerList">
 
-  <form (submit)="search()" class="form-row">
+<div class="customer-container">
+
+  <!-- Search bar and date -->
+  <form (submit)="search()" class="search-bar">
     <mat-form-field>
       <mat-label>Search</mat-label>
-      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
+      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}" />
     </mat-form-field>
   </form>
 
-  <button mat-mini-fab color="accent" routerLink="/customer-form" aria-label="Example icon button with a plus one icon">
+  <!-- Button to add new sheet -->
+  <button mat-mini-fab color="accent" routerLink="/customer-form"
+          aria-label="Add new intervention sheet" class="add-button">
     <mat-icon>plus_one</mat-icon>
   </button>
+
+  <!-- Table -->
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource2">
 
@@ -65,3 +71,4 @@
     </mat-paginator>
   </div>
 </div>
+

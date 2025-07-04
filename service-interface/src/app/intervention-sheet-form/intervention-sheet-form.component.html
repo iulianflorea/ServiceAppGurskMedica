@@ -1,94 +1,209 @@
-<div class="container">
-  <div class="container-form">
-    <div class="">
-      <div class="title-form">
-        <h1 *ngIf="id">Update intervention</h1>
-        <h1 *ngIf="!id">Create intervention</h1>
-      </div>
-      <div>
-        <form [formGroup]="interventionSheetForm" (ngSubmit)="saveInterventionSheet()" class="intervention-sheet-form">
+<!--<div class="container">-->
+<!--  <div class="container-form">-->
+<!--    <div class="">-->
+<!--      <div class="title-form">-->
+<!--        <h1 *ngIf="id">Update intervention</h1>-->
+<!--        <h1 *ngIf="!id">Create intervention</h1>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <form [formGroup]="interventionSheetForm" (ngSubmit)="saveInterventionSheet()" class="intervention-sheet-form">-->
 
-          <mat-form-field>
-            <mat-label>Customer</mat-label>
-            <mat-select [(ngModel)]="customerSelected" [ngModelOptions]="{standalone: true}">
-              <mat-option *ngFor="let customer of customerList" [value]="customer.id">
-                {{customer.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Employee</mat-label>
-            <mat-select [(ngModel)]="employeeSelected" [ngModelOptions]="{standalone: true}">
-              <mat-option *ngFor="let employee of employeeList" [value]="employee.id">
-                {{employee.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Equipment</mat-label>
-            <mat-select [(ngModel)]="equipmentSelected" [ngModelOptions]="{standalone: true}">
-              <mat-option *ngFor="let equipment of equipmentList" [value]="equipment.id">
-                {{equipment.model}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Type of intervention</mat-label>
-            <mat-select [(ngModel)]="typeOfInterventionSelected" [ngModelOptions]="{standalone: true}">
-              <mat-option *ngFor="let type of typeOfInterventionList" [value]="type">
-                {{type}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Months Of Warranty</mat-label>
-            <input matInput [(ngModel)]="yearsOfWarranty" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Engineer Note</mat-label>
-            <input matInput [(ngModel)]="engineerNote" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Serial Number</mat-label>
-            <input matInput [(ngModel)]="serialNumber" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Noticed</mat-label>
-            <input matInput [(ngModel)]="noticed" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Fixed</mat-label>
-            <input matInput [(ngModel)]="fixed" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-<!--          <mat-form-field appearance="fill">-->
-<!--            <mat-label>Date of intervention</mat-label>-->
-<!--            <input matInput placeholder="YYYY-MM-DD" name="dataOfIntervention" [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}">-->
+<!--          <mat-form-field>-->
+<!--            <mat-label>Customer</mat-label>-->
+<!--            <mat-select [(ngModel)]="customerSelected" [ngModelOptions]="{standalone: true}">-->
+<!--              <mat-option *ngFor="let customer of customerList" [value]="customer.id">-->
+<!--                {{customer.name}}-->
+<!--              </mat-option>-->
+<!--            </mat-select>-->
 <!--          </mat-form-field>-->
 
-          <mat-form-field class="example-full-width">
-            <mat-label>Date of intervention</mat-label>
-            <input matInput [matDatepicker]="picker"  [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}" name="selectedDate">
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #picker></mat-datepicker>
-          </mat-form-field>
+<!--          <mat-form-field>-->
+<!--            <mat-label>Employee</mat-label>-->
+<!--            <mat-select [(ngModel)]="employeeSelected" [ngModelOptions]="{standalone: true}">-->
+<!--              <mat-option *ngFor="let employee of employeeList" [value]="employee.id">-->
+<!--                {{employee.name}}-->
+<!--              </mat-option>-->
+<!--            </mat-select>-->
+<!--          </mat-form-field>-->
 
-          <app-signature-pad></app-signature-pad>
-          <button type="button" (click)="captureSignature()">Salvează Semnătura</button>
+<!--          <mat-form-field>-->
+<!--            <mat-label>Equipment</mat-label>-->
+<!--            <mat-select [(ngModel)]="equipmentSelected" [ngModelOptions]="{standalone: true}">-->
+<!--              <mat-option *ngFor="let equipment of equipmentList" [value]="equipment.id">-->
+<!--                {{equipment.model}}-->
+<!--              </mat-option>-->
+<!--            </mat-select>-->
+<!--          </mat-form-field>-->
 
-          <button mat-raised-button type="submit" color="primary">Save</button>
-        </form>
-      </div>
+<!--          <mat-form-field>-->
+<!--            <mat-label>Type of intervention</mat-label>-->
+<!--            <mat-select [(ngModel)]="typeOfInterventionSelected" [ngModelOptions]="{standalone: true}">-->
+<!--              <mat-option *ngFor="let type of typeOfInterventionList" [value]="type">-->
+<!--                {{type}}-->
+<!--              </mat-option>-->
+<!--            </mat-select>-->
+<!--          </mat-form-field>-->
+
+<!--          <mat-form-field>-->
+<!--            <mat-label>Months Of Warranty</mat-label>-->
+<!--            <input matInput [(ngModel)]="yearsOfWarranty" [ngModelOptions]="{standalone: true}"/>-->
+<!--          </mat-form-field>-->
+
+<!--          <mat-form-field>-->
+<!--            <mat-label>Engineer Note</mat-label>-->
+<!--            <input matInput [(ngModel)]="engineerNote" [ngModelOptions]="{standalone: true}"/>-->
+<!--          </mat-form-field>-->
+
+<!--          <mat-form-field>-->
+<!--            <mat-label>Serial Number</mat-label>-->
+<!--            <input matInput [(ngModel)]="serialNumber" [ngModelOptions]="{standalone: true}"/>-->
+<!--          </mat-form-field>-->
+
+<!--          <mat-form-field>-->
+<!--            <mat-label>Noticed</mat-label>-->
+<!--            <input matInput [(ngModel)]="noticed" [ngModelOptions]="{standalone: true}"/>-->
+<!--          </mat-form-field>-->
+
+<!--          <mat-form-field>-->
+<!--            <mat-label>Fixed</mat-label>-->
+<!--            <input matInput [(ngModel)]="fixed" [ngModelOptions]="{standalone: true}"/>-->
+<!--          </mat-form-field>-->
+
+<!--&lt;!&ndash;          <mat-form-field appearance="fill">&ndash;&gt;-->
+<!--&lt;!&ndash;            <mat-label>Date of intervention</mat-label>&ndash;&gt;-->
+<!--&lt;!&ndash;            <input matInput placeholder="YYYY-MM-DD" name="dataOfIntervention" [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}">&ndash;&gt;-->
+<!--&lt;!&ndash;          </mat-form-field>&ndash;&gt;-->
+
+<!--          <mat-form-field class="example-full-width">-->
+<!--            <mat-label>Date of intervention</mat-label>-->
+<!--            <input matInput [matDatepicker]="picker"  [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}" name="selectedDate">-->
+<!--            <mat-hint>MM/DD/YYYY</mat-hint>-->
+<!--            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--            <mat-datepicker touchUi #picker></mat-datepicker>-->
+<!--          </mat-form-field>-->
+
+<!--          <app-signature-pad></app-signature-pad>-->
+<!--          <button type="button" (click)="captureSignature()">Salvează Semnătura</button>-->
+
+<!--          <button mat-raised-button type="submit" color="primary">Save</button>-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class="form-wrapper">
+  <div class="container">
+    <div class="title-form">
+      <h1 *ngIf="id">Update intervention</h1>
+      <h1 *ngIf="!id">Create intervention</h1>
     </div>
+
+    <form [formGroup]="interventionSheetForm" (ngSubmit)="saveInterventionSheet()" class="form-layout">
+
+      <!-- Stânga -->
+      <div class="form-left">
+<!--        <mat-form-field>-->
+<!--          <mat-label>Customer</mat-label>-->
+<!--          <mat-select [(ngModel)]="customerSelected" [ngModelOptions]="{standalone: true}">-->
+<!--            <mat-option *ngFor="let customer of customerList" [value]="customer.id">-->
+<!--              {{ customer.name }}-->
+<!--            </mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Client</mat-label>
+          <input type="text" matInput [matAutocomplete]="customerAuto" [formControl]="customerControl">
+          <mat-autocomplete #customerAuto="matAutocomplete">
+            <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer.name">
+              {{ customer.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- EMPLOYEE -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Angajat</mat-label>
+          <input type="text" matInput [matAutocomplete]="employeeAuto" [formControl]="employeeControl">
+          <mat-autocomplete #employeeAuto="matAutocomplete">
+            <mat-option *ngFor="let employee of filteredEmployees | async" [value]="employee.name">
+              {{ employee.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- EQUIPMENT -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Echipament</mat-label>
+          <input type="text" matInput [matAutocomplete]="equipmentAuto" [formControl]="equipmentControl">
+          <mat-autocomplete #equipmentAuto="matAutocomplete">
+            <mat-option *ngFor="let equipment of filteredEquipment | async" [value]="equipment.model">
+              {{ equipment.model }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <!-- TYPE OF INTERVENTION -->
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Tip intervenție</mat-label>
+          <input type="text" matInput [matAutocomplete]="typeAuto" [formControl]="typeControl">
+          <mat-autocomplete #typeAuto="matAutocomplete">
+            <mat-option *ngFor="let type of filteredTypes | async" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Months of Warranty</mat-label>
+          <input matInput [(ngModel)]="yearsOfWarranty" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Serial Number</mat-label>
+          <input matInput [(ngModel)]="serialNumber" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+      </div>
+
+      <!-- Dreapta -->
+      <div class="form-right">
+        <mat-form-field>
+          <mat-label>Noticed</mat-label>
+          <input matInput [(ngModel)]="noticed" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Fixed</mat-label>
+          <input matInput [(ngModel)]="fixed" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Engineer Note</mat-label>
+          <input matInput [(ngModel)]="engineerNote" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+
+        <!-- Semnătura -->
+        <div class="signature-container">
+          <app-signature-pad></app-signature-pad>
+<!--          <button type="button" (click)="captureSignature()">Salvează Semnătura</button>-->
+        </div>
+      </div>
+
+      <!-- Jos: Date & Save -->
+      <div class="form-bottom">
+        <mat-form-field>
+          <mat-label>Date of intervention</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="dateOfIntervention"
+                 [ngModelOptions]="{standalone: true}" name="selectedDate"/>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #picker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit">Save</button>
+      </div>
+
+    </form>
   </div>
 </div>
 

@@ -1,7 +1,12 @@
-<div class="containerList">
-    <button mat-mini-fab color="accent" routerLink="/employee-form" aria-label="Example icon button with a plus one icon">
-      <mat-icon>plus_one</mat-icon>
-    </button>
+
+<div class="employee-container">
+
+  <button mat-mini-fab color="accent" routerLink="/employee-form"
+          aria-label="Add new intervention sheet" class="add-button">
+    <mat-icon>plus_one</mat-icon>
+  </button>
+
+  <!-- Table -->
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource2">
 

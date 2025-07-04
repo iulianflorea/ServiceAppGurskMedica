@@ -7,6 +7,7 @@ import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
+import {map, Observable, startWith} from "rxjs";
 
 
 @Component({
@@ -36,7 +37,15 @@ export class InterventionSheetFormComponent implements OnInit {
   @ViewChild(SignaturePadComponent) signaturePadComponent!: SignaturePadComponent;
   signatureBase64: string = '';
 
+  customerControl = new FormControl();
+  employeeControl = new FormControl();
+  equipmentControl = new FormControl();
+  typeControl = new FormControl();
 
+  filteredCustomers!: Observable<CustomerDto[]>;
+  filteredEmployees!: Observable<EmployeeDto[]>;
+  filteredEquipment!: Observable<EquipmentDto[]>;
+  filteredTypes!: Observable<string[]>;
 
 
   interventionSheetForm: FormGroup = new FormGroup({
@@ -50,21 +59,48 @@ export class InterventionSheetFormComponent implements OnInit {
   constructor(private httpClient: HttpClient, private router: Router, private route: ActivatedRoute) {
   }
 
+
   ngOnInit() {
-    this.getEquipmentList();
     this.getCustomerList();
     this.getEmployeeList();
+    this.getEquipmentList();
     this.getType();
-    console.log("id", this.route.snapshot.params['id'])
+
+    this.filteredCustomers = this.customerControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value?.name),
+      map(name => name ? this.filterCustomers(name) : this.customerList.slice())
+    );
+
+    this.filteredEmployees = this.employeeControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value?.name),
+      map(name => name ? this.filterEmployees(name) : this.employeeList.slice())
+    );
+
+    this.filteredEquipment = this.equipmentControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? value : value?.name),
+      map(name => name ? this.filterEquipment(name) : this.equipmentList.slice())
+    );
+
+    this.filteredTypes = this.typeControl.valueChanges.pipe(
+      startWith(''),
+      map(value => value?.toLowerCase() || ''),
+      map(value => value ? this.filterTypes(value) : this.typeOfInterventionList.slice())
+    );
+
     if (this.route.snapshot.params['id'] !== undefined) {
       this.httpClient.get("/api/intervention-sheet/" + this.route.snapshot.params['id']).subscribe((response: InterventionSheetDto) => {
-        console.log(response);
-        // @ts-ignore
         this.id = response.id;
         this.customerSelected = response.customerId;
+        this.customerControl.setValue(response.customerName);
         this.employeeSelected = response.employeeId;
+        this.employeeControl.setValue(response.employeeName);
         this.equipmentSelected = response.equipmentId;
+        this.equipmentControl.setValue(response.equipmentName);
         this.typeOfInterventionSelected = response.typeOfIntervention;
+        this.typeControl.setValue(response.typeOfIntervention);
         this.serialNumber = response.serialNumber;
         this.noticed = response.noticed;
         this.fixed = response.fixed;
@@ -72,9 +108,10 @@ export class InterventionSheetFormComponent implements OnInit {
         this.dateOfIntervention = response.dateOfIntervention;
         this.dateOfExpireWarranty = response.dateOfExpireWarranty;
         this.yearsOfWarranty = response.yearsOfWarranty;
-      })
+      });
     }
   }
+
 
   getEquipmentList() {
     this.httpClient.get("/api/equipment/find-all").subscribe((response) => {
@@ -103,11 +140,13 @@ export class InterventionSheetFormComponent implements OnInit {
     })
   }
 
+
   saveInterventionSheet() {
     this.captureSignature();
-    var interventionSheet = {
-      id: this.id,
-      typeOfIntervention: this.typeOfInterventionSelected,
+    // const customerId = this.getCustomerIdByName(this.customerControl.value);
+
+    const interventionSheet: any = {
+      typeOfIntervention: this.typeControl.value,
       dateOfIntervention: this.dateOfIntervention ? this.convertDatePiker(new Date(this.dateOfIntervention)) : null,
       dateOfExpireWarranty: this.dateOfExpireWarranty,
       yearsOfWarranty: this.yearsOfWarranty,
@@ -115,17 +154,22 @@ export class InterventionSheetFormComponent implements OnInit {
       noticed: this.noticed,
       fixed: this.fixed,
       engineerNote: this.engineerNote,
-      equipmentId: this.equipmentSelected,
-      customerId: this.customerSelected,
-      employeeId: this.employeeSelected,
+      equipmentId: this.equipmentList.find(eq => eq.model === this.equipmentControl.value)?.id,
+      customerId: this.customerList.find(c => c.name === this.customerControl.value)?.id,
+      employeeId: this.employeeList.find(e => e.name === this.employeeControl.value)?.id,
       signatureBase64: this.signatureBase64
+    };
+
+    if (this.id) {
+      interventionSheet.id = this.id; // doar dacă e definit
     }
+
     this.httpClient.post("/api/intervention-sheet", interventionSheet).subscribe((response) => {
-      console.log(response);
       alert("Intervention sheet was saved");
       this.router.navigate(["/intervention-sheet-list"]);
-    })
+    });
   }
+
 
   getById(interventionSheet: InterventionSheetDto) {
     const id = interventionSheet.id;
@@ -151,4 +195,26 @@ export class InterventionSheetFormComponent implements OnInit {
   }
 
 
+  private filterCustomers(name: string): CustomerDto[] {
+    // @ts-ignore
+    return this.customerList.filter(c => c.name.toLowerCase().includes(name.toLowerCase()));
+  }
+
+  private filterEmployees(name: string): EmployeeDto[] {
+    // @ts-ignore
+    return this.employeeList.filter(e => e.name.toLowerCase().includes(name.toLowerCase()));
+  }
+
+  private filterEquipment(name: string): EquipmentDto[] {
+    // @ts-ignore
+    return this.equipmentList.filter(eq => eq.model.toLowerCase().includes(name.toLowerCase()));
+  }
+
+  private filterTypes(value: string): string[] {
+    return this.typeOfInterventionList.filter(t => t.toLowerCase().includes(value));
+  }
+
 }
+
+
+

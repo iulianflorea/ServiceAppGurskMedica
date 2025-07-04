@@ -68,51 +68,6 @@
 <body>
 <!-- Fundal și container pentru modala -->
 <div class="modal-overlay" id="modal-overlay">
-<!--  <div class="modal-content" #printSection id="print-section">-->
-<!--    <span class="close-btn" (click)="closeModal()">×</span>-->
-<!--    <div class="modal-title">Fisa Interventie</div>-->
-<!--    <div class="modal-description">-->
-<!--      Id: {{ item.id }}<br>-->
-<!--      Type Of Intervention: {{item.typeOfIntervention}}<br>-->
-<!--      Equipment Name: {{item.equipmentName}}<br>-->
-<!--      Serial Number: {{item.serialNumber}}<br>-->
-<!--      Date Of Intervention: {{item.dateOfIntervention}}<br>-->
-<!--      Expire Warranty: {{item.dataOfExpireWarranty}}<br>-->
-<!--      Years Of Warranty: {{item.yearsOfWarranty}}<br>-->
-<!--      Customer Name: {{item.customerName}}<br>-->
-<!--      Employee Name: {{item.employeeName}}<br>-->
-<!--      Noticed: {{item.noticed}}<br>-->
-<!--      Fixed: {{item.fixed}}<br>-->
-<!--      Engineer Note: {{item.engineerNote}}<br>-->
-<!--      &lt;!&ndash;      <div *ngIf="item?.signatureBase64">&ndash;&gt;-->
-<!--      &lt;!&ndash;        <p>Semnătură:</p>&ndash;&gt;-->
-<!--      &lt;!&ndash;        <img [src]="item.signatureBase64" alt="signature" style="max-width: 300px; max-height: 150px;" />&ndash;&gt;-->
-<!--      &lt;!&ndash;      </div>&ndash;&gt;-->
-<!--      <div style="margin-top: 100px; display: flex; justify-content: flex-end;">-->
-<!--        <div style="text-align: center;">-->
-<!--          <p>Semnătură</p>-->
-<!--          <img *ngIf="item.signatureBase64"-->
-<!--               [src]="item.signatureBase64"-->
-<!--               alt="Semnătură"-->
-<!--               style="max-width: 200px;"/>-->
-<!--        </div>-->
-<!--      </div>-->
-
-
-<!--      <a routerLink="/intervention-sheet/{{item.id}}">-->
-<!--        <button class="no-print" mat-raised-button>Edit</button>-->
-<!--      </a>-->
-
-<!--      <button class="no-print" mat-raised-button (click)="print()">Printează</button>-->
-<!--      <button class="no-print" mat-raised-button (click)="exportPdf()">Exportă PDF</button>-->
-
-
-
-<!--      <button class="no-print" mat-fab color="warn" aria-label="Example icon button with a delete icon"-->
-<!--              (click)="delete(item)">Delete-->
-<!--      </button>-->
-<!--    </div>-->
-<!--  </div>-->
 
   <div class="modal-content" #printSection id="print-section">
     <span class="close-btn no-print" (click)="closeModal()">×</span>
@@ -211,15 +166,86 @@
 </html>
 
 
-<!--<div class="modal">-->
-<!--  <div class="modal-content">-->
-<!--    <span class="close-btn" (click)="closeModal()">×</span>-->
-<!--    <h2>Task</h2>-->
-<!--    <p>Id: {{ item.id}}</p>-->
-<!--    <p>To Do: {{ item?.toDo}}</p>-->
-<!--    <p>Status: {{ item?.status}}</p>-->
-<!--    <p>User: {{ item?.username}}</p>-->
-<!--    <p>Begin Date: {{ item?.beginDate}}</p>-->
-<!--    <p>Completed Date: {{ item?.completedDate}}</p>-->
+
+
+<!--<div class="modal-overlay">-->
+<!--  <div class="modal-content" #printSection id="print-section">-->
+<!--    <span class="close-btn no-print" (click)="closeModal()">×</span>-->
+
+<!--    <h2 style="text-align: center;">Fișă de Intervenție</h2>-->
+
+<!--    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">-->
+<!--      <tr>-->
+<!--        <td><strong>Tip intervenție:</strong></td>-->
+<!--        <td>{{ item.typeOfIntervention }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Denumire echipament:</strong></td>-->
+<!--        <td>{{ item.equipmentName }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Serie:</strong></td>-->
+<!--        <td>{{ item.serialNumber }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Data intervenției:</strong></td>-->
+<!--        <td>{{ item.dateOfIntervention }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Garanție expiră la:</strong></td>-->
+<!--        <td>{{ item.dateOfExpireWarranty }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Durata garanției:</strong></td>-->
+<!--        <td>{{ item.yearsOfWarranty }} luni</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Client:</strong></td>-->
+<!--        <td>{{ item.customerName }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Tehnician:</strong></td>-->
+<!--        <td>{{ item.employeeName }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Problemă semnalată:</strong></td>-->
+<!--        <td>{{ item.noticed }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Rezolvare:</strong></td>-->
+<!--        <td>{{ item.fixed }}</td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td><strong>Notă inginer:</strong></td>-->
+<!--        <td>{{ item.engineerNote }}</td>-->
+<!--      </tr>-->
+<!--    </table>-->
+
+<!--    <div style="margin-top: 120px; display: flex; justify-content: flex-end;">-->
+<!--      <div style="text-align: center;">-->
+<!--        <p>Ștampilă</p>-->
+<!--        <img-->
+<!--          src="assets/stampila.jpg"-->
+<!--          alt="Ștampilă"-->
+<!--          style="max-width: 150px;" />-->
+<!--      </div>-->
+
+<!--      <div style="text-align: center;">-->
+<!--        <p>Semnătură</p>-->
+<!--        <img *ngIf="item.signatureBase64"-->
+<!--             [src]="item.signatureBase64"-->
+<!--             alt="Semnătură"-->
+<!--             style="max-width: 200px;"/>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="no-print" style="margin-top: 30px;">-->
+<!--      <a [routerLink]="['/intervention-sheet', item.id]">-->
+<!--        <button mat-raised-button>Edit</button>-->
+<!--      </a>-->
+<!--      <button mat-raised-button (click)="print()">Printează</button>-->
+<!--      <button mat-raised-button (click)="exportPdf()">Exportă PDF</button>-->
+<!--      <button mat-fab color="warn" (click)="delete(item)">Delete</button>-->
+<!--    </div>-->
 <!--  </div>-->
 <!--</div>-->

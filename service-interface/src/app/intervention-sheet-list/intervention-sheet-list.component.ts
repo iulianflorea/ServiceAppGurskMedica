@@ -41,7 +41,7 @@ import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 })
 export class InterventionSheetListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'dataOfExpireWarranty', 'yearsOfWarranty', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'view'];
+  displayedColumns: string[] = ['typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'dataOfExpireWarranty', 'yearsOfWarranty', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'view'];
   dataSource: InterventionSheetDto[] = [];
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
   keyword: string = '';

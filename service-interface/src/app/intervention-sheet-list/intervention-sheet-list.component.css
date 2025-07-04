@@ -1,6 +1,26 @@
+.intervention-container {
+  background: rgba(255, 255, 255, 0.5); /* transparent-opac */
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 2000px;
+  overflow: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.add-button {
+  margin-bottom: 10px;
+}
+
 table {
   width: 100%;
 }
-.containerList {
-  margin: 30px
-}
+

@@ -1,16 +1,91 @@
-<div class="containerList">
+<!--<div class="containerList">-->
 
-  <form (submit)="search()" class="form-row">
+<!--  <form (submit)="search()" class="form-row">-->
+<!--    <mat-form-field>-->
+<!--      <mat-label>Search</mat-label>-->
+<!--      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>-->
+<!--    </mat-form-field>-->
+<!--  </form>-->
+
+<!--  <button mat-mini-fab color="accent" routerLink="/product-form"-->
+<!--          aria-label="Example icon button with a plus one icon">-->
+<!--    <mat-icon>plus_one</mat-icon>-->
+<!--  </button>-->
+<!--  <div class="mat-elevation-z8">-->
+<!--    <table mat-table [dataSource]="dataSource2">-->
+
+<!--      <ng-container matColumnDef="id">-->
+<!--        <th mat-header-cell *matHeaderCellDef> No.</th>-->
+<!--        <td mat-cell *matCellDef="let element"> {{element.id}} </td>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="name">-->
+<!--        <th mat-header-cell *matHeaderCellDef>Name</th>-->
+<!--        <td mat-cell *matCellDef="let element"> {{element.name}} </td>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="cod">-->
+<!--        <th mat-header-cell *matHeaderCellDef>Code</th>-->
+<!--        <td mat-cell *matCellDef="let element"> {{element.cod}} </td>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="producer">-->
+<!--        <th mat-header-cell *matHeaderCellDef>Producer</th>-->
+<!--        <td mat-cell *matCellDef="let element"> {{element.producerName}} </td>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="quantity">-->
+<!--        <th mat-header-cell *matHeaderCellDef>Quantity</th>-->
+<!--        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="delete">-->
+<!--        <th mat-header-cell *matHeaderCellDef>Delete</th>-->
+<!--        <td mat-cell *matCellDef="let element">-->
+<!--          <button mat-fab color="warn" aria-label="Example icon button with a delete icon" (click)="delete(element)">-->
+<!--            <mat-icon>delete</mat-icon>-->
+<!--          </button>-->
+<!--        </td>-->
+<!--      </ng-container>-->
+<!--      <ng-container matColumnDef="update">-->
+<!--        <th mat-header-cell *matHeaderCellDef>Update</th>-->
+<!--        <td mat-cell *matCellDef="let element">-->
+<!--          <a routerLink="/product-form/{{element.id}}">-->
+<!--            <button mat-raised-button>Edit</button>-->
+<!--          </a>-->
+<!--      </ng-container>-->
+
+<!--      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+<!--    </table>-->
+
+<!--    <mat-paginator [pageSizeOptions]="[10, 20, 30]"-->
+<!--                   showFirstLastButtons-->
+<!--                   aria-label="Select page of periodic elements">-->
+<!--    </mat-paginator>-->
+<!--  </div>-->
+
+<!--</div>-->
+
+
+
+<div class="product-container">
+
+  <!-- Search bar and date -->
+  <form (submit)="search()" class="search-bar">
     <mat-form-field>
       <mat-label>Search</mat-label>
-      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
+      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}" />
     </mat-form-field>
   </form>
 
+  <!-- Button to add new sheet -->
   <button mat-mini-fab color="accent" routerLink="/product-form"
-          aria-label="Example icon button with a plus one icon">
+          aria-label="Add new product" class="add-button">
     <mat-icon>plus_one</mat-icon>
   </button>
+
+  <!-- Table -->
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource2">
 
@@ -64,5 +139,5 @@
                    aria-label="Select page of periodic elements">
     </mat-paginator>
   </div>
-
 </div>
+

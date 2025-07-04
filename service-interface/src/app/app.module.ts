@@ -34,6 +34,7 @@ import {LoginComponent} from "./login/login.component";
 import {AuthGuardComponent} from "./auth-guard/auth-guard.component";
 import {AuthInterceptor} from "./header/auth-interceptor";
 import { SignaturePadComponent } from './signature-pad/signature-pad.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 
 
@@ -56,29 +57,30 @@ import { SignaturePadComponent } from './signature-pad/signature-pad.component';
     AuthGuardComponent,
     SignaturePadComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    HttpClientModule,
-    FormsModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    DatePickerComponent,
-    InterventionSheetListComponent,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatDividerModule,
-    MatFormFieldModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        HttpClientModule,
+        FormsModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        DatePickerComponent,
+        InterventionSheetListComponent,
+        MatProgressSpinnerModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        MatAutocompleteModule
+    ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
