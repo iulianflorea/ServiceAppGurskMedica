@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {EquipmentDto} from "../dtos/equipmentDto";
 import {CustomerDto} from "../dtos/customerDto";
@@ -8,12 +8,17 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 import {map, Observable, startWith} from "rxjs";
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from "@angular/material/input";
+import {MatFormFieldModule} from "@angular/material/form-field";
 
 
 @Component({
   selector: 'app-intervention-sheet-form',
   templateUrl: './intervention-sheet-form.component.html',
   styleUrls: ['./intervention-sheet-form.component.css'],
+
+
 
 })
 export class InterventionSheetFormComponent implements OnInit {
@@ -46,6 +51,7 @@ export class InterventionSheetFormComponent implements OnInit {
   filteredEmployees!: Observable<EmployeeDto[]>;
   filteredEquipment!: Observable<EquipmentDto[]>;
   filteredTypes!: Observable<string[]>;
+  isMobile: boolean = false;
 
 
   interventionSheetForm: FormGroup = new FormGroup({
@@ -65,6 +71,7 @@ export class InterventionSheetFormComponent implements OnInit {
     this.getEmployeeList();
     this.getEquipmentList();
     this.getType();
+    this.isMobile = window.innerWidth <= 768;
 
     this.filteredCustomers = this.customerControl.valueChanges.pipe(
       startWith(''),

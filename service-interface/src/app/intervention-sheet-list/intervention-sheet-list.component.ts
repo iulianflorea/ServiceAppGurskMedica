@@ -14,6 +14,7 @@ import {MatSort} from "@angular/material/sort";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {PopUpTaskComponent} from "../pop-up-task/pop-up-task.component";
 import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
+import {MatCardModule} from "@angular/material/card";
 
 
 @Component({
@@ -32,7 +33,8 @@ import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
     MatInputModule,
     MatDatepickerModule,
     PopUpTaskComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCardModule
   ],
   standalone: true
 })
@@ -65,6 +67,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
   selectedItem: any = null;
   isModalOpen = false;
+  isMobile: boolean = false;
 
   openModal(item: any) {
     this.selectedItem = item;
@@ -90,6 +93,10 @@ export class InterventionSheetListComponent implements AfterViewInit {
   }
 
   ngOnInit() {
+    this.isMobile = window.innerWidth < 768;
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 768;
+    });
     this.httpClient.get("/api/intervention-sheet/find-all").subscribe((response) => {
       console.log(response);
       this.dataSource = response as InterventionSheetDto[];

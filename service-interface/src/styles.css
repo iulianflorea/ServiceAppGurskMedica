@@ -10,3 +10,69 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-size: cover;
   background-attachment: fixed;
 }
+
+@media screen and (max-width: 768px) {
+  .intervention-container {
+    padding: 10px;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar mat-form-field {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .add-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .mat-header-cell,
+  .mat-cell {
+    padding: 8px 12px;
+  }
+
+  .no-print {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .no-print button {
+    width: 100%;
+  }
+}
+
+.mobile-card {
+  margin-bottom: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-bar mat-form-field {
+    width: 100%;
+  }
+
+  .add-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+  }
+}
+
+

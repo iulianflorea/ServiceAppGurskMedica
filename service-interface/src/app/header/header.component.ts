@@ -16,4 +16,15 @@ export class HeaderComponent {
     this.router.navigate(["/login"]);
   }
 
+  isMobile: boolean = false;
+
+  ngOnInit() {
+    this.checkMobile();
+    window.addEventListener('resize', this.checkMobile.bind(this));
+  }
+
+  checkMobile() {
+    this.isMobile = window.innerWidth < 768;
+  }
+
 }

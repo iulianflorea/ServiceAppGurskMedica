@@ -192,12 +192,24 @@
 
       <!-- Jos: Date & Save -->
       <div class="form-bottom">
-        <mat-form-field>
+<!--        <mat-form-field>-->
+<!--          <mat-label>Date of intervention</mat-label>-->
+<!--          <input matInput [matDatepicker]="picker" [(ngModel)]="dateOfIntervention" [ngModelOptions]="{standalone: true}" name="selectedDate"/>-->
+<!--          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--          <mat-datepicker #picker [touchUi]="isMobile"></mat-datepicker>-->
+<!--        </mat-form-field>-->
+
+        <mat-form-field appearance="fill">
           <mat-label>Date of intervention</mat-label>
-          <input matInput [matDatepicker]="picker" [(ngModel)]="dateOfIntervention"
-                 [ngModelOptions]="{standalone: true}" name="selectedDate"/>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [(ngModel)]="dateOfIntervention"
+            [ngModelOptions]="{ standalone: true }"
+            name="selectedDate"
+          />
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker touchUi #picker></mat-datepicker>
+          <mat-datepicker #picker [touchUi]="isMobile"></mat-datepicker>
         </mat-form-field>
 
         <button mat-raised-button color="primary" type="submit">Save</button>

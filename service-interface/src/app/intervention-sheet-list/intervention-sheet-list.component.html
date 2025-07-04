@@ -2,8 +2,9 @@
 <div class="intervention-container">
 
   <!-- Search bar and date -->
-  <form (submit)="search()"  class="search-bar">
-    <mat-form-field>
+<!--  <form (submit)="search()"  class="search-bar">-->
+  <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
+  <mat-form-field>
       <mat-label>Search</mat-label>
       <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}" />
     </mat-form-field>
@@ -26,8 +27,8 @@
   </button>
 
   <!-- Table -->
-  <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource2">
+  <div class="mat-elevation-z8" style="overflow-x: auto;" *ngIf="!isMobile">
+    <table mat-table [dataSource]="dataSource2" class="full-width-table">
 
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>No.</th>
@@ -114,4 +115,27 @@
                    aria-label="Select page of periodic elements">
     </mat-paginator>
   </div>
+</div>
+
+<div *ngIf="isMobile" class="intervention-container">
+  <mat-card *ngFor="let item of searchResult" class="mobile-card">
+    <mat-card-content>
+      <p><strong>No.:</strong> {{ item.id }}</p>
+      <p><strong>Type of Intervention:</strong> {{ item.typeOfIntervention }}</p>
+      <p><strong>Equipment:</strong> {{ item.equipmentName }}</p>
+      <p><strong>Serial No.:</strong> {{ item.serialNumber }}</p>
+      <p><strong>Date:</strong> {{ item.dateOfIntervention }}</p>
+      <p><strong>Warranty:</strong> {{ item.dateOfExpireWarranty }}</p>
+      <p><strong>Months Warranty:</strong> {{ item.yearsOfWarranty }}</p>
+      <p><strong>Customer:</strong> {{ item.customerName }}</p>
+      <p><strong>Engineer:</strong> {{ item.employeeName }}</p>
+      <p><strong>Noticed:</strong> {{ item.noticed }}</p>
+      <p><strong>Fixed:</strong> {{ item.fixed }}</p>
+      <p><strong>Note:</strong> {{ item.engineerNote }}</p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-stroked-button color="primary" (click)="openModal(item)">View</button>
+    </mat-card-actions>
+  </mat-card>
 </div>
