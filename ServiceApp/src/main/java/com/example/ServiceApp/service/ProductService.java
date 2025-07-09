@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -52,38 +53,47 @@ public class ProductService {
         return productMapper.toDto(productToBeSaved);
     }
 
-//    public ResponseEntity<ProductDto> createProduct(String name, String cod, Long producer, Integer quantity, MultipartFile image) {
-//        String imageName = null;
-//
-//        if (image != null && !image.isEmpty()) {
-//            imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-//
-//            Path uploadPath = Paths.get("uploads");
-//            try {
-//                if (!Files.exists(uploadPath)) {
-//                    Files.createDirectories(uploadPath);
-//                }
-//
-//                Path filePath = uploadPath.resolve(imageName);
-//                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//            } catch (IOException e) {
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//            }
-//        }
-//
-//        Product product = new Product();
-//        product.setName(name);
-//        product.setCod(cod);
-//        product.setQuantity(quantity);
-//        product.setProducerId(producer);
-//        product.setImageName(imageName);
-//
-//        productRepository.save(product);
-//
-//        ProductDto dto = productMapper.toDto(product);
-//        return ResponseEntity.ok(dto);
-//    }
 
+    public ResponseEntity<ProductDto> saveOrUpdateProduct(Long id, String name, String cod, Long producer, Integer quantity, MultipartFile image) {
+        Product product;
+
+        if (id != null) {
+            // UPDATE
+            Optional<Product> optionalProduct = productRepository.findById(id);
+            if (optionalProduct.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            product = optionalProduct.get();
+        } else {
+            // CREATE
+            product = new Product();
+        }
+
+        product.setName(name);
+        product.setCod(cod);
+        product.setQuantity(quantity);
+        product.setProducerId(producer);
+
+        // Image handling
+        if (image != null && !image.isEmpty()) {
+            String imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+            Path uploadPath = Paths.get("uploads");
+            try {
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                Path filePath = uploadPath.resolve(imageName);
+                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                product.setImageName(imageName);
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
+        productRepository.save(product);
+        ProductDto dto = productMapper.toDto(product);
+        return ResponseEntity.ok(dto);
+    }
 
 
 
