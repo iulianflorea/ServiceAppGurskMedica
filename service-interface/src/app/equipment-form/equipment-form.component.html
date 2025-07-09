@@ -2,7 +2,8 @@
   <div class="container-form">
     <div class="">
       <div class="title-form">
-        <h1>Create equipment</h1>
+        <h1 *ngIf="!id">Create equipment</h1>
+        <h1 *ngIf="id">Update equipment</h1>
       </div>
       <div>
         <form [formGroup]="equipmentForm" (ngSubmit)="saveEquipment()" class="intervention-sheet-form">
