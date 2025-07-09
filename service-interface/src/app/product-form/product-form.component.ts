@@ -72,35 +72,6 @@ export class ProductFormComponent implements OnInit {
     })
   }
 
-  // saveProduct() {
-  //   // var product = {
-  //   //   id: this.id,
-  //   //   name: this.name,
-  //   //   cod: this.cod,
-  //   //   producer: this.producerSelected,
-  //   //   quantity: this.quantity
-  //   // }
-  //
-  //   const formData = new FormData();
-  //
-  //   formData.append('id', this.id.toString());
-  //   formData.append("name", this.name);
-  //   formData.append("cod", this.cod);
-  //   formData.append("quantity", this.quantity.toString());
-  //   // formData.append("producerName", this.producerSelected);
-  //   formData.append('producerName', this.producerSelected.toString());
-  //   // Adaugă imaginea (dacă există)
-  //   if (this.selectedFile) {
-  //     formData.append("image", this.selectedFile);
-  //   }
-  //   this.httpClient.post("/api/product", formData).subscribe((response) => {
-  //     console.log(response);
-  //     alert("Product was saved");
-  //     this.router.navigate(["/product-list"]);
-  //   })
-  // }
-
-
   saveProduct() {
     const formData = new FormData();
 
