@@ -89,9 +89,9 @@
 
 .close-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 1.2em;
+  top: 30px;
+  right: 30px;
+  font-size: 2.5em;
   color: #aaaaaa;
   cursor: pointer;
   transition: color 0.3s;

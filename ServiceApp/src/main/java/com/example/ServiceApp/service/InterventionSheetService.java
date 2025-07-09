@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -65,7 +66,7 @@ public class InterventionSheetService {
     }
 
     public List<InterventionSheetDto> findAll() {
-        List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAll();
+        List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAllByOrderByIdDesc();
         return interventionSheetMapper.toDtoList(interventionSheetList);
     }
 

@@ -54,6 +54,9 @@ public interface InterventionSheetRepository extends JpaRepository<InterventionS
             CAST(t.dateOfIntervention AS string) LIKE CONCAT('%', :keyword, '%') OR
             CAST(t.dataOfExpireWarranty AS string) LIKE CONCAT('%', :keyword, '%')
         ))
+        ORDER BY t.id DESC
 """)
     List<InterventionSheet> searchIntervention(@Param("keyword") String keyword);
+
+    List<InterventionSheet> findAllByOrderByIdDesc();
 }
