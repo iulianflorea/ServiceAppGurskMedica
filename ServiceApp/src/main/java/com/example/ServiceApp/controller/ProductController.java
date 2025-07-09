@@ -34,14 +34,15 @@ public class ProductController {
 //    }
 
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(
+    public ResponseEntity<ProductDto> saveOrUpdateProduct(
+            @RequestParam(required = false) Long id,
             @RequestParam String name,
             @RequestParam String cod,
             @RequestParam Integer quantity,
             @RequestParam Long producerName,
             @RequestParam(required = false) MultipartFile image
     ) {
-        return productService.createProduct(name, cod, producerName, quantity, image);
+        return productService.saveOrUpdateProduct(id,name, cod, producerName, quantity, image);
     }
 
     @GetMapping("/getAll")
