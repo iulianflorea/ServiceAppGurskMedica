@@ -83,7 +83,7 @@ export class ProductFormComponent implements OnInit {
 
     const formData = new FormData();
 
-    // Adaugă câmpurile produsului
+    formData.append('id', this.id.toString());
     formData.append("name", this.name);
     formData.append("cod", this.cod);
     formData.append("quantity", this.quantity.toString());
