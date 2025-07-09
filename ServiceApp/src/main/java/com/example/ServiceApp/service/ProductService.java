@@ -53,37 +53,6 @@ public class ProductService {
         return productMapper.toDto(productToBeSaved);
     }
 
-//    public ResponseEntity<ProductDto> createProduct(String name, String cod, Long producer, Integer quantity, MultipartFile image) {
-//        String imageName = null;
-//
-//        if (image != null && !image.isEmpty()) {
-//            imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-//
-//            Path uploadPath = Paths.get("uploads");
-//            try {
-//                if (!Files.exists(uploadPath)) {
-//                    Files.createDirectories(uploadPath);
-//                }
-//
-//                Path filePath = uploadPath.resolve(imageName);
-//                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//            } catch (IOException e) {
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//            }
-//        }
-//
-//        Product product = new Product();
-//        product.setName(name);
-//        product.setCod(cod);
-//        product.setQuantity(quantity);
-//        product.setProducerId(producer);
-//        product.setImageName(imageName);
-//
-//        productRepository.save(product);
-//
-//        ProductDto dto = productMapper.toDto(product);
-//        return ResponseEntity.ok(dto);
-//    }
 
     public ResponseEntity<ProductDto> saveOrUpdateProduct(Long id, String name, String cod, Long producer, Integer quantity, MultipartFile image) {
         Product product;
@@ -125,6 +94,7 @@ public class ProductService {
         ProductDto dto = productMapper.toDto(product);
         return ResponseEntity.ok(dto);
     }
+
 
 
     public Producer findProducerById(Long id) {
