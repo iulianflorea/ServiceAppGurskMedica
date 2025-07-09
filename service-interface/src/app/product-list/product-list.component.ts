@@ -14,7 +14,7 @@ import {Observable} from "rxjs";
 })
 export class ProductListComponent implements AfterViewInit{
 
-  displayedColumns: string[] = ['id', 'name', 'cod', 'producer', 'quantity', 'update', 'delete'];
+  displayedColumns: string[] = ['id', 'image', 'name', 'cod', 'producer', 'quantity', 'update', 'delete'];
   dataSource: ProductDto[] = [];
   dataSource2 = new MatTableDataSource<ProductDto>(this.dataSource);
   keyword: string = '';

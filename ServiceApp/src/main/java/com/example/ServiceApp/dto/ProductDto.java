@@ -15,5 +15,6 @@ public class ProductDto {
     private Integer quantity;
     private Long producer;
     private String producerName;
+    private String imageName;
 }
 

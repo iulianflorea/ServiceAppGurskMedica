@@ -20,6 +20,7 @@ public class ProductMapper {
                 .cod(productDto.getCod())
                 .quantity(productDto.getQuantity())
                 .producerId(productDto.getProducer())
+                .imageName(productDto.getImageName())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class ProductMapper {
                 .quantity(product.getQuantity())
                 .producer(product.getProducerId())
                 .producerName(getProducerName(product))
+                .imageName(product.getImageName())
                 .build();
     }
 

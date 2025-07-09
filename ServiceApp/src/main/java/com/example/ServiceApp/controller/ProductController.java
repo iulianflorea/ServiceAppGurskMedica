@@ -9,8 +9,15 @@ import com.example.ServiceApp.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/product")
@@ -21,9 +28,20 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-@PostMapping
-    public ProductDto create(@RequestBody ProductDto productDto) {
-        return productService.save(productDto);
+//@PostMapping
+//    public ProductDto create(@RequestBody ProductDto productDto) {
+//        return productService.save(productDto);
+//    }
+
+    @PostMapping
+    public ResponseEntity<ProductDto> createProduct(
+            @RequestParam String name,
+            @RequestParam String cod,
+            @RequestParam Integer quantity,
+            @RequestParam Long producerName,
+            @RequestParam(required = false) MultipartFile image
+    ) {
+        return productService.createProduct(name, cod, producerName, quantity, image);
     }
 
     @GetMapping("/getAll")

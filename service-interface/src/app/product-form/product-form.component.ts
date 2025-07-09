@@ -19,12 +19,29 @@ export class ProductFormComponent implements OnInit {
   producerList: ProducerDto[] = [];
   producerSelected: any;
 
+  selectedFile: File | null = null;
+  previewUrl: string | ArrayBuffer | null = null;
+
+
+  onFileSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files[0]) {
+      this.selectedFile = fileInput.files[0];
+
+      // Pentru preview
+      const reader = new FileReader();
+      reader.onload = e => this.previewUrl = reader.result;
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
 
 
   productForm: FormGroup = new FormGroup({
     name: new FormControl,
     cod: new FormControl,
     quantity: new FormControl,
+
   })
 
   constructor(private httpClient: HttpClient,
@@ -56,14 +73,27 @@ export class ProductFormComponent implements OnInit {
   }
 
   saveProduct() {
-    var product = {
-      id: this.id,
-      name: this.name,
-      cod: this.cod,
-      producer: this.producerSelected,
-      quantity: this.quantity
+    // var product = {
+    //   id: this.id,
+    //   name: this.name,
+    //   cod: this.cod,
+    //   producer: this.producerSelected,
+    //   quantity: this.quantity
+    // }
+
+    const formData = new FormData();
+
+    // Adaugă câmpurile produsului
+    formData.append("name", this.name);
+    formData.append("cod", this.cod);
+    formData.append("quantity", this.quantity.toString());
+    formData.append("producerName", this.producerSelected);
+
+    // Adaugă imaginea (dacă există)
+    if (this.selectedFile) {
+      formData.append("image", this.selectedFile);
     }
-    this.httpClient.post("/api/product", product).subscribe((response) => {
+    this.httpClient.post("/api/product", formData).subscribe((response) => {
       console.log(response);
       alert("Product was saved");
       this.router.navigate(["/product-list"]);
