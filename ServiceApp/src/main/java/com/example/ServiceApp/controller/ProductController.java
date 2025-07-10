@@ -40,9 +40,10 @@ public class ProductController {
             @RequestParam String cod,
             @RequestParam Integer quantity,
             @RequestParam Long producerName,
+            @RequestParam Double price,
             @RequestParam(required = false) MultipartFile image
     ) {
-        return productService.saveOrUpdateProduct(id,name, cod, producerName, quantity, image);
+        return productService.saveOrUpdateProduct(id,name, cod, producerName, price, quantity, image);
     }
 
     @GetMapping("/getAll")

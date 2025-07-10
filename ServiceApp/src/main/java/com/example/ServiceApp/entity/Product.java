@@ -24,5 +24,11 @@ public class Product {
     @JoinColumn(name = "producer_id", insertable = false, updatable = false)
     private Producer producer;
     private String imageName;
+    private Double price;
+
+    public Double getPriceWithVAT() {
+        if (price == null) return null;
+        return price * 1.21;
+    }
 
 }

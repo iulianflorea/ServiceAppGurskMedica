@@ -32,6 +32,11 @@
             <input matInput [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}"/>
           </mat-form-field>
 
+          <mat-form-field appearance="fill">
+            <mat-label>Price</mat-label>
+            <input matInput [(ngModel)]="price"  type="number" formControlName="price">
+          </mat-form-field>
+
           <h3>Alege imaginea</h3>
           <input type="file" (change)="onFileSelected($event)" accept="image/*"/>
           <img *ngIf="previewUrl" [src]="previewUrl" width="150" style="margin-top: 10px;"/>

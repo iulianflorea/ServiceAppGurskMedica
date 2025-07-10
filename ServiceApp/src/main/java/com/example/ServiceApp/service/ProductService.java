@@ -54,7 +54,7 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<ProductDto> saveOrUpdateProduct(Long id, String name, String cod, Long producer, Integer quantity, MultipartFile image) {
+    public ResponseEntity<ProductDto> saveOrUpdateProduct(Long id, String name, String cod, Long producer, Double price, Integer quantity, MultipartFile image) {
         Product product;
 
         if (id != null) {
@@ -73,6 +73,7 @@ public class ProductService {
         product.setCod(cod);
         product.setQuantity(quantity);
         product.setProducerId(producer);
+        product.setPrice(price);
 
         // Image handling
         if (image != null && !image.isEmpty()) {

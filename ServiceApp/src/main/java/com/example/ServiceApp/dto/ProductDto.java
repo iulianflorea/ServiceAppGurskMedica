@@ -16,5 +16,7 @@ public class ProductDto {
     private Long producer;
     private String producerName;
     private String imageName;
+    private Double price;
+    private Double priceWithVAT;
 }
 

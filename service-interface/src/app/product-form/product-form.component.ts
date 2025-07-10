@@ -21,7 +21,7 @@ export class ProductFormComponent implements OnInit {
 
   selectedFile: File | null = null;
   previewUrl: string | ArrayBuffer | null = null;
-
+  price: any;
 
   onFileSelected(event: Event) {
     const fileInput = event.target as HTMLInputElement;
@@ -41,6 +41,7 @@ export class ProductFormComponent implements OnInit {
     name: new FormControl,
     cod: new FormControl,
     quantity: new FormControl,
+    price: new FormControl(0)
 
   })
 
@@ -61,6 +62,7 @@ export class ProductFormComponent implements OnInit {
         this.cod = response.cod;
         this.producerSelected = response.producer;
         this.quantity = response.quantity;
+        this.price = response.price;
       })
     }
   }
@@ -83,6 +85,7 @@ export class ProductFormComponent implements OnInit {
     formData.append("cod", this.cod);
     formData.append("quantity", this.quantity.toString());
     formData.append('producerName', this.producerSelected.toString());
+    formData.append("price", this.price.toString());
 
     if (this.selectedFile) {
       formData.append("image", this.selectedFile);

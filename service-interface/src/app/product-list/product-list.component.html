@@ -38,6 +38,11 @@
         <td mat-cell *matCellDef="let element"> {{element.producerName}} </td>
       </ng-container>
 
+      <ng-container matColumnDef="priceWithVAT">
+        <th mat-header-cell *matHeaderCellDef>Price with TVA</th>
+        <td mat-cell *matCellDef="let element"> {{ element.priceWithVAT | number:'1.2-2' }} Euro </td>
+      </ng-container>
+
       <ng-container matColumnDef="quantity">
         <th mat-header-cell *matHeaderCellDef>Quantity</th>
         <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
