@@ -76,3 +76,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 
+
+#print-section {
+  width: 100%;
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  #print-section table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  #print-section td {
+    word-break: break-word;
+    font-size: 13px;
+  }
+
+  .modal-content {
+    padding: 10px;
+  }
+}

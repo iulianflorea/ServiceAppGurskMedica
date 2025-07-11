@@ -4,66 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apple-style Modal</title>
-  <style>
-    /* Fundal semi-transparent */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    /* Container modal */
-    .modal-content {
-      background-color: #ffffff;
-      width: 90%;
-      max-width: 400px;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      position: relative;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-
-    /* Stil pentru titlu */
-    .modal-title {
-      font-size: 1.5em;
-      font-weight: 600;
-      color: #333333;
-      margin-bottom: 10px;
-    }
-
-    /* Stil pentru descriere */
-    .modal-description {
-      font-size: 1em;
-      color: #666666;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    /* Buton de închidere */
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      font-size: 1.2em;
-      color: #aaaaaa;
-      cursor: pointer;
-      transition: color 0.3s;
-    }
-
-    /* Efect hover pentru butonul de închidere */
-    .close-btn:hover {
-      color: #333333;
-    }
-  </style>
 </head>
 <body>
 <!-- Fundal și container pentru modala -->
@@ -133,7 +73,7 @@
       </div>
 
       <div style="text-align: center;">
-        <p>Semnătură</p>
+        <p>Semnătură client</p>
         <img *ngIf="item.signatureBase64"
              [src]="item.signatureBase64"
              alt="Semnătură"
@@ -165,87 +105,3 @@
 </body>
 </html>
 
-
-
-
-<!--<div class="modal-overlay">-->
-<!--  <div class="modal-content" #printSection id="print-section">-->
-<!--    <span class="close-btn no-print" (click)="closeModal()">×</span>-->
-
-<!--    <h2 style="text-align: center;">Fișă de Intervenție</h2>-->
-
-<!--    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">-->
-<!--      <tr>-->
-<!--        <td><strong>Tip intervenție:</strong></td>-->
-<!--        <td>{{ item.typeOfIntervention }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Denumire echipament:</strong></td>-->
-<!--        <td>{{ item.equipmentName }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Serie:</strong></td>-->
-<!--        <td>{{ item.serialNumber }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Data intervenției:</strong></td>-->
-<!--        <td>{{ item.dateOfIntervention }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Garanție expiră la:</strong></td>-->
-<!--        <td>{{ item.dateOfExpireWarranty }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Durata garanției:</strong></td>-->
-<!--        <td>{{ item.yearsOfWarranty }} luni</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Client:</strong></td>-->
-<!--        <td>{{ item.customerName }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Tehnician:</strong></td>-->
-<!--        <td>{{ item.employeeName }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Problemă semnalată:</strong></td>-->
-<!--        <td>{{ item.noticed }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Rezolvare:</strong></td>-->
-<!--        <td>{{ item.fixed }}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td><strong>Notă inginer:</strong></td>-->
-<!--        <td>{{ item.engineerNote }}</td>-->
-<!--      </tr>-->
-<!--    </table>-->
-
-<!--    <div style="margin-top: 120px; display: flex; justify-content: flex-end;">-->
-<!--      <div style="text-align: center;">-->
-<!--        <p>Ștampilă</p>-->
-<!--        <img-->
-<!--          src="assets/stampila.jpg"-->
-<!--          alt="Ștampilă"-->
-<!--          style="max-width: 150px;" />-->
-<!--      </div>-->
-
-<!--      <div style="text-align: center;">-->
-<!--        <p>Semnătură</p>-->
-<!--        <img *ngIf="item.signatureBase64"-->
-<!--             [src]="item.signatureBase64"-->
-<!--             alt="Semnătură"-->
-<!--             style="max-width: 200px;"/>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="no-print" style="margin-top: 30px;">-->
-<!--      <a [routerLink]="['/intervention-sheet', item.id]">-->
-<!--        <button mat-raised-button>Edit</button>-->
-<!--      </a>-->
-<!--      <button mat-raised-button (click)="print()">Printează</button>-->
-<!--      <button mat-raised-button (click)="exportPdf()">Exportă PDF</button>-->
-<!--      <button mat-fab color="warn" (click)="delete(item)">Delete</button>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->

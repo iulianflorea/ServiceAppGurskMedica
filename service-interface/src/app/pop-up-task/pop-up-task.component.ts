@@ -106,26 +106,58 @@ export class PopUpTaskComponent {
   }
 
 
+  // exportPdf() {
+  //   const element = this.printSection.nativeElement;
+  //
+  //   // Ascunde butoanele înainte de conversie PDF
+  //   const buttons = element.querySelectorAll('.no-print');
+  //   buttons.forEach((btn: HTMLElement) => btn.style.display = 'none');
+  //
+  //   const options = {
+  //     margin: 10,
+  //     filename: 'interventie.pdf',
+  //     image: { type: 'jpeg', quality: 0.98 },
+  //     html2canvas: { scale: 2 },
+  //     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  //   };
+  //
+  //   html2pdf().from(element).set(options).save().then(() => {
+  //     // Revine la vizibilitatea butoanelor după salvare
+  //     buttons.forEach((btn: HTMLElement) => btn.style.display = '');
+  //   });
+  // }
+
   exportPdf() {
     const element = this.printSection.nativeElement;
 
-    // Ascunde butoanele înainte de conversie PDF
+    // Ascunde temporar butoanele
     const buttons = element.querySelectorAll('.no-print');
     buttons.forEach((btn: HTMLElement) => btn.style.display = 'none');
 
     const options = {
-      margin: 10,
+      margin: 0,
       filename: 'interventie.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: document.documentElement.scrollWidth,  // 🟢 cheia: folosește întreaga lățime reală
+      },
+      jsPDF: {
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'portrait'
+      }
     };
 
     html2pdf().from(element).set(options).save().then(() => {
-      // Revine la vizibilitatea butoanelor după salvare
+      // Reafișează butoanele
       buttons.forEach((btn: HTMLElement) => btn.style.display = '');
     });
   }
+
 
 
 
