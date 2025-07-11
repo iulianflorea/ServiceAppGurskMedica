@@ -1,107 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple-style Modal</title>
-</head>
-<body>
-<!-- Fundal și container pentru modala -->
-<div class="modal-overlay" id="modal-overlay">
 
-  <div class="modal-content" #printSection id="print-section">
+<!-- Fundal întunecat -->
+<div class="modal-backdrop"></div>
+
+<!-- Modala centrată -->
+<div class="modal-wrapper" (click)="onBackdropClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()" #printSection id="print-section">
     <span class="close-btn no-print" (click)="closeModal()">×</span>
 
     <h2 style="text-align: center;">Fișă de Intervenție</h2>
 
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-      <tr>
-        <td><strong>Tip intervenție:</strong></td>
-        <td>{{ item.typeOfIntervention }}</td>
-      </tr>
-      <tr>
-        <td><strong>Denumire echipament:</strong></td>
-        <td>{{ item.equipmentName }}</td>
-      </tr>
-      <tr>
-        <td><strong>Serie:</strong></td>
-        <td>{{ item.serialNumber }}</td>
-      </tr>
-      <tr>
-        <td><strong>Data intervenției:</strong></td>
-        <td>{{ item.dateOfIntervention }}</td>
-      </tr>
-      <tr>
-        <td><strong>Garanție expiră la:</strong></td>
-        <td>{{ item.dateOfExpireWarranty }}</td>
-      </tr>
-      <tr>
-        <td><strong>Durata garanției:</strong></td>
-        <td>{{ item.yearsOfWarranty }} luni</td>
-      </tr>
-      <tr>
-        <td><strong>Client:</strong></td>
-        <td>{{ item.customerName }}</td>
-      </tr>
-      <tr>
-        <td><strong>Tehnician:</strong></td>
-        <td>{{ item.employeeName }}</td>
-      </tr>
-      <tr>
-        <td><strong>Problemă semnalată:</strong></td>
-        <td>{{ item.noticed }}</td>
-      </tr>
-      <tr>
-        <td><strong>Rezolvare:</strong></td>
-        <td>{{ item.fixed }}</td>
-      </tr>
-      <tr>
-        <td><strong>Notă inginer:</strong></td>
-        <td>{{ item.engineerNote }}</td>
-      </tr>
+      <tr><td><strong>Tip intervenție:</strong></td><td>{{ item.typeOfIntervention }}</td></tr>
+      <tr><td><strong>Denumire echipament:</strong></td><td>{{ item.equipmentName }}</td></tr>
+      <tr><td><strong>Serie:</strong></td><td>{{ item.serialNumber }}</td></tr>
+      <tr><td><strong>Data intervenției:</strong></td><td>{{ item.dateOfIntervention }}</td></tr>
+      <tr><td><strong>Garanție expiră la:</strong></td><td>{{ item.dateOfExpireWarranty }}</td></tr>
+      <tr><td><strong>Durata garanției:</strong></td><td>{{ item.yearsOfWarranty }} luni</td></tr>
+      <tr><td><strong>Client:</strong></td><td>{{ item.customerName }}</td></tr>
+      <tr><td><strong>Tehnician:</strong></td><td>{{ item.employeeName }}</td></tr>
+      <tr><td><strong>Problemă semnalată:</strong></td><td>{{ item.noticed }}</td></tr>
+      <tr><td><strong>Rezolvare:</strong></td><td>{{ item.fixed }}</td></tr>
+      <tr><td><strong>Notă inginer:</strong></td><td>{{ item.engineerNote }}</td></tr>
     </table>
 
-    <!-- Semnătură în colțul din dreapta jos -->
     <div style="margin-top: 120px; display: flex; justify-content: flex-end;">
-
-      <div style="text-align: center;">
+      <div style="text-align: center; margin-right: 20px;">
         <p>Ștampilă</p>
-        <img
-          src="assets/stampila.png"
-          alt="Ștampilă"
-          style="max-width: 150px;" />
+        <img src="assets/stampila.png" alt="Ștampilă" style="max-width: 150px;" />
       </div>
-
       <div style="text-align: center;">
         <p>Semnătură client</p>
-        <img *ngIf="item.signatureBase64"
-             [src]="item.signatureBase64"
-             alt="Semnătură"
-             style="max-width: 200px;"/>
+        <img *ngIf="item.signatureBase64" [src]="item.signatureBase64" alt="Semnătură" style="max-width: 200px;" />
       </div>
     </div>
 
-    <!-- Butoane neprintabile -->
     <div class="no-print" style="margin-top: 30px;">
       <a routerLink="/intervention-sheet/{{item.id}}">
         <button mat-raised-button>Edit</button>
       </a>
-
       <button mat-raised-button (click)="print()">Printează</button>
       <button mat-raised-button (click)="exportPdf()">Exportă PDF</button>
       <button mat-fab color="warn" (click)="delete(item)">Delete</button>
     </div>
   </div>
-
 </div>
-
-<script>
-  // Funcția pentru închiderea modalului
-  function closeModal() {
-    document.getElementById("modal-overlay").style.display = "none";
-  }
-</script>
-
-</body>
-</html>
-

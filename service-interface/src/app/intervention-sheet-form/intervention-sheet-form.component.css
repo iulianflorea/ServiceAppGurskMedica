@@ -48,7 +48,7 @@
   margin: 3rem auto;
   padding: 2rem;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.5); /* semi-transparent white */
+  /*background: rgba(255, 255, 255, 0.5); !* semi-transparent white *!*/
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(6px); /* opțional: efect modern de blur */
 }

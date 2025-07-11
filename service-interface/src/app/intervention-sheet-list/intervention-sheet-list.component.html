@@ -104,18 +104,24 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <app-pop-up-task
-      *ngIf="isModalOpen"
-      [item]="selectedItem"
-      (close)="closeModal()">
-    </app-pop-up-task>
+
 
     <mat-paginator [pageSizeOptions]="[10, 20, 30]"
                    showFirstLastButtons
                    aria-label="Select page of periodic elements">
     </mat-paginator>
   </div>
+
+
+
 </div>
+
+<app-pop-up-task
+  *ngIf="isModalOpen"
+  [item]="selectedItem"
+  (close)="closeModal()">
+</app-pop-up-task>
+
 
 <div *ngIf="isMobile" class="intervention-container">
   <mat-card *ngFor="let item of searchResult" class="mobile-card">

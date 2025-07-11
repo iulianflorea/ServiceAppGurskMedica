@@ -1,0 +1,203 @@
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.all {
+  /*background: #90f1ca;*/
+  background-image: url("/assets/Background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+@media screen and (max-width: 768px) {
+  .intervention-container {
+    padding: 10px;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar mat-form-field {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .add-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .mat-header-cell,
+  .mat-cell {
+    padding: 8px 12px;
+  }
+
+  .no-print {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .no-print button {
+    width: 100%;
+  }
+}
+
+.mobile-card {
+  margin-bottom: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-bar mat-form-field {
+    width: 100%;
+  }
+
+  .add-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+  }
+}
+
+
+
+#print-section {
+  width: 100%;
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  #print-section table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  #print-section td {
+    word-break: break-word;
+    font-size: 13px;
+  }
+
+  .modal-content {
+    padding: 10px;
+  }
+}
+
+
+
+
+@include mat.core();
+
+// Definește paletele
+$primary: mat.define-palette(mat.$indigo-palette);
+$accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$warn: mat.define-palette(mat.$red-palette);
+
+$light-theme: mat.define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
+));
+
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
+));
+
+// Aplica tema LIGHT global ca implicit
+@include mat.all-component-themes($light-theme);
+
+// Tema DARK — doar când se aplică `.dark-theme` pe `body`
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+}
+
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --card-color: rgba(255, 255, 255, 0.7); /* alb semi-transparent */
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --card-color: rgba(0, 0, 0, 0.4); /* negru semi-transparent */
+  --border-color: rgba(255, 255, 255, 0.2);
+}
+
+
+.form-wrapper,
+.modal-content,
+.transparent-box,
+.container-form,
+.intervention-container,
+.intervention-sheet-form,
+.product-container,
+.header,
+.customer-container,
+.employee-container,
+.equipment-container,
+.login,
+.product-container,
+.register
+{
+  background-color: var(--card-color);
+  color: var(--text-color);
+  backdrop-filter: blur(6px);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mat-card {
+  background-color: var(--card-color) !important;
+  color: var(--text-color) !important;
+}
+
+button, .mat-button {
+  color: var(--text-color);
+}
+
+input, textarea, select {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+}
+
+::ng-deep .mat-form-field-flex {
+  background: transparent !important;
+}
+
+::ng-deep .mat-form-field-infix {
+  background: transparent !important;
+}
+
+::ng-deep .mat-input-element {
+  background: transparent !important;
+}

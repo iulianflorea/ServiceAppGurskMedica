@@ -36,6 +36,8 @@ import {AuthInterceptor} from "./header/auth-interceptor";
 import { SignaturePadComponent } from './signature-pad/signature-pad.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatMenuModule} from "@angular/material/menu";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {PopUpTaskComponent} from "./pop-up-task/pop-up-task.component";
 
 
 
@@ -81,7 +83,9 @@ import {MatMenuModule} from "@angular/material/menu";
     MatDividerModule,
     MatFormFieldModule,
     MatAutocompleteModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule,
+    PopUpTaskComponent
   ],
   providers: [
     {

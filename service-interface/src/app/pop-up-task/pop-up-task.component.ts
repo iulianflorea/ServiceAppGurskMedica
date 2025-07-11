@@ -105,28 +105,6 @@ export class PopUpTaskComponent {
     }
   }
 
-
-  // exportPdf() {
-  //   const element = this.printSection.nativeElement;
-  //
-  //   // Ascunde butoanele înainte de conversie PDF
-  //   const buttons = element.querySelectorAll('.no-print');
-  //   buttons.forEach((btn: HTMLElement) => btn.style.display = 'none');
-  //
-  //   const options = {
-  //     margin: 10,
-  //     filename: 'interventie.pdf',
-  //     image: { type: 'jpeg', quality: 0.98 },
-  //     html2canvas: { scale: 2 },
-  //     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  //   };
-  //
-  //   html2pdf().from(element).set(options).save().then(() => {
-  //     // Revine la vizibilitatea butoanelor după salvare
-  //     buttons.forEach((btn: HTMLElement) => btn.style.display = '');
-  //   });
-  // }
-
   exportPdf() {
     const element = this.printSection.nativeElement;
 
@@ -160,7 +138,9 @@ export class PopUpTaskComponent {
 
 
 
-
+  onBackdropClick(event: MouseEvent) {
+    this.closeModal(); // deja o ai definită
+  }
 
 
   closeModal() {

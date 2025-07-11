@@ -8,11 +8,11 @@
 .container-form {
   margin: 30px;
   border-radius: 20px;
-  background-color: rgba(245, 245, 245, 0.7);
+  /*background-color: rgba(245, 245, 245, 0.7);*/
   border: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   font-family: Arial, sans-serif;
-  color: #333;
+  /*color: #333;*/
   width: 350px;
   height: auto;
   padding: 10px;
