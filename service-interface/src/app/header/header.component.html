@@ -39,6 +39,11 @@
       <mat-icon>menu</mat-icon>
     </button>
 
+    <mat-slide-toggle
+      [checked]="isDarkMode"
+      (change)="toggleDarkMode($event)">
+      🌙 Dark Mode
+    </mat-slide-toggle>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/dashboard"><mat-icon>home</mat-icon>Dashboard</button>
       <button mat-menu-item (click)="logout()" routerLink="/login"><mat-icon>logout</mat-icon>Logout</button>
