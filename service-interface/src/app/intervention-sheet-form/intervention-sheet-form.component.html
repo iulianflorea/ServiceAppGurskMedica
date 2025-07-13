@@ -1,4 +1,3 @@
-
 <div class="form-wrapper">
   <div class="container">
     <div class="title-form">
@@ -90,8 +89,7 @@
       </div>
 
       <!-- Jos: Date & Save -->
-      <div class="form-bottom">
-
+      <div class="date-form">
         <mat-form-field appearance="fill">
           <mat-label>Date of intervention</mat-label>
           <input
@@ -104,10 +102,11 @@
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker [touchUi]="isMobile"></mat-datepicker>
         </mat-form-field>
-
-        <button mat-raised-button color="primary" type="submit">Save</button>
       </div>
-
+      <div class="form-button">
+        <button mat-raised-button type="submit">Save</button>
+        <button mat-raised-button type="submit" routerLink="/intervention-sheet-list">cancel</button>
+      </div>
     </form>
   </div>
 </div>

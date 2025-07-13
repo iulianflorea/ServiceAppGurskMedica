@@ -136,7 +136,7 @@ $dark-theme: mat.define-dark-theme((
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
-  --card-color: rgba(255, 255, 255, 0.7); /* alb semi-transparent */
+  --card-color: rgba(255, 255, 255, 0.4); /* alb semi-transparent */
   --border-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -147,6 +147,27 @@ $dark-theme: mat.define-dark-theme((
   --border-color: rgba(255, 255, 255, 0.2);
 }
 
+
+//.form-wrapper,
+//.modal-content,
+//.transparent-box,
+//.container-form,
+//.intervention-container,
+//.intervention-sheet-form,
+//.product-container,
+//.header,
+//.customer-container,
+//.employee-container,
+//.equipment-container,
+//.login,
+//.product-container,
+//.register
+//{
+//  background-color: var(--card-color);
+//  color: var(--text-color);
+//  backdrop-filter: blur(6px);
+//  transition: background-color 0.3s ease, color 0.3s ease;
+//}
 
 .form-wrapper,
 .modal-content,
@@ -161,11 +182,12 @@ $dark-theme: mat.define-dark-theme((
 .equipment-container,
 .login,
 .product-container,
-.register
-{
+.register {
   background-color: var(--card-color);
   color: var(--text-color);
   backdrop-filter: blur(6px);
+  border: 1px solid transparent;
+  background-clip: padding-box;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -201,3 +223,5 @@ input, textarea, select {
 ::ng-deep .mat-input-element {
   background: transparent !important;
 }
+
+

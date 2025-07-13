@@ -1,6 +1,6 @@
 .header {
   border-radius: 20px;
-  color: #333;
+  /*color: #333;*/
   width: 50%;
   /*background-color: rgba(245, 245, 245, 0.7);*/
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -18,7 +18,7 @@
 }
 
 .buttons {
-  color: white;
+  /*color: white;*/
   width: 100%;
   /*background-color: #e0ce7a;*/
   display: flex;

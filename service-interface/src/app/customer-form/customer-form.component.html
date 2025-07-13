@@ -1,37 +1,36 @@
-<div class="container">
-  <div class="container-form">
-    <div class="">
-      <div class="title-form">
-        <h1 *ngIf="!id">Create customer</h1>
-        <h1 *ngIf="id">Update customer</h1>
-      </div>
-      <div>
-        <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="intervention-sheet-form">
-
-          <mat-form-field>
-            <mat-label>Name</mat-label>
-            <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>CUI</mat-label>
-            <input matInput [(ngModel)]="cui" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Address</mat-label>
-            <input matInput [(ngModel)]="address" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Telephone</mat-label>
-            <input matInput [(ngModel)]="telephone" [ngModelOptions]="{standalone: true}"/>
-          </mat-form-field>
-
-          <button mat-raised-button type="submit" color="primary">Save</button>
-        </form>
-
-      </div>
+<div class="form-wrapper">
+  <div class="container">
+    <div class="title-form">
+      <h1 *ngIf="!id">Create customer</h1>
+      <h1 *ngIf="id">Update customer</h1>
     </div>
+
+    <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="form-layout">
+      <div class="form">
+        <mat-form-field class="w-full">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>CUI</mat-label>
+          <input matInput [(ngModel)]="cui" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Address</mat-label>
+          <input matInput [(ngModel)]="address" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Telephone</mat-label>
+          <input matInput [(ngModel)]="telephone" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+        <div class="form-button">
+          <button mat-raised-button type="submit">Save</button>
+          <button mat-raised-button type="submit" routerLink="/customer-list">cancel</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
