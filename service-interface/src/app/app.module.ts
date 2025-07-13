@@ -38,6 +38,9 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {PopUpTaskComponent} from "./pop-up-task/pop-up-task.component";
+import { DocumentDialogComponent } from './document-dialog/document-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { SafePipe } from './safe.pipe';
 
 
 
@@ -59,6 +62,8 @@ import {PopUpTaskComponent} from "./pop-up-task/pop-up-task.component";
     LoginComponent,
     AuthGuardComponent,
     SignaturePadComponent,
+    DocumentDialogComponent,
+    SafePipe,
   ],
   imports: [
     BrowserModule,
@@ -85,7 +90,8 @@ import {PopUpTaskComponent} from "./pop-up-task/pop-up-task.component";
     MatAutocompleteModule,
     MatMenuModule,
     MatSlideToggleModule,
-    PopUpTaskComponent
+    PopUpTaskComponent,
+    MatDialogModule
   ],
   providers: [
     {

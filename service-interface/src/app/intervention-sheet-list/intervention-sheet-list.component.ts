@@ -15,6 +15,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {PopUpTaskComponent} from "../pop-up-task/pop-up-task.component";
 import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 import {MatCardModule} from "@angular/material/card";
+import {MatDialog} from "@angular/material/dialog";
+import {DocumentDialogComponent} from "../document-dialog/document-dialog.component";
 
 
 @Component({
@@ -43,7 +45,7 @@ import {MatCardModule} from "@angular/material/card";
 })
 export class InterventionSheetListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'dataOfExpireWarranty', 'yearsOfWarranty', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'view'];
+  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'dataOfExpireWarranty', 'yearsOfWarranty', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'view', 'documents'];
   dataSource: InterventionSheetDto[] = [];
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
   keyword: string = '';
@@ -62,7 +64,8 @@ export class InterventionSheetListComponent implements AfterViewInit {
   }
 
   constructor(private httpClient: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private dialog: MatDialog) {
   }
 
   selectedItem: any = null;
@@ -147,6 +150,14 @@ export class InterventionSheetListComponent implements AfterViewInit {
       })
     }
     this.searchInterventionSheet(this.keyword).subscribe(data => this.searchResult = data);
+  }
+
+
+  openDocumentDialog(intervention: any): void {
+    this.dialog.open(DocumentDialogComponent, {
+      width: '600px',
+      data: { intervention }
+    });
   }
 
 

@@ -12,4 +12,8 @@ export class AuthenticationService {
     // Implementează logica de verificare a existenței și validității tokenului aici
     return !!localStorage.getItem('token');
   }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
 }

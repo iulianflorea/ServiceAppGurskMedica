@@ -99,6 +99,15 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="documents">
+        <mat-header-cell *matHeaderCellDef> Documente </mat-header-cell>
+        <mat-cell *matCellDef="let intervention">
+          <button mat-raised-button color="primary" (click)="openDocumentDialog(intervention)">
+            View Documents
+          </button>
+        </mat-cell>
+      </ng-container>
+
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
