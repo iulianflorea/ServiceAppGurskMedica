@@ -8,26 +8,44 @@ import {AuthenticationService} from "../auth-guard/AuthenticationService";
 })
 export class DocumentService {
 
-  private apiUrl = 'http://localhost:8080/api/interventions'; // modifică dacă e nevoie
+  private apiUrl = 'http://188.24.7.49:8080/api/interventions'; // modifică dacă e nevoie
 
   constructor(private http: HttpClient, private authService: AuthenticationService) {
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
   }
 
   uploadDocument(interventionId: number, file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post(`${this.apiUrl}/${interventionId}/documents`, formData, { responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/${interventionId}/documents`, formData, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    });
   }
 
   getDocuments(interventionId: number): Observable<any[]> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`
+    return this.http.get<any[]>(`${this.apiUrl}/${interventionId}/documents`, {
+      headers: this.getAuthHeaders()
     });
-    return this.http.get<any[]>(`${this.apiUrl}/${interventionId}/documents`);
   }
 
   deleteDocument(interventionId: number, filename: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${interventionId}/documents/${filename}`,{ responseType: 'text' });
+    return this.http.delete(`${this.apiUrl}/${interventionId}/documents/${filename}`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    });
+  }
+
+  getDocumentFile(interventionId: number, filename: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${interventionId}/documents/${filename}`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    });
   }
 }

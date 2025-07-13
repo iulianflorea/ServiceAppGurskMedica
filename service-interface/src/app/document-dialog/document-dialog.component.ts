@@ -1,6 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {DocumentService} from "../services/document.service";
+import {InterventionSheetListComponent} from "../intervention-sheet-list/intervention-sheet-list.component";
 
 @Component({
   selector: 'app-document-dialog',
@@ -11,7 +12,7 @@ export class DocumentDialogComponent {
 
   documents: any[] = [];
   selectedDocumentUrl: string | null = null;
-  private apiUrl = 'http://localhost:8080/api/interventions';
+  private apiUrl = 'http://188.24.7.49:8080/api/interventions';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private documentService: DocumentService) {}
 
@@ -24,7 +25,7 @@ export class DocumentDialogComponent {
       next: (docs) => {
         this.documents = docs.map((doc: any) => ({
           ...doc,
-          url: `http://localhost:8080/api/interventions/${this.data.intervention.id}/documents/${doc.name}`
+          url: `http://188.24.7.49:8080/api/interventions/${this.data.intervention.id}/documents/${doc.name}`
         }));
       },
       error: (err) => console.error('Error loading documents', err)
@@ -52,11 +53,21 @@ export class DocumentDialogComponent {
 
   previewDocument(doc: { name: string, url: string }) {
     if (doc.name.toLowerCase().endsWith('.pdf')) {
-      this.selectedDocumentUrl = doc.url;
+      this.documentService.getDocumentFile(this.data.intervention.id, doc.name).subscribe({
+        next: (blob) => {
+          const blobUrl = URL.createObjectURL(blob);
+          this.selectedDocumentUrl = blobUrl;
+        },
+        error: (err) => {
+          console.error('Error loading document', err);
+          this.selectedDocumentUrl = null;
+        }
+      });
     } else {
       this.selectedDocumentUrl = null;
       window.open(doc.url, '_blank');
     }
   }
 
+  protected readonly InterventionSheetListComponent = InterventionSheetListComponent;
 }

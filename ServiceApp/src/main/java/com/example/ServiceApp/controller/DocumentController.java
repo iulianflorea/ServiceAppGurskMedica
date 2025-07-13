@@ -1,6 +1,10 @@
 package com.example.ServiceApp.controller;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/interventions")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://188.24.7.49:4200")
 public class DocumentController {
 
 
@@ -45,21 +49,46 @@ public class DocumentController {
     @GetMapping("/{id}/documents")
     public ResponseEntity<List<Map<String, String>>> listDocuments(@PathVariable Long id) {
         try {
-            Path folder = rootLocation.resolve("intervention-" + id);
-            if (!Files.exists(folder)) {
+            Path interventionFolder = rootLocation.resolve("intervention-" + id);
+            if (!Files.exists(interventionFolder)) {
                 return ResponseEntity.ok(Collections.emptyList());
             }
 
-            List<Map<String, String>> files = Files.list(folder)
+            List<Map<String, String>> files = Files.list(interventionFolder)
                     .map(path -> {
-                        Map<String, String> fileInfo = new HashMap<>();
-                        fileInfo.put("name", path.getFileName().toString());
-                        fileInfo.put("url", "/api/files/intervention-" + id + "/" + path.getFileName());
-                        return fileInfo;
+                        Map<String, String> fileData = new HashMap<>();
+                        fileData.put("name", path.getFileName().toString());
+                        return fileData;
                     })
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(files);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @GetMapping("/{id}/documents/{filename:.+}")
+    public ResponseEntity<Resource> getDocument(@PathVariable Long id,
+                                                @PathVariable String filename) {
+        try {
+            Path filePath = rootLocation.resolve("intervention-" + id).resolve(filename);
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists() || !resource.isReadable()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                    .body(resource);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

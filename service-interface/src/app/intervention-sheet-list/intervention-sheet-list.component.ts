@@ -155,7 +155,8 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
   openDocumentDialog(intervention: any): void {
     this.dialog.open(DocumentDialogComponent, {
-      width: '600px',
+      width: '60vw',   // 80% din lățimea viewport-ului
+      height: '80vh',  // 80% din înălțimea viewport-ului
       data: { intervention }
     });
   }

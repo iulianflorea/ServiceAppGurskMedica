@@ -1,11 +1,11 @@
-<h2 mat-dialog-title>Documente pentru {{ data.intervention.name }}</h2>
+<h2 mat-dialog-title>Documente pentru fisa de interventie {{ data.intervention.id }}</h2>
 
 <mat-dialog-content>
   <div *ngIf="documents.length === 0">Nu există documente încă.</div>
 
-  <div *ngFor="let doc of documents">
-    <a href="{{doc.url}}" target="_blank">{{doc.name}}</a>
-  </div>
+<!--  <div *ngFor="let doc of documents">-->
+<!--    <a href="{{doc.url}}" target="_blank">{{doc.name}}</a>-->
+<!--  </div>-->
 
   <br>
   <input type="file" (change)="onFileSelected($event)" />
@@ -34,7 +34,7 @@
 
 <div *ngIf="selectedDocumentUrl" class="pdf-preview">
   <h3>Previzualizare PDF</h3>
-  <iframe [src]="selectedDocumentUrl | safe" width="100%" height="500px" style="border: none;"></iframe>
+  <iframe [src]="selectedDocumentUrl | safe "></iframe>
 </div>
 
 
