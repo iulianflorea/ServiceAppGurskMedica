@@ -2,6 +2,8 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {DocumentService} from "../services/document.service";
 import {InterventionSheetListComponent} from "../intervention-sheet-list/intervention-sheet-list.component";
+// @ts-ignore
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-document-dialog',
@@ -67,6 +69,19 @@ export class DocumentDialogComponent {
       this.selectedDocumentUrl = null;
       window.open(doc.url, '_blank');
     }
+  }
+
+
+  downloadDocument(doc: { name: string }) {
+    this.documentService.downloadDocument(this.data.intervention.id, doc.name).subscribe({
+      next: (blob) => {
+        saveAs(blob, doc.name);
+      },
+      error: (err) => {
+        console.error('Download failed', err);
+        alert('Descărcarea a eșuat.');
+      }
+    });
   }
 
   protected readonly InterventionSheetListComponent = InterventionSheetListComponent;

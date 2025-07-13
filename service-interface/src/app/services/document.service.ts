@@ -48,4 +48,11 @@ export class DocumentService {
       responseType: 'blob'
     });
   }
+
+  downloadDocument(interventionId: number, filename: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${interventionId}/documents/${filename}`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob' // primești fișierul ca Blob
+    });
+  }
 }

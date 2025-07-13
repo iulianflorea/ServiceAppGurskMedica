@@ -20,9 +20,9 @@
           <mat-icon>visibility</mat-icon>
         </button>
 
-        <a mat-icon-button matTooltip="Descarcă" [href]="doc.url" target="_blank" download>
+        <button mat-icon-button matTooltip="Descarcă" (click)="downloadDocument(doc)">
           <mat-icon>download</mat-icon>
-        </a>
+        </button>
 
         <button mat-icon-button matTooltip="Șterge" (click)="deleteDocument(doc.name)">
           <mat-icon>delete</mat-icon>

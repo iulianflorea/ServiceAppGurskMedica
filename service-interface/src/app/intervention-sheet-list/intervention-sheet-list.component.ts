@@ -17,6 +17,7 @@ import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 import {MatCardModule} from "@angular/material/card";
 import {MatDialog} from "@angular/material/dialog";
 import {DocumentDialogComponent} from "../document-dialog/document-dialog.component";
+import {BreakpointObserver} from "@angular/cdk/layout";
 
 
 @Component({
@@ -65,7 +66,8 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
   constructor(private httpClient: HttpClient,
               private router: Router,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private breakpointObserver: BreakpointObserver) {
   }
 
   selectedItem: any = null;
@@ -154,10 +156,16 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
 
   openDocumentDialog(intervention: any): void {
+    const isMobile = this.breakpointObserver.isMatched('(max-width: 600px)');
+
     this.dialog.open(DocumentDialogComponent, {
-      width: '60vw',   // 80% din lățimea viewport-ului
-      height: '80vh',  // 80% din înălțimea viewport-ului
-      data: { intervention }
+      width: isMobile ? '95vw' : '60vw',   // pe mobil aproape full screen, pe desktop 80%
+      height: isMobile ? '90vh' : '80vh',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      data: { intervention },
+      autoFocus: false,
+      restoreFocus: false,
     });
   }
 
