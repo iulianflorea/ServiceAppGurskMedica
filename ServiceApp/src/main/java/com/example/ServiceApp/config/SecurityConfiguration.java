@@ -58,7 +58,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/uploads/**").permitAll()
-                .requestMatchers("/interventions/**").permitAll()
+                .requestMatchers("/api/interventions/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

@@ -4,12 +4,15 @@
 
 <!-- Modala centrată -->
 <div class="modal-wrapper" (click)="onBackdropClick($event)">
+  <!-- Zona invizibilă pentru export PDF -->
+
   <div class="modal-content" (click)="$event.stopPropagation()" #printSection id="print-section">
     <span class="close-btn no-print" (click)="closeModal()">×</span>
 
     <h2 style="text-align: center;">Fișă de Intervenție</h2>
 
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <tr><td><strong>Numar fisa:</strong></td><td>{{ item.id }}</td></tr>
       <tr><td><strong>Tip intervenție:</strong></td><td>{{ item.typeOfIntervention }}</td></tr>
       <tr><td><strong>Denumire echipament:</strong></td><td>{{ item.equipmentName }}</td></tr>
       <tr><td><strong>Serie:</strong></td><td>{{ item.serialNumber }}</td></tr>
@@ -42,5 +45,6 @@
       <button mat-raised-button (click)="exportPdf()">Exportă PDF</button>
       <button mat-fab color="warn" (click)="delete(item)">Delete</button>
     </div>
+
   </div>
 </div>

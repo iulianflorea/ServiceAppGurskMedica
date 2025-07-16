@@ -1,44 +1,66 @@
-<h2 mat-dialog-title>Documente pentru fisa de interventie {{ data.intervention.id }}</h2>
+<!--<h2 mat-dialog-title>Documente pentru fisa de interventie {{ data.intervention.id }}</h2>-->
 
-<mat-dialog-content>
-  <div *ngIf="documents.length === 0">Nu există documente încă.</div>
+<!--<mat-dialog-content>-->
+<!--  <div *ngIf="documents.length === 0">Nu există documente încă.</div>-->
 
-<!--  <div *ngFor="let doc of documents">-->
-<!--    <a href="{{doc.url}}" target="_blank">{{doc.name}}</a>-->
-<!--  </div>-->
+<!--&lt;!&ndash;  <div *ngFor="let doc of documents">&ndash;&gt;-->
+<!--&lt;!&ndash;    <a href="{{doc.url}}" target="_blank">{{doc.name}}</a>&ndash;&gt;-->
+<!--&lt;!&ndash;  </div>&ndash;&gt;-->
 
-  <br>
-  <input type="file" (change)="onFileSelected($event)" />
-</mat-dialog-content>
+<!--  <br>-->
+<!--  <input type="file" (change)="onFileSelected($event)" />-->
+<!--</mat-dialog-content>-->
 
-<div class="document-item">
-  <table class="docs-table" *ngIf="documents.length > 0">
-    <tr *ngFor="let doc of documents">
-      <td>{{ doc.name }}</td>
-      <td>
-        <button mat-icon-button matTooltip="Vezi" (click)="previewDocument(doc)">
-          <mat-icon>visibility</mat-icon>
-        </button>
+<!--<div class="document-item">-->
+<!--  <table class="docs-table" *ngIf="documents.length > 0">-->
+<!--    <tr *ngFor="let doc of documents">-->
+<!--      <td>{{ doc.name }}</td>-->
+<!--      <td>-->
+<!--        <button mat-icon-button matTooltip="Vezi" (click)="previewDocument(doc)">-->
+<!--          <mat-icon>visibility</mat-icon>-->
+<!--        </button>-->
 
-        <button mat-icon-button matTooltip="Descarcă" (click)="downloadDocument(doc)">
-          <mat-icon>download</mat-icon>
-        </button>
+<!--        <button mat-icon-button matTooltip="Descarcă" (click)="downloadDocument(doc)">-->
+<!--          <mat-icon>download</mat-icon>-->
+<!--        </button>-->
 
-        <button mat-icon-button matTooltip="Șterge" (click)="deleteDocument(doc.name)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </tr>
-  </table>
-</div>
+<!--        <button mat-icon-button matTooltip="Șterge" (click)="deleteDocument(doc.name)">-->
+<!--          <mat-icon>delete</mat-icon>-->
+<!--        </button>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--  </table>-->
+<!--</div>-->
 
-<div *ngIf="selectedDocumentUrl" class="pdf-preview">
-  <h3>Previzualizare PDF</h3>
-  <iframe [src]="selectedDocumentUrl | safe "></iframe>
-</div>
+<!--<div *ngIf="selectedDocumentUrl" class="pdf-preview">-->
+<!--  <h3>Previzualizare PDF</h3>-->
+<!--  <iframe [src]="selectedDocumentUrl | safe "></iframe>-->
+<!--</div>-->
 
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Închide</button>
 </mat-dialog-actions>
+<h2>Documente intervenție cu numarul: {{data.intervention.id}}</h2>
+<input type="file" (change)="onFileSelected($event)" />
+<table>
+  <tr *ngFor="let document of documents">
+    <td>{{ document.name }}</td>
+    <td>
+      <button mat-icon-button (click)="previewDocument(document)">
+        <mat-icon>visibility</mat-icon>
+      </button>
+      <button mat-icon-button (click)="downloadDocument(document)">
+        <mat-icon>download</mat-icon>
+      </button>
+      <button mat-icon-button (click)="deleteDocument(document.name)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </tr>
+</table>
+
+<div *ngIf="previewUrl" style="height: 900px; border: 1px solid #ccc;">
+  <iframe [src]="previewUrl" width="100%" height="100%" type="application/pdf"></iframe>
+</div>
 
