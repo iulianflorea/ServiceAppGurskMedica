@@ -59,4 +59,5 @@ public interface InterventionSheetRepository extends JpaRepository<InterventionS
     List<InterventionSheet> searchIntervention(@Param("keyword") String keyword);
 
     List<InterventionSheet> findAllByOrderByIdDesc();
+    List<InterventionSheet> findAllByOrderByDateOfInterventionDesc();
 }

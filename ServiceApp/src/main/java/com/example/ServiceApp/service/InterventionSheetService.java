@@ -66,7 +66,7 @@ public class InterventionSheetService {
     }
 
     public List<InterventionSheetDto> findAll() {
-        List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAllByOrderByIdDesc();
+        List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAllByOrderByDateOfInterventionDesc();
         return interventionSheetMapper.toDtoList(interventionSheetList);
     }
 
