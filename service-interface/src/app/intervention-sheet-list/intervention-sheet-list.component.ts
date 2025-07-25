@@ -5,10 +5,10 @@ import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {HttpClient} from "@angular/common/http";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {Router, RouterLink} from "@angular/router";
+import {Router, RouterLink, RouterModule} from "@angular/router";
 import {Observable} from "rxjs";
 import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {CommonModule, NgForOf, NgIf} from "@angular/common";
 import {MatInputModule} from "@angular/material/input";
 import {MatSort} from "@angular/material/sort";
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -18,6 +18,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatDialog} from "@angular/material/dialog";
 import {DocumentDialogComponent} from "../document-dialog/document-dialog.component";
 import {BreakpointObserver} from "@angular/cdk/layout";
+
 
 
 @Component({
@@ -37,7 +38,9 @@ import {BreakpointObserver} from "@angular/cdk/layout";
     MatDatepickerModule,
     PopUpTaskComponent,
     ReactiveFormsModule,
-    MatCardModule
+    MatCardModule,
+    CommonModule,
+    RouterModule,
   ],
   standalone: true
 })

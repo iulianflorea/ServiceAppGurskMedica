@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, isDevMode} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -41,6 +41,10 @@ import {PopUpTaskComponent} from "./pop-up-task/pop-up-task.component";
 import { DocumentDialogComponent } from './document-dialog/document-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { SafePipe } from './safe.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import {RouterModule} from "@angular/router";
+import {CommonModule} from "@angular/common";
+
 
 
 
@@ -91,7 +95,15 @@ import { SafePipe } from './safe.pipe';
     MatMenuModule,
     MatSlideToggleModule,
     PopUpTaskComponent,
-    MatDialogModule
+    MatDialogModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+    CommonModule,
+    RouterModule,
   ],
   providers: [
     {

@@ -51,7 +51,8 @@ export class InterventionSheetFormComponent implements OnInit {
   filteredEmployees!: Observable<EmployeeDto[]>;
   filteredEquipment!: Observable<EquipmentDto[]>;
   filteredTypes!: Observable<string[]>;
-  isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  // isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  isMobile = window.innerWidth <= 768;
 
 
   interventionSheetForm: FormGroup = new FormGroup({

@@ -8,7 +8,7 @@ import {AuthenticationService} from "../auth-guard/AuthenticationService";
 })
 export class DocumentService {
 
-  private apiUrl = 'http://188.24.7.49:8080/api/interventions'; // modifică dacă e nevoie
+  private apiUrl = 'http://188.24.7.49:8080/api/interventions';
 
   constructor(private http: HttpClient, private authService: AuthenticationService) {
   }
