@@ -3,6 +3,7 @@ package com.example.ServiceApp.controller;
 import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.dto.ProducerDto;
 import com.example.ServiceApp.dto.ProductDto;
+import com.example.ServiceApp.dto.ProductScanDto;
 import com.example.ServiceApp.entity.Producer;
 import com.example.ServiceApp.entity.Product;
 import com.example.ServiceApp.service.ProductService;
@@ -16,7 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -71,4 +74,26 @@ public class ProductController {
         List<ProductDto> productDtoList = productService.search(keyword);
         return new ResponseEntity<>(productDtoList, HttpStatus.OK);
     }
+
+//    @PostMapping("/scan")
+//    public ResponseEntity<String> updateProductQuantityFromScan(@RequestBody ProductScanDto scanDTO) {
+//        try {
+//            productService.updateQuantityByCode(scanDTO.getCod(), scanDTO.getQuantity());
+//            return ResponseEntity.ok("Product quantity updated");
+//        } catch (RuntimeException ex) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+//        }
+//    }
+
+    @PostMapping("/scan")
+    public ResponseEntity<Map<String, String>> updateProductQuantityFromScan(@RequestBody ProductScanDto scanDTO) {
+        try {
+            productService.updateQuantityByCode(scanDTO.getCod(), scanDTO.getQuantity());
+            return ResponseEntity.ok(Collections.singletonMap("message", "Product quantity updated"));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("error", ex.getMessage()));
+        }
+    }
+
 }

@@ -44,6 +44,7 @@ import { SafePipe } from './safe.pipe';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
+import { ProductScanFormComponent } from './product-scan-form/product-scan-form.component';
 
 
 
@@ -68,6 +69,7 @@ import {CommonModule} from "@angular/common";
     SignaturePadComponent,
     DocumentDialogComponent,
     SafePipe,
+    ProductScanFormComponent,
   ],
   imports: [
     BrowserModule,

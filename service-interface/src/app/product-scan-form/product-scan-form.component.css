@@ -1,0 +1,29 @@
+.scan-container {
+  margin-top: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.scan{
+  /*background-color: rgba(245, 245, 245, 0.7);*/
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: Arial, sans-serif;
+  /*color: #333;*/
+  /*opacity: 0.9;*/
+  width: 300px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.scan-form {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

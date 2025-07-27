@@ -182,7 +182,8 @@ $dark-theme: mat.define-dark-theme((
 .equipment-container,
 .login,
 .product-container,
-.register {
+.register,
+.scan{
   background-color: var(--card-color);
   color: var(--text-color);
   backdrop-filter: blur(6px);

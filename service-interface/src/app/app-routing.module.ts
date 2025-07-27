@@ -14,6 +14,7 @@ import {RegisterComponent} from "./register/register.component";
 import {LoginComponent} from "./login/login.component";
 import {AuthGuardComponent} from "./auth-guard/auth-guard.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
+import {ProductScanFormComponent} from "./product-scan-form/product-scan-form.component";
 
 
 const routes: Routes = [
@@ -34,6 +35,7 @@ const routes: Routes = [
   {path: "employee-form", component: EmployeeFormComponent},
   {path: "employee-form/:id", component: EmployeeFormComponent},
   {path: "employee-list", component: EmployeeListComponent},
+  {path: "scan", component: ProductScanFormComponent},
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardComponent]}
 
 

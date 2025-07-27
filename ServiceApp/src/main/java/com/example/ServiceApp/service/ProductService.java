@@ -131,6 +131,18 @@ public class ProductService {
         return productMapper.toDtoList(productList);
     }
 
+    public void updateQuantityByCode(String cod, int quantity) {
+        Optional<Product> optionalProduct = productRepository.findByCodIgnoreCase(cod.trim());
+
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            product.setQuantity(quantity);
+            productRepository.save(product);
+        } else {
+            throw new RuntimeException("Produsul nu a fost găsit");
+        }
+    }
+
 
 
 }
