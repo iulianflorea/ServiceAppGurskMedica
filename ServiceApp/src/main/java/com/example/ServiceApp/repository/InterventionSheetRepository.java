@@ -1,6 +1,8 @@
 package com.example.ServiceApp.repository;
 
 import com.example.ServiceApp.entity.InterventionSheet;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -60,4 +62,6 @@ public interface InterventionSheetRepository extends JpaRepository<InterventionS
 
     List<InterventionSheet> findAllByOrderByIdDesc();
     List<InterventionSheet> findAllByOrderByDateOfInterventionDesc();
+    Page<InterventionSheet> findAllByOrderByDateOfInterventionDesc(Pageable pageable);
+
 }

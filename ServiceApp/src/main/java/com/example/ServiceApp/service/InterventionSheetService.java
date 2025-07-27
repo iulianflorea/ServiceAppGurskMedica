@@ -12,6 +12,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.naming.directory.SearchResult;
@@ -65,10 +69,16 @@ public class InterventionSheetService {
         return interventionSheetMapper.toDto(interventionSheet);
     }
 
-    public List<InterventionSheetDto> findAll() {
-        List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAllByOrderByDateOfInterventionDesc();
-        return interventionSheetMapper.toDtoList(interventionSheetList);
-    }
+//    public List<InterventionSheetDto> findAll() {
+//        List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAllByOrderByDateOfInterventionDesc();
+//        return interventionSheetMapper.toDtoList(interventionSheetList);
+//    }
+public List<InterventionSheetDto> findAll() {
+    Pageable topFifty = PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "dateOfIntervention"));
+    Page<InterventionSheet> interventionSheetPage = interventionSheetRepository.findAllByOrderByDateOfInterventionDesc(topFifty);
+    return interventionSheetMapper.toDtoList(interventionSheetPage.getContent());
+}
+
 
     public InterventionSheetDto update(InterventionSheetDto interventionSheetDto) {
         InterventionSheet interventionSheet = interventionSheetRepository.findById(interventionSheetDto.getId()).orElseThrow();
