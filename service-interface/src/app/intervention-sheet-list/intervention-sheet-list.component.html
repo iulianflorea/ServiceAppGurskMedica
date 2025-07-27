@@ -1,8 +1,5 @@
 
 <div class="intervention-container">
-
-  <!-- Search bar and date -->
-<!--  <form (submit)="search()"  class="search-bar">-->
   <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
   <mat-form-field>
       <mat-label>Search</mat-label>
@@ -17,10 +14,11 @@
       <mat-datepicker  touchUi #picker></mat-datepicker>
     </mat-form-field>
 
-    <button mat-flat-button color="primary" (click)="saveDate()">Search</button>
+    <button mat-flat-button color="primary" type="submit">Search</button>
+
   </form>
 
-  <!-- Button to add new sheet -->
+  <h1>Interventions</h1>
   <button mat-mini-fab color="accent" routerLink="/intervention-sheet"
           aria-label="Add new intervention sheet" class="add-button">
     <mat-icon>plus_one</mat-icon>

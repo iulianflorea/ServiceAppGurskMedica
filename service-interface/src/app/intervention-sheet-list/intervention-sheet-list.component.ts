@@ -91,14 +91,11 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
   saveDate() {
     this.selectedDate.setMinutes(this.selectedDate.getMinutes() - this.selectedDate.getTimezoneOffset());
-    const savedDate = this.selectedDate.toISOString().substring(0, 10) // Formatare ca string YYYY-MM-DD
-    console.log('Data salvată:', savedDate);
-
-    if (this.keyword === "") {
-      this.keyword = this.selectedDate.toISOString().slice(0, 10);
-    }
-
+    const savedDate = this.selectedDate.toISOString().substring(0, 10);
+    console.log('Data selectată:', savedDate);
   }
+
+
 
   ngOnInit() {
     this.isMobile = window.innerWidth < 768;
@@ -110,7 +107,6 @@ export class InterventionSheetListComponent implements AfterViewInit {
       this.dataSource = response as InterventionSheetDto[];
       this.dataSource2.data = this.dataSource;
     })
-
   }
 
 
@@ -129,12 +125,10 @@ export class InterventionSheetListComponent implements AfterViewInit {
     const id = interventionSheet.id;
     this.httpClient.get("/api/intervention-sheet/" + id).subscribe((response) => {
       console.log(response);
-
     })
   }
 
   update(interventionSheet: InterventionSheetDto) {
-
     this.httpClient.put("/api/intervention-sheet/update", interventionSheet).subscribe((response) => {
       console.log(response);
     })
@@ -148,15 +142,24 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
   search() {
     this.searchResult = [];
-    if (this.keyword) {
-      this.httpClient.get(`/api/intervention-sheet/search?keyword=${this.keyword}`).subscribe((data: any) => {
-        console.log(data);
-        this.dataSource2 = data;
-      })
-    }
-    this.searchInterventionSheet(this.keyword).subscribe(data => this.searchResult = data);
-  }
 
+    let finalKeyword = this.keyword;
+
+    // Dacă nu s-a scris nimic manual, dar s-a ales o dată, folosim data
+    if (!finalKeyword && this.selectedDate) {
+      const dateKeyword = new Date(this.selectedDate);
+      dateKeyword.setMinutes(dateKeyword.getMinutes() - dateKeyword.getTimezoneOffset());
+      finalKeyword = dateKeyword.toISOString().substring(0, 10); // YYYY-MM-DD
+    }
+
+    if (finalKeyword) {
+      this.searchInterventionSheet(finalKeyword).subscribe(data => {
+        console.log(data);
+        this.dataSource2.data = data;
+        this.searchResult = data;
+      });
+    }
+  }
 
   openDocumentDialog(intervention: any): void {
     const isMobile = this.breakpointObserver.isMatched('(max-width: 600px)');
