@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -11,30 +11,35 @@ export class ProductScanFormComponent {
   scanForm: FormGroup;
   responseMessage: string | null = null;
 
+  @ViewChild('quantityInput') quantityInput!: ElementRef;
+
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.scanForm = this.fb.group({
-      productCode: ['', Validators.required],
-      quantity: [1, [Validators.required, Validators.min(1)]]
+      quantity: [null, [Validators.required]], // fără valoare implicită
+      productCode: ['', Validators.required]
     });
   }
+
   onSubmit(): void {
     if (this.scanForm.valid) {
-      // const formData = this.scanForm.value;
       const formData = {
         cod: this.scanForm.value.productCode,
         quantity: this.scanForm.value.quantity
       };
-      console.log(formData);
+
+      console.log('Trimis:', formData);
+
       this.http.post("/api/product/scan", formData).subscribe({
         next: (res: any) => {
           this.responseMessage = 'Produs actualizat cu succes!';
-          this.scanForm.reset({ quantity: 1 });
+          this.scanForm.reset(); // resetează complet
+          setTimeout(() => this.quantityInput?.nativeElement.focus(), 0);
         },
         error: err => {
           this.responseMessage = 'Eroare: produsul nu a fost găsit.';
+          setTimeout(() => this.quantityInput?.nativeElement.focus(), 0);
         }
       });
     }
   }
-
 }
