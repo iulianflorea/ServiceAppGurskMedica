@@ -2,7 +2,8 @@
 <div class="container-header" *ngIf="!isMobile">
   <div class="header">
     <div class="title-logo">
-      <h1>Service Gursk</h1>
+<!--      <h1>Service Gursk</h1>-->
+      <img src="assets/logo.png" alt="Logo" width="200" />
     </div>
 
     <div class="buttons">
@@ -12,14 +13,18 @@
         </button>
       </div>
 
-      <button mat-button (click)="logout()" routerLink="/login">Logout</button>
-      <button routerLink="/login" mat-button>Login</button>
-      <button routerLink="/scan" mat-button>Scan</button>
-      <button routerLink="/customer-list" mat-button>Customers</button>
-      <button routerLink="/product-list" mat-button>Products</button>
-      <button routerLink="/equipment-list" mat-button>Equipments</button>
-      <button routerLink="/employee-list" mat-button>Employees</button>
-      <button routerLink="/intervention-sheet-list" mat-button>Interventions</button>
+<!--      <button mat-raised-button color="primary" (click)="runBackup()">Backup doc</button>-->
+<!--      <p *ngIf="backupStatus">{{ backupStatus }}</p>-->
+
+      <button mat-raised-button (click)="backupManualDbDoc()">Backup DB</button>
+      <button mat-raised-button (click)="logout()" routerLink="/login">Logout</button>
+      <button routerLink="/login" mat-raised-button>Login</button>
+      <button routerLink="/scan" mat-raised-button>Scan</button>
+      <button routerLink="/customer-list" mat-raised-button>Customers</button>
+      <button routerLink="/product-list" mat-raised-button>Products</button>
+      <button routerLink="/equipment-list" mat-raised-button>Equipments</button>
+      <button routerLink="/employee-list" mat-raised-button>Employees</button>
+      <button routerLink="/intervention-sheet-list" mat-raised-button>Interventions</button>
       <mat-slide-toggle
         [checked]="isDarkMode"
         (change)="toggleDarkMode($event)">
@@ -33,7 +38,8 @@
 <div class="container-header" *ngIf="isMobile">
   <div class="mobile-header">
     <div class="mobile-title">
-      <h2>Service Gursk</h2>
+<!--      <h2>Service Gursk</h2>-->
+      <img src="assets/logo.png" alt="Logo" width="150" />
     </div>
 
     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -47,6 +53,7 @@
     </mat-slide-toggle>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/dashboard"><mat-icon>home</mat-icon>Dashboard</button>
+      <button mat-menu-item (click)="backupManualDbDoc()"><mat-icon>Backup</mat-icon>Backup</button>
       <button mat-menu-item (click)="logout()" routerLink="/login"><mat-icon>logout</mat-icon>Logout</button>
       <button mat-menu-item routerLink="/login"><mat-icon>login</mat-icon>Login</button>
       <button mat-menu-item routerLink="/scan"><mat-icon>Scan</mat-icon>Scan</button>

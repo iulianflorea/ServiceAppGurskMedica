@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AuthenticationService} from "./auth-guard/AuthenticationService";
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'service-interface';
 
+  constructor(private authenticationService: AuthenticationService) {
+  }
+ngOnInit(){
+    this.authenticationService.checkTokenOnInit();
+}
 
 }
