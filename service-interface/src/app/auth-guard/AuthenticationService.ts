@@ -1,26 +1,65 @@
 
 import { Injectable } from '@angular/core';
 import {Router} from "@angular/router";
+import { jwtDecode } from 'jwt-decode';
+
+interface JwtPayload {
+  role?: string;           // dacă ai un singur rol ca string
+  roles?: string[];        // sau dacă ai roluri multiple într-un array
+  [key: string]: any;      // alte câmpuri posibile
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  // constructor() { }
-  //
-  // isLoggedIn(): boolean {
-  //   // Implementează logica de verificare a existenței și validității tokenului aici
-  //   return !!localStorage.getItem('token');
-  // }
-  //
-  // getToken(): string | null {
-  //   return localStorage.getItem('token');
-  // }
   private tokenKey = 'token';
   private logoutTimer: any;
+  private decodedToken: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
+
+  private getDecodedToken(): JwtPayload | null {
+    const token = localStorage.getItem(this.tokenKey);
+    if (!token) return null;
+
+    try {
+      return jwtDecode<JwtPayload>(token);
+    } catch (e) {
+      console.error('Invalid token:', e);
+      return null;
+    }
+  }
+
+  isAdmin(): boolean {
+    const decoded = this.getDecodedToken();
+    if (!decoded) return false;
+
+    // Verifică rolul, adaptând după cum e în JWT-ul tău
+    // Dacă ai rolul ca string:
+    if (decoded.role) {
+      return decoded.role.toUpperCase() === 'ADMIN';
+    }
+
+    // Dacă ai roluri într-un array, ex: roles: ["ROLE_ADMIN", "ROLE_USER"]
+    if (decoded.roles && Array.isArray(decoded.roles)) {
+      return decoded.roles.some(r => r.toUpperCase().includes('ADMIN'));
+    }
+
+    return false;
+  }
+
+  public getRoles(): string[] {
+    return this.decodedToken?.roles || this.decodedToken?.authorities || [];
+  }
+
+
+
+  public isUser(): boolean {
+    return this.getRoles().includes('ROLE_USER');
+  }
 
   // Salvează tokenul în localStorage și pornește timerul de auto-logout
   setToken(token: string): void {

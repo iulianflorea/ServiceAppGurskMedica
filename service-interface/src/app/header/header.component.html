@@ -17,6 +17,7 @@
 <!--      <p *ngIf="backupStatus">{{ backupStatus }}</p>-->
 
       <button mat-raised-button (click)="backupManualDbDoc()">Backup DB</button>
+      <button routerLink="/import-database" mat-raised-button>Import DB</button>
       <button mat-raised-button (click)="logout()" routerLink="/login">Logout</button>
       <button routerLink="/login" mat-raised-button>Login</button>
       <button routerLink="/scan" mat-raised-button>Scan</button>

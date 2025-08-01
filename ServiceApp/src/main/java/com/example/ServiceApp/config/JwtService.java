@@ -1,5 +1,6 @@
 package com.example.ServiceApp.config;
 
+import com.example.ServiceApp.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,8 +19,6 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "MzBxJaeWRwNubD+ZS4/zVgK9GPqH8A3Nns2gXmPvMUfAsqtsowARlphR8Z4FwYoKPDl0Sk/ahgauCJGu7bGz4Q==";
-//    private static final String SECRET_KEY = "+pkXTr25vEqYREZprfxSJFXQUyLBTmy7dYEsxPv6Oe4ko0QKZgsBzfYV3/XkFxoK";
-
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -27,11 +26,31 @@ public class JwtService {
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
-        return  claimsResolver.apply(claims);
+        return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String extractUserRole(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("role", String.class);
+    }
+
+public String generateToken(UserDetails userDetails) {
+    Map<String, Object> extraClaims = new HashMap<>();
+
+    if (userDetails instanceof User user && user.getRole() != null) {
+        extraClaims.put("role", user.getRole().name());
+    } else {
+        extraClaims.put("role", extractRoleFromAuthorities(userDetails));
+    }
+
+    return generateToken(extraClaims, userDetails);
+}
+
+    private String extractRoleFromAuthorities(UserDetails userDetails) {
+        return userDetails.getAuthorities().stream()
+                .map(auth -> auth.getAuthority().replace("ROLE_", ""))
+                .findFirst()
+                .orElse("USER");
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
@@ -58,7 +77,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())

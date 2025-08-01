@@ -183,7 +183,9 @@ $dark-theme: mat.define-dark-theme((
 .login,
 .product-container,
 .register,
-.scan{
+.scan,
+.sql-container,
+.sql{
   background-color: var(--card-color);
   color: var(--text-color);
   backdrop-filter: blur(6px);

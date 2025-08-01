@@ -1,0 +1,11 @@
+<div class="sql-container">
+  <div class="sql">
+<h1>Import Database</h1>
+    <form *ngIf="userIsAdmin" (submit)="onSubmit()" class="sql-form">
+      <input type="file" (change)="onFileSelected($event)" accept=".sql" required/>
+      <button mat-button type="submit">Import</button>
+    </form>
+
+    <p *ngIf="!userIsAdmin" style="color: red;">⚠️ Doar administratorii pot face import SQL.</p>
+  </div>
+</div>

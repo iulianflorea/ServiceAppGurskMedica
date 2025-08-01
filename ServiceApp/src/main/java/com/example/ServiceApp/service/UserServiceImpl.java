@@ -19,7 +19,8 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
-@Override
+
+    @Override
     public List<UserDto> findAll() {
         List<User> userList = userRepository.findAll();
         return userMapper.toDtoList(userList);
@@ -35,10 +36,17 @@ public class UserServiceImpl implements UserService {
         User userSaved = userRepository.save(userToBeUpdated);
         return userMapper.toDto(userSaved);
     }
+
     @Override
     public void delete(Long id) {
         User user = userRepository.findById(id).orElseThrow();
         userRepository.delete(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        return user;
     }
 
 
