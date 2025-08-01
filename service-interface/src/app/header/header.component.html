@@ -16,16 +16,16 @@
 <!--      <button mat-raised-button color="primary" (click)="runBackup()">Backup doc</button>-->
 <!--      <p *ngIf="backupStatus">{{ backupStatus }}</p>-->
 
-      <button mat-raised-button (click)="backupManualDbDoc()">Backup DB</button>
-      <button routerLink="/import-database" mat-raised-button>Import DB</button>
-      <button mat-raised-button (click)="logout()" routerLink="/login">Logout</button>
-      <button routerLink="/login" mat-raised-button>Login</button>
-      <button routerLink="/scan" mat-raised-button>Scan</button>
-      <button routerLink="/customer-list" mat-raised-button>Customers</button>
-      <button routerLink="/product-list" mat-raised-button>Products</button>
-      <button routerLink="/equipment-list" mat-raised-button>Equipments</button>
-      <button routerLink="/employee-list" mat-raised-button>Employees</button>
-      <button routerLink="/intervention-sheet-list" mat-raised-button>Interventions</button>
+      <button mat-button (click)="backupManualDbDoc()">Backup DB</button>
+      <button routerLink="/import-database" mat-button>Import DB</button>
+      <button mat-button (click)="logout()" routerLink="/login">Logout</button>
+      <button routerLink="/login" mat-button>Login</button>
+      <button routerLink="/scan" mat-button>Scan</button>
+      <button routerLink="/customer-list" mat-button>Customers</button>
+      <button routerLink="/product-list" mat-button>Products</button>
+      <button routerLink="/equipment-list" mat-button>Equipments</button>
+      <button routerLink="/employee-list" mat-button>Employees</button>
+      <button routerLink="/intervention-sheet-list" mat-button>Interventions</button>
       <mat-slide-toggle
         [checked]="isDarkMode"
         (change)="toggleDarkMode($event)">
@@ -54,7 +54,8 @@
     </mat-slide-toggle>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/dashboard"><mat-icon>home</mat-icon>Dashboard</button>
-      <button mat-menu-item (click)="backupManualDbDoc()"><mat-icon>Backup</mat-icon>Backup</button>
+      <button mat-menu-item (click)="backupManualDbDoc()"><mat-icon>backup</mat-icon>Backup</button>
+      <button mat-menu-item routerLink="/import-database"><mat-icon>restore</mat-icon>import DB</button>
       <button mat-menu-item (click)="logout()" routerLink="/login"><mat-icon>logout</mat-icon>Logout</button>
       <button mat-menu-item routerLink="/login"><mat-icon>login</mat-icon>Login</button>
       <button mat-menu-item routerLink="/scan"><mat-icon>Scan</mat-icon>Scan</button>
