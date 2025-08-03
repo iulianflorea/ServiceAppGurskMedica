@@ -3,6 +3,7 @@ package com.example.ServiceApp.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,6 +34,7 @@ public class SecurityConfiguration{
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**", "/v1/auth/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/interventions/*/documents/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/interventions/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/interventions/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
