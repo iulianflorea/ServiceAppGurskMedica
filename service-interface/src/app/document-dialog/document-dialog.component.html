@@ -10,7 +10,7 @@
       <button mat-icon-button (click)="previewDocument(doc)">
         <mat-icon>visibility</mat-icon>
       </button>
-      <button mat-icon-button (click)="downloadDocument(doc)">
+      <button mat-icon-button (click)="downloadDocument(doc.id, doc.name)">
         <mat-icon>download</mat-icon>
       </button>
       <button mat-icon-button (click)="deleteDocument(doc.name)">
