@@ -43,7 +43,7 @@ export class RegisterComponent {
       email: this.registerForm.value.email,
       password: this.registerForm.value.password
     }
-    this.httpClient.post( "/api/api/v1/auth/register", registerBody).subscribe((response) => {
+    this.httpClient.post( "/api/v1/auth/register", registerBody).subscribe((response) => {
       console.log(response);
       alert("You are registered now");
       this.router.navigate([""]);
