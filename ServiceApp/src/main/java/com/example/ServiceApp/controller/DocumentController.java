@@ -38,7 +38,7 @@ public class DocumentController {
             Path destinationFile = interventionFolder.resolve(filename);
             Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
 
-            return ResponseEntity.ok("File uploaded successfully.");
+            return ResponseEntity.ok(Map.of("message", "File uploaded successfully."));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to upload file: " + e.getMessage());
@@ -100,7 +100,7 @@ public class DocumentController {
         try {
             Path filePath = rootLocation.resolve("intervention-" + id).resolve(filename);
             Files.deleteIfExists(filePath);
-            return ResponseEntity.ok("File deleted");
+            return ResponseEntity.ok(Map.of("message", "File deleted successfully."));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting file");
         }
