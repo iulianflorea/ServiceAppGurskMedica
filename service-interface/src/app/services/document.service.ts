@@ -1,58 +1,60 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {AuthenticationService} from "../auth-guard/AuthenticationService";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentService {
 
-  private apiUrl = 'http://188.24.7.49:8080/api/interventions';
+  apiUrl = 'http://188.24.7.49:8080/api/interventions';
 
-  constructor(private http: HttpClient, private authService: AuthenticationService) {
-  }
+  constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
     return new HttpHeaders({
-      'Authorization': `Bearer ${this.authService.getToken()}`
+      'Authorization': `Bearer ${token}`
     });
   }
 
-  uploadDocument(interventionId: number, file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    return this.http.post(`${this.apiUrl}/${interventionId}/documents`, formData, {
-      headers: this.getAuthHeaders(),
-      responseType: 'text'
-    });
-  }
-
-  getDocuments(interventionId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${interventionId}/documents`, {
+  getDocuments(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${id}/documents`, {
       headers: this.getAuthHeaders()
     });
   }
 
-  deleteDocument(interventionId: number, filename: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${interventionId}/documents/${filename}`, {
-      headers: this.getAuthHeaders(),
-      responseType: 'text'
+  uploadDocument(id: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.apiUrl}/${id}/documents`, formData, {
+      headers: this.getAuthHeaders()
     });
   }
 
-  getDocumentFile(interventionId: number, filename: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/${interventionId}/documents/${filename}`, {
-      headers: this.getAuthHeaders(),
+  deleteDocument(id: number, filename: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}/documents/${filename}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  // downloadDocument(id: number, filename: string): Observable<Blob> {
+  //   return this.http.get(`${this.apiUrl}/${id}/documents/${filename}`, {
+  //     headers: this.getAuthHeaders(),
+  //     responseType: 'blob'
+  //   });
+  // }
+  downloadDocument(interventionId: number, filename: string): Observable<Blob> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    const url = `http://188.24.7.49:8080/api/interventions/${interventionId}/documents/${filename}`;
+    return this.http.get(url, {
+      headers: headers,
       responseType: 'blob'
     });
   }
 
-  downloadDocument(interventionId: number, filename: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/${interventionId}/documents/${filename}`, {
-      headers: this.getAuthHeaders(),
-      responseType: 'blob' // primești fișierul ca Blob
-    });
-  }
 }
