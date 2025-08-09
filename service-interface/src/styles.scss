@@ -184,7 +184,13 @@ $dark-theme: mat.define-dark-theme((
 .product-container,
 .register,
 .scan,
+<<<<<<< HEAD
 .sql{
+=======
+.sql,
+.order
+{
+>>>>>>> 75dad12eb3800645cc0201453e235a68f7d7dd69
   background-color: var(--card-color);
   color: var(--text-color);
   backdrop-filter: blur(6px);
@@ -192,6 +198,8 @@ $dark-theme: mat.define-dark-theme((
   background-clip: padding-box;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+
 
 body {
   background-color: var(--bg-color);

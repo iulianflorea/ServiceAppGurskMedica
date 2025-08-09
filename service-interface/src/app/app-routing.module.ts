@@ -16,6 +16,7 @@ import {AuthGuardComponent} from "./auth-guard/auth-guard.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {ProductScanFormComponent} from "./product-scan-form/product-scan-form.component";
 import {SqlImportComponent} from "./sql-import/sql-import.component";
+import {OrderComponent} from "./order/order.component";
 
 
 const routes: Routes = [
@@ -38,6 +39,7 @@ const routes: Routes = [
   {path: "employee-list", component: EmployeeListComponent},
   {path: "scan", component: ProductScanFormComponent},
   {path: "import-database", component: SqlImportComponent},
+  {path: "order", component: OrderComponent},
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardComponent]}
 
 

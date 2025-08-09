@@ -16,7 +16,6 @@ import java.io.File;
 @RequestMapping("/database")
 public class SqlImportController {
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/sql-import")
     public ResponseEntity<String> importSqlFile(@RequestParam("file") MultipartFile file) {
         try {

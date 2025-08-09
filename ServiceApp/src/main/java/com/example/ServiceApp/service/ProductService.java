@@ -11,6 +11,7 @@ import com.example.ServiceApp.mapper.ProductMapper;
 import com.example.ServiceApp.repository.ProducerRepository;
 import com.example.ServiceApp.repository.ProductRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,10 @@ public class ProductService {
     private final ProducerMapper producerMapper;
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+
+    @Autowired
+    private EmailService emailService;
+
 
     public ProductService(ProducerRepository producerRepository, ProducerMapper producerMapper, ProductRepository productRepository, ProductMapper productMapper) {
         this.producerRepository = producerRepository;
@@ -54,8 +59,51 @@ public class ProductService {
     }
 
 
+//    public ResponseEntity<ProductDto> saveOrUpdateProduct(Long id, String name, String cod, Long producer, Double price, Integer quantity, MultipartFile image) {
+//        Product product;
+//
+//        if (id != null) {
+//            // UPDATE
+//            Optional<Product> optionalProduct = productRepository.findById(id);
+//            if (optionalProduct.isEmpty()) {
+//                return ResponseEntity.notFound().build();
+//            }
+//            product = optionalProduct.get();
+//        } else {
+//            // CREATE
+//            product = new Product();
+//        }
+//
+//        product.setName(name);
+//        product.setCod(cod);
+//        product.setQuantity(quantity);
+//        product.setProducerId(producer);
+//        product.setPrice(price);
+//
+//        // Image handling
+//        if (image != null && !image.isEmpty()) {
+//            String imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+//            Path uploadPath = Paths.get("uploads");
+//            try {
+//                if (!Files.exists(uploadPath)) {
+//                    Files.createDirectories(uploadPath);
+//                }
+//                Path filePath = uploadPath.resolve(imageName);
+//                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+//                product.setImageName(imageName);
+//            } catch (IOException e) {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//            }
+//        }
+//
+//        productRepository.save(product);
+//        ProductDto dto = productMapper.toDto(product);
+//        return ResponseEntity.ok(dto);
+//    }
+
     public ResponseEntity<ProductDto> saveOrUpdateProduct(Long id, String name, String cod, Long producer, Double price, Integer quantity, MultipartFile image) {
         Product product;
+        int oldQuantity = 0;
 
         if (id != null) {
             // UPDATE
@@ -64,6 +112,7 @@ public class ProductService {
                 return ResponseEntity.notFound().build();
             }
             product = optionalProduct.get();
+            oldQuantity = product.getQuantity();  // memorăm cantitatea veche
         } else {
             // CREATE
             product = new Product();
@@ -92,9 +141,17 @@ public class ProductService {
         }
 
         productRepository.save(product);
+
+        // Trimitem email dacă cantitatea a scăzut
+        if (id != null && quantity < oldQuantity) {
+            int scadere = oldQuantity - quantity;
+            emailService.sendProductUpdateEmail("iulian.florea4@gmail.com", cod, scadere);
+        }
+
         ProductDto dto = productMapper.toDto(product);
         return ResponseEntity.ok(dto);
     }
+
 
 
 

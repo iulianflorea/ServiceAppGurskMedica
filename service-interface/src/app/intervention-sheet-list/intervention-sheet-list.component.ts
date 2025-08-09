@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Injectable, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Injectable, Input, Output, ViewChild} from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
@@ -7,17 +7,18 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {Router, RouterLink, RouterModule} from "@angular/router";
 import {Observable} from "rxjs";
-import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule, NgForOf, NgIf} from "@angular/common";
 import {MatInputModule} from "@angular/material/input";
 import {MatSort} from "@angular/material/sort";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {PopUpTaskComponent} from "../pop-up-task/pop-up-task.component";
-import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 import {MatCardModule} from "@angular/material/card";
 import {MatDialog} from "@angular/material/dialog";
 import {DocumentDialogComponent} from "../document-dialog/document-dialog.component";
 import {BreakpointObserver} from "@angular/cdk/layout";
+// @ts-ignore
+import { Datepicker } from 'vanillajs-datepicker';
 
 
 
@@ -61,10 +62,25 @@ export class InterventionSheetListComponent implements AfterViewInit {
   @Input() item: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('dateInput') dateInput!: ElementRef<HTMLInputElement>;
+  datepicker!: Datepicker;
 
   ngAfterViewInit() {
     this.dataSource2.paginator = this.paginator;
     this.dataSource2.sort = this.sort;
+
+    this.datepicker = new Datepicker(this.dateInput.nativeElement, {
+      format: 'dd/mm/yyyy',
+      autohide: true
+    });
+
+    // Ascultă evenimentul de schimbare dată
+    this.dateInput.nativeElement.addEventListener('changeDate', (event: any) => {
+      const selected = this.datepicker.getDate();
+      if (selected) {
+        this.selectedDate = selected;
+      }
+    });
   }
 
   constructor(private httpClient: HttpClient,

@@ -46,6 +46,7 @@ import {RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import { ProductScanFormComponent } from './product-scan-form/product-scan-form.component';
 import { SqlImportComponent } from './sql-import/sql-import.component';
+import { OrderComponent } from './order/order.component';
 
 
 
@@ -72,6 +73,7 @@ import { SqlImportComponent } from './sql-import/sql-import.component';
     SafePipe,
     ProductScanFormComponent,
     SqlImportComponent,
+    OrderComponent,
   ],
   imports: [
     BrowserModule,
