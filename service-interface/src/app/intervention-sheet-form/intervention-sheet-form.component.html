@@ -84,24 +84,19 @@
         <!-- Semnătura -->
         <div class="signature-container">
           <app-signature-pad></app-signature-pad>
-<!--          <button type="button" (click)="captureSignature()">Salvează Semnătura</button>-->
         </div>
       </div>
 
-      <!-- Jos: Date & Save -->
-      <div class="date-form">
-        <mat-form-field appearance="fill">
-          <mat-label>Date of intervention</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            [(ngModel)]="dateOfIntervention"
-            [ngModelOptions]="{ standalone: true }"
-            name="selectedDate"
-          />
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker [touchUi]="isMobile"></mat-datepicker>
-        </mat-form-field>
+      <div class="mb-3">
+        <label for="dateIntervention" class="form-label">Data intervenției</label>
+        <input
+          type="text"
+          id="dateIntervention"
+          #dateInput
+          class="form-control"
+          placeholder="dd/mm/yyyy"
+          autocomplete="off"
+        >
       </div>
       <div class="form-button">
         <button mat-raised-button type="submit">Save</button>

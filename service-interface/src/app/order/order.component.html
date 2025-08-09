@@ -1,0 +1,45 @@
+<div class="order-container">
+  <div class="order">
+    <div class="title-form">
+      <h1>Facturare</h1>
+    </div>
+
+    <form [formGroup]="orderForm" (ngSubmit)="submitOrder()" class="order-form">
+      <mat-form-field appearance="fill" class="client-form">
+        <mat-label>Selecteaza Clientul</mat-label>
+        <input type="text" matInput [matAutocomplete]="clientAuto" [value]="getClientName(orderForm.get('clientId')?.value)" (input)="onClientInput($event)">
+        <mat-autocomplete #clientAuto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)">
+          <mat-option *ngFor="let client of filteredClients" [value]="client.id">
+            {{ client.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <hr/>
+
+      <div formArrayName="products">
+        <div *ngFor="let group of productsFormArray.controls; let i = index" [formGroupName]="i">
+          <mat-form-field appearance="fill">
+            <mat-label>Produs</mat-label>
+            <input type="text" matInput [matAutocomplete]="productAuto" [value]="getProductName(group.get('productId')?.value)" (input)="onProductInput(i, $event)">
+            <mat-autocomplete #productAuto="matAutocomplete"
+                              (optionSelected)="onProductSelected(i, $event.option.value)">
+              <mat-option *ngFor="let product of filteredProducts[i]" [value]="product.id">
+                {{ product.name }} (stoc: {{ product.quantity }})
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Cantitate</mat-label>
+            <input type="number" matInput formControlName="quantity" min="0" placeholder="Cantitate">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-button">
+        <button mat-button type="submit">Trimite comanda</button>
+        <button mat-button routerLink="/intervention-sheet-list" type="submit">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

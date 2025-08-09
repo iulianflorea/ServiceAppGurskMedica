@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {EquipmentDto} from "../dtos/equipmentDto";
 import {CustomerDto} from "../dtos/customerDto";
 import {EmployeeDto} from "../dtos/employeeDto";
@@ -8,9 +8,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 import {map, Observable, startWith} from "rxjs";
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatInputModule} from "@angular/material/input";
-import {MatFormFieldModule} from "@angular/material/form-field";
+// @ts-ignore
+import { Datepicker } from 'vanillajs-datepicker';
 
 
 @Component({
@@ -42,6 +41,9 @@ export class InterventionSheetFormComponent implements OnInit {
   @ViewChild(SignaturePadComponent) signaturePadComponent!: SignaturePadComponent;
   signatureBase64: string = '';
 
+  @ViewChild('dateInput') dateInput!: ElementRef<HTMLInputElement>;
+  datepicker!: Datepicker;
+
   customerControl = new FormControl();
   employeeControl = new FormControl();
   equipmentControl = new FormControl();
@@ -51,7 +53,6 @@ export class InterventionSheetFormComponent implements OnInit {
   filteredEmployees!: Observable<EmployeeDto[]>;
   filteredEquipment!: Observable<EquipmentDto[]>;
   filteredTypes!: Observable<string[]>;
-  // isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   isMobile = window.innerWidth <= 768;
 
 
@@ -60,8 +61,11 @@ export class InterventionSheetFormComponent implements OnInit {
     noticed: new FormControl(),
     fixed: new FormControl(),
     engineerNote: new FormControl(),
-    yearsOfWarranty: new FormControl()
+    yearsOfWarranty: new FormControl(),
+    dateIntervention: new FormControl(null, Validators.required)
   });
+
+
 
   constructor(private httpClient: HttpClient, private router: Router, private route: ActivatedRoute) {
   }
@@ -113,10 +117,40 @@ export class InterventionSheetFormComponent implements OnInit {
         this.noticed = response.noticed;
         this.fixed = response.fixed;
         this.engineerNote = response.engineerNote;
-        this.dateOfIntervention = response.dateOfIntervention;
+        this.dateOfIntervention = response.dateOfIntervention || '';
         this.dateOfExpireWarranty = response.dateOfExpireWarranty;
         this.yearsOfWarranty = response.yearsOfWarranty;
+        if (this.dateOfIntervention && this.dateInput) {
+          this.dateInput.nativeElement.value = this.dateOfIntervention;
+        }
       });
+    }
+  }
+
+
+  ngAfterViewInit() {
+    this.datepicker = new Datepicker(this.dateInput.nativeElement, { autohide: true });
+
+    this.dateInput.nativeElement.addEventListener('changeDate', () => {
+      this.onDateChange();
+    });
+    // fallback: pentru cazurile în care changeDate nu merge
+    this.dateInput.nativeElement.addEventListener('change', () => {
+      this.onDateChange();
+    });
+  }
+
+  onDateChange() {
+    const selectedDate: Date | null = this.datepicker.getDate();
+    if (selectedDate) {
+      const year = selectedDate.getFullYear();
+      const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
+      const day = selectedDate.getDate().toString().padStart(2, '0');
+      this.dateOfIntervention = `${year}-${month}-${day}`;
+      console.log('Data formatată:', this.dateOfIntervention);
+    } else {
+      // dacă s-a șters data
+      this.dateOfIntervention = '';
     }
   }
 
@@ -148,14 +182,11 @@ export class InterventionSheetFormComponent implements OnInit {
     })
   }
 
-
   saveInterventionSheet() {
     this.captureSignature();
-    // const customerId = this.getCustomerIdByName(this.customerControl.value);
-
     const interventionSheet: any = {
       typeOfIntervention: this.typeControl.value,
-      dateOfIntervention: this.dateOfIntervention ? this.convertDatePiker(new Date(this.dateOfIntervention)) : null,
+      dateOfIntervention: this.dateOfIntervention ? this.dateOfIntervention : null,
       dateOfExpireWarranty: this.dateOfExpireWarranty,
       yearsOfWarranty: this.yearsOfWarranty,
       serialNumber: this.serialNumber,
