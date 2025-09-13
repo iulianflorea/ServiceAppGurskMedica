@@ -40,7 +40,7 @@ const routes: Routes = [
   {path: "scan", component: ProductScanFormComponent},
   {path: "import-database", component: SqlImportComponent},
   {path: "order", component: OrderComponent},
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardComponent]}
+  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardComponent]}
 
 
 ];

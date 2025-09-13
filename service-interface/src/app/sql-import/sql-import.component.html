@@ -1,6 +1,31 @@
 <div class="sql-container">
   <div class="sql">
-<h1>Import Database</h1>
+    <div class="title-form">
+      <h1>Chose Path</h1>
+    </div>
+    <form [formGroup]="pathsForm" (ngSubmit)="savePaths()" class="form-layout">
+      <div class="sql-form">
+        <mat-form-field class="w-full">
+          <mat-label>SQL Path</mat-label>
+          <input matInput formControlName="sqlPath"/>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Doc Path</mat-label>
+          <input matInput formControlName="documentPath"/>
+        </mat-form-field>
+
+        <div class="form-button">
+          <button mat-button type="submit">Save</button>
+        </div>
+
+      </div>
+    </form>
+    <button mat-button (click)="backupManualDbDoc()">Backup DB</button>
+<!--  </div>-->
+
+<!--  <div class="sql">-->
+    <h1>Import Database</h1>
     <form *ngIf="userIsAdmin" (submit)="onSubmit()" class="sql-form">
       <input type="file" (change)="onFileSelected($event)" accept=".sql" required/>
       <button mat-button type="submit">Import</button>

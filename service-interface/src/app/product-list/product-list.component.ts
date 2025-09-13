@@ -3,7 +3,6 @@ import {ProductDto} from "../dtos/productDto";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {HttpClient} from "@angular/common/http";
-import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {Observable} from "rxjs";
 
 

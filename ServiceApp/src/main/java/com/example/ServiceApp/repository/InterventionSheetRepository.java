@@ -48,7 +48,7 @@ public interface InterventionSheetRepository extends JpaRepository<InterventionS
             LOWER(t.serialNumber) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
             LOWER(t.equipment.model) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
             LOWER(t.customer.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
-            LOWER(t.employee.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
+            LOWER(t.employee.firstname) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
             LOWER(t.noticed) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
             LOWER(t.fixed) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
             LOWER(t.engineerNote) LIKE LOWER(CONCAT('%', :keyword, '%')) OR

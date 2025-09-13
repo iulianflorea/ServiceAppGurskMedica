@@ -147,7 +147,6 @@ export class PopUpTaskComponent {
     this.close.emit(); // Emite evenimentul când modalul trebuie închis
   }
 
-  protected readonly DashboardComponent = DashboardComponent;
 
   delete(interventionSheetDto: InterventionSheetDto) {
     const id = interventionSheetDto.id;

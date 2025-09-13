@@ -13,10 +13,6 @@
         </button>
       </div>
 
-<!--      <button mat-raised-button color="primary" (click)="runBackup()">Backup doc</button>-->
-<!--      <p *ngIf="backupStatus">{{ backupStatus }}</p>-->
-
-      <button mat-button (click)="backupManualDbDoc()">Backup DB</button>
       <button routerLink="/import-database" mat-button>Restore DB</button>
       <button mat-button (click)="logout()" routerLink="/login">Logout</button>
       <button routerLink="/login" mat-button>Login</button>
@@ -55,7 +51,6 @@
     </mat-slide-toggle>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/dashboard"><mat-icon>home</mat-icon>Dashboard</button>
-      <button mat-menu-item (click)="backupManualDbDoc()"><mat-icon>backup</mat-icon>Backup</button>
       <button mat-menu-item routerLink="/import-database"><mat-icon>restore</mat-icon>Restore DB</button>
       <button mat-menu-item routerLink="/order"><mat-icon>shop</mat-icon>Order</button>
       <button mat-menu-item (click)="logout()" routerLink="/login"><mat-icon>logout</mat-icon>Logout</button>

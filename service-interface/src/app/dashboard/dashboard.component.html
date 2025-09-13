@@ -1,1 +1,151 @@
-<p>dashboard works!</p>
+<div class="intervention-container">
+  <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}" />
+    </mat-form-field>
+
+    <div class="mb-3">
+      <label for="dateInput" class="form-label">Caută după dată</label>
+      <input
+        type="text"
+        id="dateInput"
+        #dateInput
+        class="form-control"
+        placeholder="dd/mm/yyyy"
+        autocomplete="off"
+      >
+    </div>
+
+    <button mat-flat-button color="primary" type="submit">Search</button>
+
+  </form>
+
+  <h1> You're Interventions</h1>
+  <button mat-mini-fab color="accent" routerLink="/intervention-sheet"
+          aria-label="Add new intervention sheet" class="add-button">
+    <mat-icon>plus_one</mat-icon>
+  </button>
+
+  <!-- Table -->
+  <div class="mat-elevation-z8" style="overflow-x: auto;">
+    <table mat-table [dataSource]="dataSource2" class="full-width-table">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="typeOfIntervention">
+        <th mat-header-cell *matHeaderCellDef>Type of intervention</th>
+        <td mat-cell *matCellDef="let element"> {{element.typeOfIntervention}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="equipmentName">
+        <th mat-header-cell *matHeaderCellDef>Equipment name</th>
+        <td mat-cell *matCellDef="let element"> {{element.equipmentName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="serialNumber">
+        <th mat-header-cell *matHeaderCellDef>Serial number</th>
+        <td mat-cell *matCellDef="let element"> {{element.serialNumber}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateOfIntervention">
+        <th mat-header-cell *matHeaderCellDef>Date of intervention</th>
+        <td mat-cell *matCellDef="let element"> {{element.dateOfIntervention}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataOfExpireWarranty">
+        <th mat-header-cell *matHeaderCellDef>Date of expire warranty</th>
+        <td mat-cell *matCellDef="let element"> {{element.dateOfExpireWarranty}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="yearsOfWarranty">
+        <th mat-header-cell *matHeaderCellDef>Months of warranty</th>
+        <td mat-cell *matCellDef="let element"> {{element.yearsOfWarranty}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="customerName">
+        <th mat-header-cell *matHeaderCellDef> Customer Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.customerName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="employeeName">
+        <th mat-header-cell *matHeaderCellDef> Employee name</th>
+        <td mat-cell *matCellDef="let element"> {{element.employeeName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="noticed">
+        <th mat-header-cell *matHeaderCellDef> Noticed</th>
+        <td mat-cell *matCellDef="let element"> {{element.noticed}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fixed">
+        <th mat-header-cell *matHeaderCellDef> Fixed</th>
+        <td mat-cell *matCellDef="let element"> {{element.fixed}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="engineerNote">
+        <th mat-header-cell *matHeaderCellDef> Engineer note</th>
+        <td mat-cell *matCellDef="let element"> {{element.engineerNote}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="view">
+        <th mat-header-cell *matHeaderCellDef>View</th>
+        <td mat-cell *matCellDef="let element">
+          <a>
+            <button mat-raised-button (click)="openModal(element)">View</button>
+          </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="documents">
+        <th mat-header-cell *matHeaderCellDef> Documente </th>
+        <td mat-cell *matCellDef="let intervention">
+          <button mat-raised-button (click)="openDocumentDialog(intervention)">
+            Documents
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[20, 30, 50]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+</div>
+
+<app-pop-up-task
+  *ngIf="isModalOpen"
+  [item]="selectedItem"
+  (close)="closeModal()">
+</app-pop-up-task>
+
+
+<div *ngIf="isMobile" class="intervention-container">
+  <mat-card *ngFor="let item of searchResult" class="mobile-card">
+    <mat-card-content>
+      <p><strong>No.:</strong> {{ item.id }}</p>
+      <p><strong>Type of Intervention:</strong> {{ item.typeOfIntervention }}</p>
+      <p><strong>Equipment:</strong> {{ item.equipmentName }}</p>
+      <p><strong>Serial No.:</strong> {{ item.serialNumber }}</p>
+      <p><strong>Date:</strong> {{ item.dateOfIntervention }}</p>
+      <p><strong>Warranty:</strong> {{ item.dateOfExpireWarranty }}</p>
+      <p><strong>Months Warranty:</strong> {{ item.yearsOfWarranty }}</p>
+      <p><strong>Customer:</strong> {{ item.customerName }}</p>
+      <p><strong>Engineer:</strong> {{ item.employeeName }}</p>
+      <p><strong>Noticed:</strong> {{ item.noticed }}</p>
+      <p><strong>Fixed:</strong> {{ item.fixed }}</p>
+      <p><strong>Note:</strong> {{ item.engineerNote }}</p>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-stroked-button color="primary" (click)="openModal(item)">View</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

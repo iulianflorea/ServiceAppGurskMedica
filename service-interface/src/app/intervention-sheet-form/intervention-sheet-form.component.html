@@ -25,8 +25,8 @@
           <mat-label>Angajat</mat-label>
           <input type="text" matInput [matAutocomplete]="employeeAuto" [formControl]="employeeControl">
           <mat-autocomplete #employeeAuto="matAutocomplete">
-            <mat-option *ngFor="let employee of filteredEmployees | async" [value]="employee.name">
-              {{ employee.name }}
+            <mat-option *ngFor="let employee of filteredEmployees | async" [value]="employee.firstname">
+              {{ employee.firstname }}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>

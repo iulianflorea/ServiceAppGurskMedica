@@ -10,6 +10,7 @@ import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 import {map, Observable, startWith} from "rxjs";
 // @ts-ignore
 import { Datepicker } from 'vanillajs-datepicker';
+import {UserDto} from "../dtos/userDto";
 
 
 @Component({
@@ -30,7 +31,7 @@ export class InterventionSheetFormComponent implements OnInit {
   customerSelected: any;
   customerList: CustomerDto[] = [];
   employeeSelected: any;
-  employeeList: EmployeeDto[] = [];
+  employeeList: UserDto[] = [];
   typeOfInterventionSelected: any;
   typeOfInterventionList: string[] = [];
   serialNumber: any;
@@ -50,7 +51,7 @@ export class InterventionSheetFormComponent implements OnInit {
   typeControl = new FormControl();
 
   filteredCustomers!: Observable<CustomerDto[]>;
-  filteredEmployees!: Observable<EmployeeDto[]>;
+  filteredEmployees!: Observable<UserDto[]>;
   filteredEquipment!: Observable<EquipmentDto[]>;
   filteredTypes!: Observable<string[]>;
   isMobile = window.innerWidth <= 768;
@@ -86,8 +87,8 @@ export class InterventionSheetFormComponent implements OnInit {
 
     this.filteredEmployees = this.employeeControl.valueChanges.pipe(
       startWith(''),
-      map(value => typeof value === 'string' ? value : value?.name),
-      map(name => name ? this.filterEmployees(name) : this.employeeList.slice())
+      map(value => typeof value === 'string' ? value : value?.firstname || ''),
+      map(firstname => firstname ? this.filterEmployees(firstname) : this.employeeList.slice())
     );
 
     this.filteredEquipment = this.equipmentControl.valueChanges.pipe(
@@ -170,9 +171,9 @@ export class InterventionSheetFormComponent implements OnInit {
   }
 
   getEmployeeList() {
-    this.httpClient.get("/api/employee/find-all").subscribe((response) => {
+    this.httpClient.get("/api/user/findAll").subscribe((response) => {
       console.log(response);
-      this.employeeList = response as EmployeeDto[];
+      this.employeeList = response as UserDto[];
     })
   }
 
@@ -195,7 +196,7 @@ export class InterventionSheetFormComponent implements OnInit {
       engineerNote: this.engineerNote,
       equipmentId: this.equipmentList.find(eq => eq.model === this.equipmentControl.value)?.id,
       customerId: this.customerList.find(c => c.name === this.customerControl.value)?.id,
-      employeeId: this.employeeList.find(e => e.name === this.employeeControl.value)?.id,
+      employeeId: this.employeeList.find(e => e.firstname === this.employeeControl.value)?.id,
       signatureBase64: this.signatureBase64
     };
 
@@ -239,9 +240,9 @@ export class InterventionSheetFormComponent implements OnInit {
     return this.customerList.filter(c => c.name.toLowerCase().includes(name.toLowerCase()));
   }
 
-  private filterEmployees(name: string): EmployeeDto[] {
+  private filterEmployees(firstname: string): UserDto[] {
     // @ts-ignore
-    return this.employeeList.filter(e => e.name.toLowerCase().includes(name.toLowerCase()));
+    return this.employeeList.filter(e => e.firstname.toLowerCase().includes(firstname.toLowerCase()));
   }
 
   private filterEquipment(name: string): EquipmentDto[] {

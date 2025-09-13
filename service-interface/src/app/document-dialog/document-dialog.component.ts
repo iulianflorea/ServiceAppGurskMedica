@@ -57,29 +57,6 @@ export class DocumentDialogComponent implements OnInit {
     }
   }
 
-  // previewDocument(doc: any): void {
-  //   this.documentService.downloadDocument(this.data.intervention.id, doc.name).subscribe({
-  //     next: (blob) => {
-  //       const fileURL = URL.createObjectURL(blob);
-  //
-  //       // Compatibil cu mobil: simulează click
-  //       const link = document.createElement('a');
-  //       link.href = fileURL;
-  //       link.target = '_blank';
-  //       link.rel = 'noopener';
-  //       document.body.appendChild(link);
-  //       link.click();
-  //       document.body.removeChild(link);
-  //
-  //       // Cleanup
-  //       setTimeout(() => URL.revokeObjectURL(fileURL), 1000);
-  //     },
-  //     error: (err) => {
-  //       console.error('Preview failed:', err);
-  //       alert('Nu s-a putut deschide PDF-ul');
-  //     }
-  //   });
-  // }
   previewDocument(doc: any): void {
     const encodedName = encodeURIComponent(doc.name);
     const url = `${this.documentService.apiUrl}/${this.data.intervention.id}/documents/${encodedName}`;

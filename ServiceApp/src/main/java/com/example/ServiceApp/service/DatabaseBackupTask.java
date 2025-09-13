@@ -14,7 +14,13 @@ public class DatabaseBackupTask {
     private final String dbUser = "root";
     private final String dbPassword = "rgbiuli1";
     private final String dbName = "serviceapp";
-    private final String backupFolder = "D:/backup-mysql";
+//    private final String backupFolder = "";
+
+    private final BackupService backupService;
+
+    public DatabaseBackupTask(BackupService backupService) {
+        this.backupService = backupService;
+    }
 
     @Scheduled(cron = "0 30 2 * * ?") // backup zilnic la 02:30 AM
     public void scheduledDatabaseBackup() {
@@ -23,10 +29,10 @@ public class DatabaseBackupTask {
 
     public void runBackup() {
         try {
-            Files.createDirectories(Paths.get(backupFolder));
+            Files.createDirectories(Paths.get(backupService.getSqlPath().orElseThrow()));
             String backupFileName = String.format("backup-%s.sql",
                     new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date()));
-            String backupPath = backupFolder + "/" + backupFileName;
+            String backupPath = backupService.getSqlPath().orElseThrow() + "/" + backupFileName;
 
             String mysqldumpPath = "\"C:/Program Files/MySQL/MySQL Server 8.0/bin/mysqldump.exe\""; // adaptează dacă e nevoie
 

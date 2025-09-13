@@ -1,10 +1,7 @@
 package com.example.ServiceApp.mapper;
 
 import com.example.ServiceApp.dto.InterventionSheetDto;
-import com.example.ServiceApp.entity.Customer;
-import com.example.ServiceApp.entity.Employee;
-import com.example.ServiceApp.entity.Equipment;
-import com.example.ServiceApp.entity.InterventionSheet;
+import com.example.ServiceApp.entity.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -62,8 +59,8 @@ public class InterventionSheetMapper {
     }
 
     private String getEmployeeName(InterventionSheet interventionSheet) {
-        Employee employee = interventionSheet.getEmployee();
-        return (employee != null) ? employee.getName() : null;
+        User employee = interventionSheet.getEmployee();
+        return (employee != null) ? employee.getFirstname() : null;
     }
 
     private String getEquipmentName(InterventionSheet interventionSheet) {

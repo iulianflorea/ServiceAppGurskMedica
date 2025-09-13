@@ -1,13 +1,9 @@
 package com.example.ServiceApp.service;
 
-import com.example.ServiceApp.dto.CustomerDto;
 import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.entity.*;
 import com.example.ServiceApp.mapper.InterventionSheetMapper;
-import com.example.ServiceApp.repository.CustomerRepository;
-import com.example.ServiceApp.repository.EmployeeRepository;
-import com.example.ServiceApp.repository.EquipmentRepository;
-import com.example.ServiceApp.repository.InterventionSheetRepository;
+import com.example.ServiceApp.repository.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -18,12 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.naming.directory.SearchResult;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,24 +26,28 @@ public class InterventionSheetService {
     private final EquipmentRepository equipmentRepository;
     private final CustomerRepository customerRepository;
     private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
 
 
-    public InterventionSheetService(InterventionSheetRepository interventionSheetRepository, InterventionSheetMapper interventionSheetMapper, EquipmentRepository equipmentRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository) throws JsonProcessingException {
+    public InterventionSheetService(InterventionSheetRepository interventionSheetRepository, InterventionSheetMapper interventionSheetMapper, EquipmentRepository equipmentRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, UserRepository userRepository) throws JsonProcessingException {
         this.interventionSheetRepository = interventionSheetRepository;
         this.interventionSheetMapper = interventionSheetMapper;
         this.equipmentRepository = equipmentRepository;
         this.customerRepository = customerRepository;
         this.employeeRepository = employeeRepository;
+        this.userRepository = userRepository;
     }
 
     public InterventionSheetDto create(InterventionSheetDto interventionSheetDto) {
         InterventionSheet interventionSheetToBeSaved = interventionSheetMapper.toInterventionSheet(interventionSheetDto);
         Equipment equipment = equipmentRepository.findById(interventionSheetDto.getEquipmentId()).orElseThrow();
         Customer customer = customerRepository.findById(interventionSheetDto.getCustomerId()).orElseThrow();
-        Employee employee = employeeRepository.findById(interventionSheetDto.getEmployeeId()).orElseThrow();
+//        Employee employee = employeeRepository.findById(interventionSheetDto.getEmployeeId()).orElseThrow();
+        User user = userRepository.findById(interventionSheetDto.getEmployeeId()).orElseThrow();
         interventionSheetToBeSaved.setEquipmentId(equipment.getId());
         interventionSheetToBeSaved.setCustomerId(customer.getId());
-        interventionSheetToBeSaved.setEmployeeId(employee.getId());
+//        interventionSheetToBeSaved.setEmployeeId(employee.getId());
+        interventionSheetToBeSaved.setEmployeeId(user.getId());
         interventionSheetToBeSaved.setSignatureBase64(interventionSheetDto.getSignatureBase64());
         interventionSheetToBeSaved.setDataOfExpireWarranty(calculeazaExpirareaGarantiei(interventionSheetDto.getDateOfIntervention(),interventionSheetDto.getYearsOfWarranty()));
         if (interventionSheetDto.getId() == null) {
@@ -69,10 +65,7 @@ public class InterventionSheetService {
         return interventionSheetMapper.toDto(interventionSheet);
     }
 
-//    public List<InterventionSheetDto> findAll() {
-//        List<InterventionSheet> interventionSheetList = interventionSheetRepository.findAllByOrderByDateOfInterventionDesc();
-//        return interventionSheetMapper.toDtoList(interventionSheetList);
-//    }
+
 public List<InterventionSheetDto> findAll() {
     Pageable topFifty = PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "dateOfIntervention"));
     Page<InterventionSheet> interventionSheetPage = interventionSheetRepository.findAllByOrderByDateOfInterventionDesc(topFifty);
@@ -105,49 +98,7 @@ public List<InterventionSheetDto> findAll() {
         return dataAchizitie.plusMonths(durataGarantie);
     }
 
-//    public List<InterventionSheetDto> search(String keyword) {
-//
-//        LocalDate dateOfIntervention = null;
-//        LocalDate dataOfExpireWarranty = null;
-//        Integer yearsOfWarranty = null;
-//
-//        // Încearcă să parsezi keyword ca LocalDate
-//        try {
-//            dateOfIntervention = LocalDate.parse(keyword);
-//            dataOfExpireWarranty = dateOfIntervention;
-//        } catch (DateTimeParseException e) {
-//            // Dacă nu poate fi convertit în LocalDate, lăsăm valorile ca null
-//        }
-//        List<InterventionSheet> interventionSheetList =  interventionSheetRepository.searchIntervention(keyword, dateOfIntervention, dataOfExpireWarranty, yearsOfWarranty);
-//
-//        return interventionSheetMapper.toDtoList(interventionSheetList);
-//    }
 
-//    public List<InterventionSheetDto> search(String keyword) {
-//        LocalDate dateOfIntervention = null;
-//        LocalDate dataOfExpireWarranty = null;
-//        Integer yearsOfWarranty = null;
-//
-//        // Încearcă să parsezi keyword ca LocalDate
-//        try {
-//            dateOfIntervention = LocalDate.parse(keyword);
-//            dataOfExpireWarranty = dateOfIntervention;
-//        } catch (DateTimeParseException ignored) {}
-//
-//        // Verificăm că este numeric și scurt (ex. 1–10), nu serial number
-//        if (keyword.matches("^\\d{1,2}$")) {
-//            yearsOfWarranty = Integer.parseInt(keyword);
-//        }
-//
-//        List<InterventionSheet> interventionSheetList = interventionSheetRepository.searchIntervention(
-//                keyword,
-//                dateOfIntervention,
-//                dataOfExpireWarranty,
-//                yearsOfWarranty
-//        );
-//
-//        return interventionSheetMapper.toDtoList(interventionSheetList);
-//    }
 
     public List<InterventionSheetDto> search(String keyword) {
         List<InterventionSheet> interventionSheetList = interventionSheetRepository.searchIntervention(keyword);
@@ -160,7 +111,7 @@ public List<InterventionSheetDto> findAll() {
         List<InterventionSheet> allTasks = interventionSheetRepository.findAll();
         List<InterventionSheet> userInterventions = new ArrayList<>();
         for (InterventionSheet interventionSheet : allTasks) {
-            if (interventionSheet.getEmployee().getName().equals(userId)) {
+            if (interventionSheet.getEmployee().getUsername().equals(userId)) {
                 userInterventions.add(interventionSheet);
             }
         }

@@ -1,13 +1,16 @@
 package com.example.ServiceApp.controller;
 
+import com.example.ServiceApp.dto.BackupDto;
+import com.example.ServiceApp.dto.EmployeeDto;
+import com.example.ServiceApp.entity.Backup;
 import com.example.ServiceApp.service.BackupService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/backup")
+@RequestMapping("/backup")
 public class BackupController {
 
     private final BackupService backupService;
@@ -16,9 +19,30 @@ public class BackupController {
         this.backupService = backupService;
     }
 
-    @PostMapping
-    public ResponseEntity<String> manualBackup() {
-        backupService.doBackup();
-        return ResponseEntity.ok("Backup completed manually.");
+    @PostMapping("/admin/set-path")
+    public BackupDto create(@RequestBody BackupDto backupDto) {
+        return backupService.create(backupDto);
+
     }
+
+    @GetMapping("/admin/get-paths")
+    public List<BackupDto> findAll() {
+        return backupService.findAll();
+    }
+
+    @GetMapping("/admin/findById/{id}")
+    public BackupDto findById(@PathVariable Long id) {
+        return backupService.findById(id);
+    }
+
+    @PutMapping()
+    public BackupDto update(@RequestBody BackupDto backupDto) {
+        return backupService.update(backupDto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Long id) {
+        backupService.delete(id);
+    }
+
 }

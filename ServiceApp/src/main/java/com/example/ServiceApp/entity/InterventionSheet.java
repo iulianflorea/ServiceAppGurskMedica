@@ -35,9 +35,9 @@ public class InterventionSheet {
     private Integer yearsOfWarranty;
     @Column(name = "employee_id")
     private Long employeeId;
-    @ManyToOne(targetEntity = Employee.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id", insertable = false, updatable = false)
-    private Employee employee;
+    private User employee;
     private String noticed;
     private String fixed;
     private String engineerNote;
