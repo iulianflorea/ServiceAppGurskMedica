@@ -3,7 +3,6 @@ import {HttpClient} from "@angular/common/http";
 import {AuthenticationService} from "../auth-guard/AuthenticationService";
 import {FormControl, FormGroup} from "@angular/forms";
 import {BackupDto} from "../dtos/bacupDto";
-import {HeaderComponent} from "../header/header.component";
 import {Observable} from "rxjs";
 
 
@@ -46,14 +45,12 @@ export class SqlImportComponent implements OnInit{
       this.id = response.id;
       this.pathsForm.patchValue({
         sqlPath: response.sqlPath,
-        documentPath: response.documentPath  // ⚠️ asigură-te că în backend DTO are același nume
+        documentPath: response.documentPath
       });
     });
   }
 
   savePaths() {
-    console.log("Form values at save:", this.pathsForm.value);
-
     const paths = {
       id: 1,
       sqlPath: this.pathsForm.value.sqlPath,
