@@ -74,7 +74,7 @@ public ResponseEntity<?> handleOrder(@RequestBody OrderFormDto orderForm) {
 
         emailBody.append("\nVa mulțumim!\nCu stimă,\nEchipa Service");
 
-        sendEmail("cristina.toader@gurskmedica.ro",
+        sendEmail("iulian.florea@gurskmedica.ro",
                 "Facturare catre " + customer.getName(),
                 emailBody.toString());
 

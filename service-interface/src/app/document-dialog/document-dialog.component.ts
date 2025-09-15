@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { DocumentService } from "../services/document.service";
 import { InterventionSheetListComponent } from "../intervention-sheet-list/intervention-sheet-list.component";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-document-dialog',
@@ -19,7 +20,8 @@ export class DocumentDialogComponent implements OnInit {
   constructor(
     private documentService: DocumentService,
     private sanitizer: DomSanitizer,
-    @Inject(MAT_DIALOG_DATA) public data: { intervention: any }
+    @Inject(MAT_DIALOG_DATA) public data: { intervention: any },
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -61,8 +63,13 @@ export class DocumentDialogComponent implements OnInit {
     const encodedName = encodeURIComponent(doc.name);
     const url = `${this.documentService.apiUrl}/${this.data.intervention.id}/documents/${encodedName}`;
 
-    // Deschide într-o filă nouă – compatibil cu toate platformele
-    window.open(url, '_blank', 'noopener');
+    this.http.get(url, {
+      headers: this.documentService.getAuthHeaders(),
+      responseType: 'blob'
+    }).subscribe(blob => {
+      const fileURL = URL.createObjectURL(blob);
+      window.open(fileURL, '_blank'); // se deschide în browser cu token validat
+    });
   }
 
   downloadDocument(doc: any): void {
