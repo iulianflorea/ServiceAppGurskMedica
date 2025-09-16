@@ -47,6 +47,7 @@ import {CommonModule} from "@angular/common";
 import { ProductScanFormComponent } from './product-scan-form/product-scan-form.component';
 import { SqlImportComponent } from './sql-import/sql-import.component';
 import { OrderComponent } from './order/order.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 
@@ -75,42 +76,43 @@ import { OrderComponent } from './order/order.component';
     SqlImportComponent,
     OrderComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    HttpClientModule,
-    FormsModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    DatePickerComponent,
-    InterventionSheetListComponent,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatMenuModule,
-    MatSlideToggleModule,
-    PopUpTaskComponent,
-    MatDialogModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    }),
-    CommonModule,
-    RouterModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        HttpClientModule,
+        FormsModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        DatePickerComponent,
+        InterventionSheetListComponent,
+        MatProgressSpinnerModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        MatMenuModule,
+        MatSlideToggleModule,
+        PopUpTaskComponent,
+        MatDialogModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            // Register the ServiceWorker as soon as the application is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        }),
+        CommonModule,
+        RouterModule,
+        MatCheckboxModule,
+    ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

@@ -59,47 +59,6 @@ public class ProductService {
     }
 
 
-//    public ResponseEntity<ProductDto> saveOrUpdateProduct(Long id, String name, String cod, Long producer, Double price, Integer quantity, MultipartFile image) {
-//        Product product;
-//
-//        if (id != null) {
-//            // UPDATE
-//            Optional<Product> optionalProduct = productRepository.findById(id);
-//            if (optionalProduct.isEmpty()) {
-//                return ResponseEntity.notFound().build();
-//            }
-//            product = optionalProduct.get();
-//        } else {
-//            // CREATE
-//            product = new Product();
-//        }
-//
-//        product.setName(name);
-//        product.setCod(cod);
-//        product.setQuantity(quantity);
-//        product.setProducerId(producer);
-//        product.setPrice(price);
-//
-//        // Image handling
-//        if (image != null && !image.isEmpty()) {
-//            String imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-//            Path uploadPath = Paths.get("uploads");
-//            try {
-//                if (!Files.exists(uploadPath)) {
-//                    Files.createDirectories(uploadPath);
-//                }
-//                Path filePath = uploadPath.resolve(imageName);
-//                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-//                product.setImageName(imageName);
-//            } catch (IOException e) {
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//            }
-//        }
-//
-//        productRepository.save(product);
-//        ProductDto dto = productMapper.toDto(product);
-//        return ResponseEntity.ok(dto);
-//    }
 
     public ResponseEntity<ProductDto> saveOrUpdateProduct(Long id, String name, String cod, Long producer, Double price, Integer quantity, MultipartFile image) {
         Product product;
@@ -171,11 +130,9 @@ public class ProductService {
 
     public Product update(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getId()).orElseThrow();
-        product.setCod(productDto.getCod());
-        product.setName(productDto.getName());
-        product.setQuantity(productDto.getQuantity());
-        product.setProducerId(productDto.getProducer());
-        return productRepository.save(product);
+        ProductDto productDto1 = productMapper.toDto(product);
+        Product product1 = productMapper.toProduct(productDto1);
+        return productRepository.save(product1);
     }
 
     public void delete(Long id) {

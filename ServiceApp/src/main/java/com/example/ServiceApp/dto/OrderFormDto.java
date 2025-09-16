@@ -13,4 +13,5 @@ public class OrderFormDto {
 
     private Long clientId;
     private List<OrderProductDto> products;
+    private String deliveryAddress;
 }

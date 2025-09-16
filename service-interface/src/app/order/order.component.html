@@ -36,6 +36,17 @@
           </mat-form-field>
         </div>
       </div>
+      <mat-checkbox [(ngModel)]="sameAddress" [ngModelOptions]="{standalone: true}">
+        Aceeași adresă cu adresa de facturare
+      </mat-checkbox>
+      <br>
+
+      <div *ngIf="!sameAddress">
+        <mat-form-field>
+          <mat-label>Adresa de livrare</mat-label>
+          <input matInput formControlName="deliveryAddress"/>
+        </mat-form-field>
+      </div>
       <div class="form-button">
         <button mat-button type="submit">Trimite comanda</button>
         <button mat-button routerLink="/intervention-sheet-list" type="submit">Cancel</button>

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, FormArray, Validators, FormControl} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import {hide} from "@popperjs/core";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 interface Client {
   id: number;
@@ -24,13 +26,17 @@ export class OrderComponent implements OnInit {
   products: Product[] = [];
   filteredClients: Client[] = [];
   filteredProducts: Product[][] = [];
+  deliveryAddress!: string;
+  sameAddress = false;
+
 
   constructor(private fb: FormBuilder, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.orderForm = this.fb.group({
       clientId: [null, Validators.required],
-      products: this.fb.array([])
+      products: this.fb.array([]),
+      deliveryAddress: this.deliveryAddress
     });
 
     // Adaugă 6 produse goale
@@ -118,4 +124,5 @@ export class OrderComponent implements OnInit {
     }
   }
 
+  protected readonly hide = hide;
 }

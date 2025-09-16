@@ -71,6 +71,11 @@ public ResponseEntity<?> handleOrder(@RequestBody OrderFormDto orderForm) {
                     .append(": Cantitate: ").append(item.getQuantity())
                     .append(" unitati\n");
         }
+        if(orderForm.getDeliveryAddress() != null && !orderForm.getDeliveryAddress().isEmpty()) {
+            emailBody.append("\nAdresa de livrare este: ").append(orderForm.getDeliveryAddress()).append("\n");
+        } else {
+            emailBody.append("\nAdresa de livrare este: ").append(customer.getAddress()).append("\n");
+        }
 
         emailBody.append("\nVa mulțumim!\nCu stimă,\nEchipa Service");
 
