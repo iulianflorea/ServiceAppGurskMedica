@@ -79,12 +79,12 @@ public ResponseEntity<?> handleOrder(@RequestBody OrderFormDto orderForm) {
 
         emailBody.append("\nVa mulțumim!\nCu stimă,\nEchipa Service");
 
-        sendEmail("comenzi@gurskmedica.ro",
+        sendEmail("iulian.florea@gurskmedica.ro",
                 "Facturare catre " + customer.getName(),
                 emailBody.toString());
-        sendEmail("service@gurskmedica.ro",
-                "Facturare catre " + customer.getName(),
-                emailBody.toString());
+//        sendEmail("service@gurskmedica.ro",
+//                "Facturare catre " + customer.getName(),
+//                emailBody.toString());
 
 
     }
