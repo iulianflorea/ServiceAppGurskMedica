@@ -25,8 +25,8 @@ export class SqlImportComponent implements OnInit{
   sqlPath: any;
   documentPath: any;
 
-  private backupUrl = 'http://localhost:8080/api/backup/manual';
-  private backupUrlDatabase = 'http://localhost:8080/api/backup/database';
+  private backupUrl = 'http://188.24.7.49:8080/api/backup/manual';
+  private backupUrlDatabase = 'http://188.24.7.49:8080/api/backup/database';
   backupStatus: string = '';
   backupStatusDatabase: string = '';
 

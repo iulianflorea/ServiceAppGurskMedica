@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/interventions")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://188.24.7.49:4200")
 public class DocumentController {
 
 

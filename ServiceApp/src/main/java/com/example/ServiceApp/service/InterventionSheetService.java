@@ -106,7 +106,9 @@ public List<InterventionSheetDto> findAll() {
 
     public List<InterventionSheetDto> getTasksLoggedUser(String jwtToken) {
         String userId = parseJWT(jwtToken);
-        List<InterventionSheet> allTasks = interventionSheetRepository.findAll();
+//        List<InterventionSheet> allTasks = interventionSheetRepository.findAll();
+        Pageable topFifty = PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "dateOfIntervention"));
+        Page<InterventionSheet> allTasks = interventionSheetRepository.findAllByOrderByDateOfInterventionDesc(topFifty);
         List<InterventionSheet> userInterventions = new ArrayList<>();
         for (InterventionSheet interventionSheet : allTasks) {
             if (interventionSheet.getEmployee().getUsername().equals(userId)) {
