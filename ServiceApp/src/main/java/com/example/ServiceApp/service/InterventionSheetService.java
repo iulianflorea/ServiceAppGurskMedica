@@ -42,11 +42,9 @@ public class InterventionSheetService {
         InterventionSheet interventionSheetToBeSaved = interventionSheetMapper.toInterventionSheet(interventionSheetDto);
         Equipment equipment = equipmentRepository.findById(interventionSheetDto.getEquipmentId()).orElseThrow();
         Customer customer = customerRepository.findById(interventionSheetDto.getCustomerId()).orElseThrow();
-//        Employee employee = employeeRepository.findById(interventionSheetDto.getEmployeeId()).orElseThrow();
         User user = userRepository.findById(interventionSheetDto.getEmployeeId()).orElseThrow();
         interventionSheetToBeSaved.setEquipmentId(equipment.getId());
         interventionSheetToBeSaved.setCustomerId(customer.getId());
-//        interventionSheetToBeSaved.setEmployeeId(employee.getId());
         interventionSheetToBeSaved.setEmployeeId(user.getId());
         interventionSheetToBeSaved.setSignatureBase64(interventionSheetDto.getSignatureBase64());
         interventionSheetToBeSaved.setDataOfExpireWarranty(calculeazaExpirareaGarantiei(interventionSheetDto.getDateOfIntervention(),interventionSheetDto.getYearsOfWarranty()));

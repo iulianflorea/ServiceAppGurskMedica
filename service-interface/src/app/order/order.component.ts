@@ -2,7 +2,6 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormArray, Validators, FormControl} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {hide} from "@popperjs/core";
-import {toSignal} from "@angular/core/rxjs-interop";
 
 interface Client {
   id: number;
@@ -106,9 +105,13 @@ export class OrderComponent implements OnInit {
   }
 
   submitOrder(): void {
+    if (this.sameAddress) {
+      this.orderForm.patchValue({
+        deliveryAddress: null
+      });
+    }
     if (this.orderForm.valid) {
       console.log('Trimitem:', this.orderForm.value);
-
       this.http.post('/api/orders', this.orderForm.value).subscribe({
         next: () => alert('Comanda a fost trimisă cu succes!'),
         error: (err) => {
