@@ -33,10 +33,10 @@ public class InterventionSheet {
     @JoinColumn(name = "customer_id", insertable = false, updatable = false)
     private Customer customer;
     private Integer yearsOfWarranty;
-    @Column(name = "employee_id")
+    @Column(name = "user_id")
     private Long employeeId;
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User employee;
     private String noticed;
     private String fixed;

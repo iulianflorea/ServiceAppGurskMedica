@@ -17,8 +17,11 @@ public class EmailService {
             message.setTo(to);
             message.setFrom("office@singularity-ai.eu");  // <- adresa reală de expeditor
             message.setSubject("Modificare cantitate produs");
-            message.setText("Produsul cu codul " + productCode +
-                    " a fost modificat. Cantitatea a fost scăzută cu " + quantityChange + " unități.");
+            message.setText("Buna ziua, \n" +
+                    "\nProdusul cu codul " + productCode + " a fost modificat. Cantitatea a fost scăzută cu " + quantityChange + " unități." +
+                    "\nVa rog sa-l scadeti din gestiunea service" +
+                    "\n\nMultumim," +
+                    "\nEchipa service");
             mailSender.send(message);
             System.out.println("Email trimis cu succes!");
         } catch (Exception e) {
