@@ -2,6 +2,7 @@ package com.example.ServiceApp.controller;
 
 import com.example.ServiceApp.service.BackupService;
 import com.example.ServiceApp.service.DatabaseBackupTask;
+import com.example.ServiceApp.service.UploadsBackupTask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +14,12 @@ public class DatabaseBackupController {
 
     private final DatabaseBackupTask dbBackupTask;
     private final BackupService backupService;
+    private final UploadsBackupTask uploadsBackupTask;
 
-    public DatabaseBackupController(DatabaseBackupTask dbBackupTask, BackupService backupService) {
+    public DatabaseBackupController(DatabaseBackupTask dbBackupTask, BackupService backupService, UploadsBackupTask uploadsBackupTask) {
         this.dbBackupTask = dbBackupTask;
         this.backupService = backupService;
+        this.uploadsBackupTask = uploadsBackupTask;
     }
 
     @PostMapping("/database")
@@ -27,7 +30,7 @@ public class DatabaseBackupController {
 
     @PostMapping("/manual")
     public ResponseEntity<String> manualBackup() {
-        backupService.doBackup();
+        uploadsBackupTask.backupUploads();
         return ResponseEntity.ok("Backup completed manually.");
     }
 }

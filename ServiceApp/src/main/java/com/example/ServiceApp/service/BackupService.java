@@ -16,11 +16,6 @@ import java.util.Optional;
 @Service
 public class BackupService {
 
-//    private final Path uploadsFolder = Paths.get("C:/Users/iulian.florea/OneDrive/Desktop/uploads/");
-//    private final Path uploadsFolder = Paths.get("C:/Users/Iulian/IdeaProjects/ServiceAppGurskMedica/uploads");
-    private final Path uploadsFolder = Paths.get("uploads");
-//    private final Path backupBaseFolder = Paths.get("D:/ServiceApp-backup");
-
     private final BackupRepository backupRepository;
     private final BackupMapper backupMapper;
 
@@ -28,11 +23,6 @@ public class BackupService {
         this.backupRepository = backupRepository;
         this.backupMapper = backupMapper;
     }
-
-    private Path getBackupBaseFolder() {
-        return Paths.get(getBackupPath().orElseThrow(() -> new RuntimeException("Backup path not configured")));
-    }
-
 
 
     public BackupDto create(BackupDto backupDto) {
@@ -83,31 +73,4 @@ public class BackupService {
 
     }
 
-
-    public void doBackup() {
-        String date = LocalDate.now().toString();
-        Path destination = getBackupBaseFolder().resolve(date);
-
-        try {
-            Files.walkFileTree(uploadsFolder, new SimpleFileVisitor<>() {
-                @Override
-                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    Path targetDir = destination.resolve(uploadsFolder.relativize(dir));
-                    Files.createDirectories(targetDir);
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    Path targetFile = destination.resolve(uploadsFolder.relativize(file));
-                    Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-
-            System.out.println("Backup successful to: " + destination);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
