@@ -27,15 +27,23 @@ export class OrderComponent implements OnInit {
   filteredProducts: Product[][] = [];
   deliveryAddress!: string;
   sameAddress = false;
-
+  selectedPdfFile: File | null = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {}
+
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedPdfFile = input.files[0];
+    }
+  }
 
   ngOnInit(): void {
     this.orderForm = this.fb.group({
       clientId: [null, Validators.required],
       products: this.fb.array([]),
-      deliveryAddress: this.deliveryAddress
+      deliveryAddress: [null]   // inițial null
     });
 
     // Adaugă 6 produse goale
@@ -110,22 +118,34 @@ export class OrderComponent implements OnInit {
         deliveryAddress: null
       });
     }
+
     if (this.orderForm.valid) {
-      console.log('Trimitem:', this.orderForm.value);
-      this.http.post('/api/orders', this.orderForm.value).subscribe({
+      const formData = new FormData();
+
+      // JSON cu datele comenzii
+      const orderData = this.orderForm.value;
+      formData.append(
+        "orderForm",
+        new Blob([JSON.stringify(orderData)], { type: "application/json" })
+      );
+
+      // PDF-ul selectat
+      if (this.selectedPdfFile) {
+        formData.append("pdfFile", this.selectedPdfFile);
+      }
+
+      this.http.post('/api/orders', formData).subscribe({
         next: () => alert('Comanda a fost trimisă cu succes!'),
         error: (err) => {
           console.error(err);
-          // Dacă backendul returnează un ResponseStatusException, mesajul de eroare e de obicei în err.error.message
           if (err.status === 400 && err.error && err.error.message) {
             alert('Eroare: ' + err.error.message);
           } else {
-            alert('A apărut o eroare necunoscută. Probabil stocul unui produs este insuficient');
+            alert('A apărut o eroare necunoscută.');
           }
         }
       });
     }
   }
-
   protected readonly hide = hide;
 }

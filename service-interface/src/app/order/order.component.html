@@ -41,6 +41,12 @@
       </mat-checkbox>
       <br>
 
+      <div>
+        <label for="pdfFile">Încarcă deviz PDF:</label>
+        <input type="file" id="pdfFile" (change)="onFileSelected($event)" accept="application/pdf" />
+      </div>
+      <br>
+
       <div *ngIf="!sameAddress">
         <mat-form-field>
           <mat-label>Adresa de livrare</mat-label>

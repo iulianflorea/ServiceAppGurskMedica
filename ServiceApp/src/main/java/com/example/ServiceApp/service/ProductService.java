@@ -104,7 +104,7 @@ public class ProductService {
         // Trimitem email dacă cantitatea a scăzut
         if (id != null && quantity < oldQuantity) {
             int scadere = oldQuantity - quantity;
-            emailService.sendProductUpdateEmail("iulian.florea@gurskmedica.ro", cod, scadere);
+            emailService.sendProductUpdateEmail("office@singularity-ai.eu", cod, scadere);
         }
 
         ProductDto dto = productMapper.toDto(product);
