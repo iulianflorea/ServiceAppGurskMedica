@@ -87,12 +87,19 @@ public class OrderController {
             emailBody.append("\nVa mulțumim!\nCu stimă,\nEchipa Service");
 
             if (pdfFile != null && !pdfFile.isEmpty()) {
-                sendEmailWithPdf("iulian.florea@gurskmedica.ro",
+                sendEmailWithPdf("comenzi@gurskmedica.ro",
+                        "Facturare catre " + customer.getName(),
+                        emailBody.toString(),
+                        pdfFile);
+                sendEmailWithPdf("service@gurskmedica.ro",
                         "Facturare catre " + customer.getName(),
                         emailBody.toString(),
                         pdfFile);
             } else {
-                sendEmailSimple("iulian.florea@gurskmedica.ro",
+                sendEmailSimple("comenzi@gurskmedica.ro",
+                        "Facturare catre " + customer.getName(),
+                        emailBody.toString());
+                sendEmailSimple("service@gurskmedica.ro",
                         "Facturare catre " + customer.getName(),
                         emailBody.toString());
             }
