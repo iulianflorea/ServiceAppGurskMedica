@@ -36,8 +36,6 @@ public class SecurityConfiguration{
                         .requestMatchers("/api/v1/auth/**", "/v1/auth/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/backup/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/employeeIntervention/**").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/orders").permitAll()
                         .requestMatchers("/api/interventions/*/documents/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/interventions/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/interventions/user/**").hasAnyRole("USER", "ADMIN")
