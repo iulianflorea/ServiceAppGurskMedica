@@ -26,6 +26,11 @@
           <mat-label>Telephone</mat-label>
           <input matInput [(ngModel)]="telephone" [ngModelOptions]="{standalone: true}"/>
         </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>E-mail Address</mat-label>
+          <input matInput [(ngModel)]="email" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
         <div class="form-button">
           <button mat-raised-button type="submit">Save</button>
           <button mat-raised-button type="submit" routerLink="/customer-list">cancel</button>

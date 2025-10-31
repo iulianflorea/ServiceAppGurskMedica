@@ -4,4 +4,5 @@ export class CustomerDto {
   cui?: string;
   address?: string;
   telephone?: string;
+  email?: string;
 }

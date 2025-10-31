@@ -14,4 +14,5 @@ public class CustomerDto {
     private String cui;
     private String address;
     private String telephone;
+    private String email;
 }

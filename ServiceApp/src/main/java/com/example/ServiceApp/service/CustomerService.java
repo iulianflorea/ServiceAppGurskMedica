@@ -49,6 +49,7 @@ public class CustomerService {
         customerToBeSaved.setCui(customerDto.getCui());
         customerToBeSaved.setAddress(customerDto.getAddress());
         customerToBeSaved.setTelephone(customerDto.getTelephone());
+        customerToBeSaved.setEmail(customerDto.getEmail());
         Customer customerSaved = customerRepository.save(customerToBeSaved);
         return customerMapper.toDto(customerSaved);
     }

@@ -13,7 +13,7 @@ import {Observable} from "rxjs";
 })
 export class CustomerListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'name', 'cui', 'address', 'telephone', 'update', 'delete'];
+  displayedColumns: string[] = ['id', 'name', 'cui', 'address', 'telephone', 'email', 'update', 'delete'];
   dataSource: CustomerDto[] = [];
   dataSource2 = new MatTableDataSource<CustomerDto>(this.dataSource);
   keyword: string = '';

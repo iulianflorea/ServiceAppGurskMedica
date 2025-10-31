@@ -19,7 +19,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
             LOWER(t.cui) LIKE LOWER(CONCAT('%', :keyword, '%')) OR  
             LOWER(t.address) LIKE LOWER(CONCAT('%', :keyword, '%')) OR  
-            LOWER(t.telephone) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            LOWER(t.telephone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+            LOWER(t.email) LIKE LOWER(CONCAT('%', :keyword, '%'))
         ))
 """, nativeQuery = true)
     List<Customer> searchCustomer(@Param("keyword") String keyword);
