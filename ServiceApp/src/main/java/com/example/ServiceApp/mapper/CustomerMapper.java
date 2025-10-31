@@ -15,6 +15,7 @@ public class CustomerMapper {
                 .cui(customerDto.getCui())
                 .address(customerDto.getAddress())
                 .telephone(customerDto.getTelephone())
+                .email(customerDto.getEmail())
                 .build();
     }
 
@@ -25,6 +26,7 @@ public class CustomerMapper {
                 .cui(customer.getCui())
                 .address(customer.getAddress())
                 .telephone(customer.getTelephone())
+                .email(customer.getEmail())
                 .build();
     }
 

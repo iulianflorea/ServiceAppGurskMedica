@@ -16,12 +16,14 @@ export class CustomerFormComponent implements OnInit {
   cui: any;
   address: any;
   telephone: any;
+  email: any;
 
   customerForm: FormGroup = new FormGroup({
     name: new FormControl,
     cui: new FormControl,
     address: new FormControl,
-    telephone: new FormControl
+    telephone: new FormControl,
+    email: new FormControl
   })
 
   constructor(private httpClient: HttpClient,
@@ -39,6 +41,7 @@ export class CustomerFormComponent implements OnInit {
         this.cui = response.cui;
         this.address = response.address;
         this.telephone = response.telephone;
+        this.email = response.email;
       })
     }
 
@@ -50,7 +53,8 @@ export class CustomerFormComponent implements OnInit {
       name: this.name,
       cui: this.cui,
       address: this.address,
-      telephone: this.telephone
+      telephone: this.telephone,
+      email: this.email
     }
     this.httpClient.post("/api/customer", customer).subscribe((response) => {
       console.log(response);

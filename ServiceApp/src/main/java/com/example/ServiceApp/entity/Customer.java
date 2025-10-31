@@ -20,5 +20,6 @@ public class Customer {
     private String cui;
     private String address;
     private String telephone;
+    private String email;
 
 }
