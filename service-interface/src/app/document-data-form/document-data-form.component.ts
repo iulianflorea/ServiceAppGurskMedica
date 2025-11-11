@@ -1,15 +1,23 @@
-import { Component, OnInit, QueryList, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import {Component, OnInit, QueryList, ViewChild, ViewChildren, ElementRef, AfterViewInit} from '@angular/core';
+import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, startWith, map } from 'rxjs';
-import { SignaturePadComponent } from '../signature-pad/signature-pad.component';
-import { MatAutocomplete } from '@angular/material/autocomplete';
+import {HttpClient} from '@angular/common/http';
+import {Observable, forkJoin, startWith, map, delay} from 'rxjs';
+import {SignaturePadComponent} from '../signature-pad/signature-pad.component';
+import {MatAutocomplete} from '@angular/material/autocomplete';
 // @ts-ignore
-import { Datepicker } from 'vanillajs-datepicker';
+import {Datepicker} from 'vanillajs-datepicker';
 
-interface CustomerDto { id: number; name: string; cui: string; }
-interface EquipmentDto { id: number; model: string; }
+interface CustomerDto {
+  id: number;
+  name: string;
+  cui: string;
+}
+
+interface EquipmentDto {
+  id: number;
+  model: string;
+}
 
 @Component({
   selector: 'app-document-data-form',
@@ -45,7 +53,8 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
@@ -53,7 +62,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
     // Initialize form
     const group: any = {
       customerControl: new FormControl(null, Validators.required),
-      cui: [{ value: '', disabled: true }],
+      cui: [{value: '', disabled: true}],
       contractDate: [''],
       monthOfWarranty: [''],
       numberOfContract: [''],
@@ -80,21 +89,21 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       this.documentForm.get('contractDate')?.setValue(val);
     });
     this.documentForm.get('contractDate')?.valueChanges.subscribe(val => {
-      this.contractDateControl.setValue(val, { emitEvent: false });
+      this.contractDateControl.setValue(val, {emitEvent: false});
     });
 
     this.signatureDateControl.valueChanges.subscribe(val => {
       this.documentForm.get('signatureDate')?.setValue(val);
     });
     this.documentForm.get('signatureDate')?.valueChanges.subscribe(val => {
-      this.signatureDateControl.setValue(val, { emitEvent: false });
+      this.signatureDateControl.setValue(val, {emitEvent: false});
     });
 
     // Load customers & equipments
     forkJoin({
       customers: this.http.get<CustomerDto[]>('/api/customer/customer-list'),
       equipments: this.http.get<EquipmentDto[]>('/api/equipment/find-all')
-    }).subscribe(({ customers, equipments }) => {
+    }).subscribe(({customers, equipments}) => {
       this.customerList = customers || [];
       this.equipmentList = equipments || [];
 
@@ -222,7 +231,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
         id: doc.customerId, name: doc.customerName, cui: doc.cui
       };
 
-      this.documentForm.get('customerControl')!.setValue(customer, { emitEvent: true });
+      this.documentForm.get('customerControl')!.setValue(customer, {emitEvent: true});
 
       // Populate rest of fields
       this.documentForm.patchValue({
@@ -242,7 +251,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
         if (eqId) {
           const eqObj = this.equipmentList.find(e => e.id === eqId);
           if (eqObj) {
-            this.equipmentControls[i].setValue(eqObj, { emitEvent: false });
+            this.equipmentControls[i].setValue(eqObj, {emitEvent: false});
             this.documentForm.get('productCode' + (i + 1))?.setValue(doc['productCode' + (i + 1)] || '');
             this.documentForm.get('serialNumber' + (i + 1))?.setValue(doc['serialNumber' + (i + 1)] || '');
           }
@@ -288,10 +297,17 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
     }
 
     this.http.post('/api/documents', dto).subscribe({
-      next: () => { this.loading = false; alert('Document saved'); },
-      error: err => { this.loading = false; console.error(err); alert('Error saving document'); }
+      next: () => {
+        this.loading = true;
+        alert('Document saved');
+      },
+      error: err => {
+        this.loading = false;
+        console.error(err);
+        alert('Error saving document');
+      }
     });
-    this.router.navigate(["/documents"]);
+    window.history.back();
   }
 
   cancel(): void {
