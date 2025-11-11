@@ -1,0 +1,99 @@
+<div class="container-doc-list">
+  <h2 class="title">📄 Lista Documente</h2>
+
+  <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}" />
+    </mat-form-field>
+
+    <div class="mb-3">
+      <label for="dateInput" class="form-label">Caută după dată</label>
+      <input
+        type="text"
+        id="dateInput"
+        #dateInput
+        class="form-control"
+        placeholder="dd/mm/yyyy"
+        autocomplete="off"
+      >
+    </div>
+
+    <button mat-button type="submit">Search</button>
+
+  </form>
+
+  <mat-progress-spinner
+    *ngIf="loading"
+    mode="indeterminate"
+    color="primary"
+    class="spinner">
+  </mat-progress-spinner>
+
+  <div *ngIf="!loading && documents2.data.length === 0" class="empty-state">
+    Nu există documente salvate.
+  </div>
+  <button mat-mini-fab color="accent" routerLink="/documents-form"
+          aria-label="Add new document" class="add-button">
+    <mat-icon>plus_one</mat-icon>
+  </button>
+  <table mat-table [dataSource]="documents2" class="mat-elevation-z8">
+
+    <!-- ID -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let doc">{{ doc.id }}</td>
+    </ng-container>
+
+    <!-- Client -->
+    <ng-container matColumnDef="customerName">
+      <th mat-header-cell *matHeaderCellDef>Client</th>
+      <td mat-cell *matCellDef="let doc">{{ doc.customerName }}</td>
+    </ng-container>
+
+    <!-- Echipament -->
+    <ng-container matColumnDef="contractDate">
+      <th mat-header-cell *matHeaderCellDef>Data Contractului</th>
+      <td mat-cell *matCellDef="let doc">{{ doc.contractDate }}</td>
+    </ng-container>
+
+    <!-- Contract -->
+    <ng-container matColumnDef="numberOfContract">
+      <th mat-header-cell *matHeaderCellDef>Contract</th>
+      <td mat-cell *matCellDef="let doc">{{ doc.numberOfContract }}</td>
+    </ng-container>
+
+    <!-- Acțiuni -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acțiuni</th>
+      <td mat-cell *matCellDef="let doc">
+        <button mat-icon-button color="primary" matTooltip="PV Predare-Primire"
+                (click)="downloadDocx(doc.id, 'predare')">
+          <mat-icon>assignment</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" matTooltip="Certificat Garanție"
+                (click)="downloadDocx(doc.id, 'garantie')">
+          <mat-icon>verified</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" matTooltip="PV Punere în Funcțiune"
+                (click)="downloadDocx(doc.id, 'punere')">
+          <mat-icon>build_circle</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" matTooltip="PV Recepție"
+                (click)="downloadDocx(doc.id, 'receptie')">
+          <mat-icon>done_all</mat-icon>
+        </button>
+        <a routerLink="/documents-form/{{doc.id}}">
+          <button mat-raised-button>Edit</button>
+        </a>
+        <button mat-icon-button color="primary" (click)="delete(doc)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+

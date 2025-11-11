@@ -1,5 +1,6 @@
 
 <div class="intervention-container">
+  <h2>Interventions</h2>
   <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
   <mat-form-field>
       <mat-label>Search</mat-label>
@@ -22,7 +23,6 @@
 
   </form>
 
-  <h1>Interventions</h1>
   <button mat-mini-fab color="accent" routerLink="/intervention-sheet"
           aria-label="Add new intervention sheet" class="add-button">
     <mat-icon>plus_one</mat-icon>
@@ -129,7 +129,7 @@
 
 
 <div *ngIf="isMobile" class="intervention-container">
-  <mat-card *ngFor="let item of searchResult" class="mobile-card">
+  <mat-card *ngFor="let item of dataSource2.data" class="mobile-card">
     <mat-card-content>
       <p><strong>No.:</strong> {{ item.id }}</p>
       <p><strong>Type of Intervention:</strong> {{ item.typeOfIntervention }}</p>

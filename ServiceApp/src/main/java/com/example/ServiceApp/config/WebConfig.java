@@ -10,8 +10,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Schimbă "uploads/" cu calea reală dacă este altă locație
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:C:/Users/iulia/ServiceApp/ServiceAppGurskMedica/uploads/");
-//                .addResourceLocations("file:uploads/");
+//                .addResourceLocations("file:C:/Users/iulia/ServiceApp/ServiceAppGurskMedica/uploads/");
+                .addResourceLocations("file:uploads/");
     }
 
 }

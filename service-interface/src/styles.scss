@@ -185,7 +185,9 @@ $dark-theme: mat.define-dark-theme((
 .register,
 .scan,
 .sql,
-.order
+.order,
+.document-container,
+.container-doc-list
 {
   background-color: var(--card-color);
   color: var(--text-color);
