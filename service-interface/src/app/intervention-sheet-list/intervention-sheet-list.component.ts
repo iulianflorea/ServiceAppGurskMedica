@@ -54,7 +54,8 @@ export class InterventionSheetListComponent implements AfterViewInit {
   dataSource: InterventionSheetDto[] = [];
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
   keyword: string = '';
-  searchResult: InterventionSheetDto[] = [];
+  // searchResult: InterventionSheetDto[] = [];
+  selectedDate: Date = new Date();
 
 
 
@@ -84,7 +85,6 @@ export class InterventionSheetListComponent implements AfterViewInit {
   }
 
   constructor(private httpClient: HttpClient,
-              private router: Router,
               private dialog: MatDialog,
               private breakpointObserver: BreakpointObserver) {
   }
@@ -102,15 +102,11 @@ export class InterventionSheetListComponent implements AfterViewInit {
     this.isModalOpen = false;
   }
 
-
-  selectedDate: Date = new Date();
-
   saveDate() {
     this.selectedDate.setMinutes(this.selectedDate.getMinutes() - this.selectedDate.getTimezoneOffset());
     const savedDate = this.selectedDate.toISOString().substring(0, 10);
     console.log('Data selectată:', savedDate);
   }
-
 
 
   ngOnInit() {
@@ -157,7 +153,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
   }
 
   search() {
-    this.searchResult = [];
+    // this.searchResult = [];
 
     let finalKeyword = this.keyword;
 
@@ -172,7 +168,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
       this.searchInterventionSheet(finalKeyword).subscribe(data => {
         console.log(data);
         this.dataSource2.data = data;
-        this.searchResult = data;
+        // this.searchResult = data;
       });
     }
   }

@@ -131,9 +131,7 @@ public class ProductService {
 
     public Product update(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getId()).orElseThrow();
-        ProductDto productDto1 = productMapper.toDto(product);
-        Product product1 = productMapper.toProduct(productDto1);
-        return productRepository.save(product1);
+        return productRepository.save(product);
     }
 
     public void delete(Long id) {

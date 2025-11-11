@@ -1,0 +1,47 @@
+.container-doc-list {
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 1700px;
+  /*overflow: auto;*/
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.title {
+  margin-bottom: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mat-elevation-z8 {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.search-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.add-button {
+  margin-bottom: 10px;
+}
+
+.spinner {
+  display: block;
+  margin: 40px auto;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 40px;
+  color: rgb(128, 128, 128);
+  font-style: italic;
+}
+.mb-3{
+  color: black;
+}

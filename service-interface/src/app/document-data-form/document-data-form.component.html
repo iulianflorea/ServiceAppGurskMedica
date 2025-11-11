@@ -1,0 +1,293 @@
+<!--<div class="document-container" [formGroup]="documentForm">-->
+<!--  <h2 *ngIf="!id" class="title">Document Data Form</h2>-->
+<!--  <h2 *ngIf="id" class="title">Update Document</h2>-->
+
+<!--  &lt;!&ndash; CLIENT SECTION &ndash;&gt;-->
+<!--  <div class="row mb-3">-->
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>Customer</mat-label>-->
+<!--        <input matInput [matAutocomplete]="autoCustomer" formControlName="customerControl">-->
+<!--        <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer">-->
+<!--          <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">-->
+<!--            {{ customer.name }}-->
+<!--          </mat-option>-->
+<!--        </mat-autocomplete>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>CUI</mat-label>-->
+<!--        <input matInput formControlName="cui">-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; CONTRACT DETAILS &ndash;&gt;-->
+<!--  <div class="row mb-3">-->
+<!--    <div class="col">-->
+<!--      <label for="contractDate" class="form-label">Contract Date</label>-->
+<!--      <input type="text"-->
+<!--             id="contractDate"-->
+<!--             #contractDateInput-->
+<!--             class="form-control"-->
+<!--             placeholder="dd/mm/yyyy"-->
+<!--             autocomplete="off"-->
+<!--             [formControl]="contractDateControl">-->
+<!--    </div>-->
+
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>Months of Warranty</mat-label>-->
+<!--        <input matInput formControlName="monthOfWarranty" type="number">-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>Contract Number</mat-label>-->
+<!--        <input matInput formControlName="numberOfContract">-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="row mb-3">-->
+<!--    <div class="col">-->
+<!--      <label for="signatureDate" class="form-label">Signature Date</label>-->
+<!--      <input type="text"-->
+<!--             id="signatureDate"-->
+<!--             #signatureDateInput-->
+<!--             class="form-control"-->
+<!--             placeholder="dd/mm/yyyy"-->
+<!--             autocomplete="off"-->
+<!--             [formControl]="signatureDateControl">-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; EQUIPMENTS &ndash;&gt;-->
+<!--  <div class="equipment-section mb-3">-->
+<!--    <h3 class="subtitle">Equipments</h3>-->
+
+<!--    <ng-container *ngFor="let i of [0,1,2,3,4,5]; let idx = index">-->
+<!--      <div class="row mb-2 align-items-end">-->
+<!--        <div class="col-md-4">-->
+<!--          <mat-form-field appearance="fill" class="w-full">-->
+<!--            <mat-label>Equipment {{ idx + 1 }}</mat-label>-->
+<!--            <input matInput [matAutocomplete]="autoEq" [formControl]="equipmentControls[idx]">-->
+<!--            <mat-autocomplete #autoEq="matAutocomplete" [displayWith]="displayEquipment">-->
+<!--              <mat-option *ngFor="let e of filteredEquipment[idx] | async" [value]="e">-->
+<!--                {{ e.model }}-->
+<!--              </mat-option>-->
+<!--            </mat-autocomplete>-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+
+<!--        <div class="col-md-4">-->
+<!--          <mat-form-field appearance="fill" class="w-full">-->
+<!--            <mat-label>Product Code</mat-label>-->
+<!--            <input matInput [formControlName]="'productCode' + (idx + 1)">-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+
+<!--        <div class="col-md-4">-->
+<!--          <mat-form-field appearance="fill" class="w-full">-->
+<!--            <mat-label>Serial Number</mat-label>-->
+<!--            <input matInput [formControlName]="'serialNumber' + (idx + 1)">-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </ng-container>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; TRAINING INFO &ndash;&gt;-->
+<!--  <h3 class="subtitle">Training Information</h3>-->
+<!--  <div class="row mb-3">-->
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>Trained Person</mat-label>-->
+<!--        <input matInput formControlName="trainedPerson">-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>Job Function</mat-label>-->
+<!--        <input matInput formControlName="jobFunction">-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="row mb-3">-->
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>Phone</mat-label>-->
+<!--        <input matInput formControlName="phone">-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>Email</mat-label>-->
+<!--        <input matInput formControlName="email">-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+
+<!--    <div class="col">-->
+<!--      <mat-form-field appearance="fill" class="w-full">-->
+<!--        <mat-label>Contact Person</mat-label>-->
+<!--        <input matInput formControlName="contactPerson">-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; SIGNATURE PAD &ndash;&gt;-->
+<!--  <h3 class="subtitle">Signature</h3>-->
+<!--  <app-signature-pad></app-signature-pad>-->
+
+<!--  &lt;!&ndash; ACTION BUTTONS &ndash;&gt;-->
+<!--  <div class="actions mt-3">-->
+<!--    <button mat-raised-button color="primary" (click)="saveDocument()" [disabled]="loading">-->
+<!--      {{ loading ? 'Saving...' : 'Save Document' }}-->
+<!--    </button>-->
+<!--    <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class="document-container" [formGroup]="documentForm">
+  <h2 *ngIf="!id" class="title">Document Data Form</h2>
+  <h2 *ngIf="id" class="title">Update Document</h2>
+
+  <!-- ========================= -->
+  <!-- SECȚIUNEA 1: CLIENT + CONTRACT -->
+  <!-- ========================= -->
+  <div class="section">
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Customer</mat-label>
+        <input matInput [matAutocomplete]="autoCustomer" formControlName="customerControl">
+        <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer">
+          <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
+            {{ customer.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>CUI</mat-label>
+        <input matInput formControlName="cui">
+      </mat-form-field>
+    </div>
+
+    <div class="col2">
+      <label for="contractDate" class="form-label">Contract Date</label>
+      <input type="text" id="contractDate" #contractDateInput class="form-control" placeholder="dd/mm/yyyy" autocomplete="off" [formControl]="contractDateControl">
+    </div>
+
+    <div class="col2">
+      <label for="signatureDate" class="form-label">Signature Date</label>
+      <input type="text" id="signatureDate" #signatureDateInput class="form-control" placeholder="dd/mm/yyyy" autocomplete="off" [formControl]="signatureDateControl">
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Contract Number</mat-label>
+        <input matInput formControlName="numberOfContract">
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Months of Warranty</mat-label>
+        <input matInput type="number" formControlName="monthOfWarranty">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- ========================= -->
+  <!-- SECȚIUNEA 2: ECHIPAMENTE -->
+  <!-- ========================= -->
+  <div class="equipment-section">
+    <h3 class="subtitle">Equipments</h3>
+
+    <ng-container *ngFor="let i of [0,1,2,3,4,5]; let idx = index">
+      <div class="equipment-row">
+        <mat-form-field appearance="fill" class="equipment-field">
+          <mat-label>Equipment {{ idx + 1 }}</mat-label>
+          <input matInput [matAutocomplete]="autoEq" [formControl]="equipmentControls[idx]">
+        </mat-form-field>
+
+        <mat-autocomplete #autoEq="matAutocomplete" [displayWith]="displayEquipment">
+          <mat-option *ngFor="let e of filteredEquipment[idx] | async" [value]="e">
+            {{ e.model }}
+          </mat-option>
+        </mat-autocomplete>
+
+        <mat-form-field appearance="fill" class="equipment-field">
+          <mat-label>Product Code</mat-label>
+          <input matInput [formControlName]="'productCode' + (idx + 1)">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="equipment-field">
+          <mat-label>Serial Number</mat-label>
+          <input matInput [formControlName]="'serialNumber' + (idx + 1)">
+        </mat-form-field>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- ========================= -->
+  <!-- SECȚIUNEA 3: TRAINING + CONTACT -->
+  <!-- ========================= -->
+  <h3 class="subtitle">Training Information</h3>
+  <div class="section">
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Trained Person</mat-label>
+        <input matInput formControlName="trainedPerson">
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Job Function</mat-label>
+        <input matInput formControlName="jobFunction">
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone">
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email">
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Contact Person</mat-label>
+        <input matInput formControlName="contactPerson">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- SIGNATURE PAD -->
+<!--  <h3 class="subtitle">Signature</h3>-->
+<!--  <app-signature-pad></app-signature-pad>-->
+
+  <!-- ACTION BUTTONS -->
+  <div class="actions">
+    <button mat-raised-button color="primary" (click)="saveDocument()" [disabled]="loading">
+      {{ loading ? 'Saving...' : 'Save Document' }}
+    </button>
+    <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+  </div>
+</div>
