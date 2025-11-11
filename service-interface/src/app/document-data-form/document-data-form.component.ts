@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, startWith, map } from 'rxjs';
 import { SignaturePadComponent } from '../signature-pad/signature-pad.component';
@@ -43,7 +43,8 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -290,7 +291,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       next: () => { this.loading = false; alert('Document saved'); },
       error: err => { this.loading = false; console.error(err); alert('Error saving document'); }
     });
-    window.history.back();
+    this.router.navigate(["/documents"]);
   }
 
   cancel(): void {
