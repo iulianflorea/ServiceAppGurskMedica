@@ -1,9 +1,15 @@
 package com.example.ServiceApp.service;
 
 import com.example.ServiceApp.dto.EquipmentDto;
+import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.entity.Equipment;
+import com.example.ServiceApp.entity.InterventionSheet;
 import com.example.ServiceApp.mapper.EquipmentMapper;
 import com.example.ServiceApp.repository.EquipmentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +41,13 @@ public class EquipmentService {
         return equipmentMapper.toDto(equipment);
     }
 
-    public List<EquipmentDto> findAll() {
+    public List<EquipmentDto> findAllLast50() {
+        Pageable topFifty = PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Equipment> equipmentPage = equipmentRepository.findAllByOrderByIdDesc(topFifty);
+        return equipmentMapper.toDtoList(equipmentPage.getContent());
+    }
+
+    public List<EquipmentDto> findAll(){
         List<Equipment> equipmentList = equipmentRepository.findAll();
         return equipmentMapper.toDtoList(equipmentList);
     }
@@ -43,6 +55,7 @@ public class EquipmentService {
     public EquipmentDto update(EquipmentDto equipmentDto) {
         Equipment equipmentToBeUpdate = equipmentRepository.findById(equipmentDto.getId()).orElseThrow();
         equipmentToBeUpdate.setModel(equipmentDto.getModel());
+        equipmentToBeUpdate.setProductCode(equipmentDto.getProductCode());
         equipmentToBeUpdate.setProducerId(equipmentDto.getProducerId());
         Equipment equipmentUpdated = equipmentRepository.save(equipmentToBeUpdate);
         return equipmentMapper.toDto(equipmentUpdated);
@@ -50,6 +63,11 @@ public class EquipmentService {
 
     public void delete(Long id) {
         equipmentRepository.deleteById(id);
+    }
+
+    public List<EquipmentDto> search(String keyword) {
+        List<Equipment> equipmentList = equipmentRepository.seearchEquipments(keyword);
+        return equipmentMapper.toDtoList(equipmentList);
     }
 
 

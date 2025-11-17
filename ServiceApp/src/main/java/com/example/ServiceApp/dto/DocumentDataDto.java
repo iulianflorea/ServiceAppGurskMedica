@@ -19,6 +19,7 @@ public class DocumentDataDto {
     private String cui;
     private LocalDate contractDate;
     private Integer monthOfWarranty;
+    private Integer monthOfWarrantyHandPieces;
     private String numberOfContract;
 
     private Long equipmentId1;

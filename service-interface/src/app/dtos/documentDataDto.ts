@@ -3,6 +3,7 @@ export class DocumentDataDto {
   customerName?: string;
   cui?: string;
   monthOfWarranty?: number;
+  monthOfWarrantyHandPieces?: number;
   numberOfContract?: string;
   productCode?: string;
   serialNumber?: string;

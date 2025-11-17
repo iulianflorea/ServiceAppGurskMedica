@@ -15,6 +15,7 @@ public class EquipmentMapper {
     public Equipment toEntity(EquipmentDto equipmentDto) {
         return Equipment.builder()
                 .model(equipmentDto.getModel())
+                .productCode(equipmentDto.getProductCode())
                 .producerId(equipmentDto.getProducerId())
                 .build();
     }
@@ -23,6 +24,7 @@ public class EquipmentMapper {
         return EquipmentDto.builder()
                 .id(equipment.getId())
                 .model(equipment.getModel())
+                .productCode(equipment.getProductCode())
                 .producerId(equipment.getProducerId())
                 .producerName(getProducerName(equipment))
                 .build();

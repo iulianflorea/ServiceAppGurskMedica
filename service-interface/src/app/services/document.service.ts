@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class DocumentService {
 
-  apiUrl = 'http://188.24.7.49:8080/api/interventions';
-  // apiUrl = 'http://localhost:8080/api/interventions';
+  // apiUrl = 'http://188.24.7.49:8080/api/interventions';
+  apiUrl = 'http://localhost:8080/api/interventions';
 
   constructor(private http: HttpClient) {}
 

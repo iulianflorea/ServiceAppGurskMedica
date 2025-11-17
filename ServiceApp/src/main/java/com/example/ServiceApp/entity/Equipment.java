@@ -14,6 +14,7 @@ public class Equipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String model;
+    private String productCode;
     @Column(name = "producer_id")
     private Long producerId;
     @ManyToOne(targetEntity = Producer.class, fetch = FetchType.EAGER)

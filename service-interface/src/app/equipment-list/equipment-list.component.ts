@@ -5,6 +5,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {HttpClient} from "@angular/common/http";
 import {ProductDto} from "../dtos/productDto";
+import {Observable} from "rxjs";
+import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 
 @Component({
   selector: 'app-equipment-list',
@@ -13,9 +15,10 @@ import {ProductDto} from "../dtos/productDto";
 })
 export class EquipmentListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'model', 'producerId', 'update', 'delete'];
+  displayedColumns: string[] = ['id', 'model', 'productCode', 'producerId', 'update', 'delete'];
   dataSource: EquipmentDto[] = [];
   dataSource2 = new MatTableDataSource<EquipmentDto>(this.dataSource);
+  keyword: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -42,6 +45,23 @@ export class EquipmentListComponent implements AfterViewInit {
         alert("The equipment was deleted");
         this.ngOnInit();
       })
+    }
+  }
+
+  searchInterventionSheet(keyword: string): Observable<EquipmentDto[]> {
+    return this.httpClient.get<EquipmentDto[]>(`/api/equipment/search?keyword=${keyword}`);
+  }
+
+  search() {
+    // this.searchResult = [];
+
+    let finalKeyword = this.keyword;
+    if (finalKeyword) {
+      this.searchInterventionSheet(finalKeyword).subscribe(data => {
+        console.log(data);
+        this.dataSource2.data = data;
+        // this.searchResult = data;
+      });
     }
   }
 

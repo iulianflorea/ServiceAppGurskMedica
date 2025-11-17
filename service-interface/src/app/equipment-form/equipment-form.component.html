@@ -12,6 +12,11 @@
           <input matInput [(ngModel)]="model" [ngModelOptions]="{standalone: true}"/>
         </mat-form-field>
 
+        <mat-form-field class="w-full">
+          <mat-label>Product Code</mat-label>
+          <input matInput [(ngModel)]="productCode" [ngModelOptions]="{standalone: true}"/>
+        </mat-form-field>
+
         <mat-form-field>
           <mat-label>Producer</mat-label>
           <mat-select [(ngModel)]="producerSelected" [ngModelOptions]="{standalone: true}">

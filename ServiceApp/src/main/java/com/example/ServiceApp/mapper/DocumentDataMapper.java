@@ -23,6 +23,7 @@ public class DocumentDataMapper {
                 .cui(entity.getCui() != null ? entity.getCui() : null)
                 .contractDate(entity.getContractDate())
                 .monthOfWarranty(entity.getMonthOfWarranty())
+                .monthOfWarrantyHandPieces(entity.getMonthOfWarrantyHandPieces())
                 .numberOfContract(entity.getNumberOfContract())
 
                 .equipmentId1(entity.getEquipmentId1())
@@ -72,6 +73,7 @@ public class DocumentDataMapper {
                 .cui(dto.getCui())
                 .contractDate(dto.getContractDate())
                 .monthOfWarranty(dto.getMonthOfWarranty())
+                .monthOfWarrantyHandPieces(dto.getMonthOfWarrantyHandPieces())
                 .numberOfContract(dto.getNumberOfContract())
 
                 .equipmentId1(dto.getEquipmentId1())

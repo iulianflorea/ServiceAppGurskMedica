@@ -97,6 +97,7 @@ public interface DocumentDataRepository extends JpaRepository<DocumentData, Long
                         LOWER(COALESCE(t.contactPerson, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
 
                         CAST(t.monthOfWarranty AS string) LIKE CONCAT('%', :keyword, '%') OR
+                        CAST(t.monthOfWarrantyHandPieces AS string) LIKE CONCAT('%', :keyword, '%') OR
                         CAST(t.contractDate AS string) LIKE CONCAT('%', :keyword, '%') OR
                         CAST(t.signatureDate AS string) LIKE CONCAT('%', :keyword, '%')
                     )

@@ -17,6 +17,7 @@ interface CustomerDto {
 interface EquipmentDto {
   id: number;
   model: string;
+  productCode: string;
 }
 
 @Component({
@@ -65,6 +66,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       cui: [{value: '', disabled: true}],
       contractDate: [''],
       monthOfWarranty: [''],
+      monthOfWarrantyHandPieces: [''],
       numberOfContract: [''],
       signatureDate: [''],
       trainedPerson: [''],
@@ -125,9 +127,20 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
         ctrl.valueChanges.subscribe(val => {
           if (val && typeof val === 'object' && 'id' in val) {
             const idx = i + 1;
+
+            // Completezi automat modelul
             this.documentForm.get('equipmentName' + idx)?.setValue(val.model || '');
+
+            // Completezi automat productCode
+            this.documentForm.get('productCode' + idx)?.setValue(val.productCode || '');
+          } else {
+            // Dacă ștergi selecția, golește câmpurile
+            const idx = i + 1;
+            this.documentForm.get('equipmentName' + idx)?.setValue('');
+            this.documentForm.get('productCode' + idx)?.setValue('');
           }
         });
+
       }
 
       if (this.id) {
@@ -237,6 +250,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       this.documentForm.patchValue({
         contractDate: doc.contractDate,
         monthOfWarranty: doc.monthOfWarranty,
+        monthOfWarrantyHandPieces: doc.monthOfWarrantyHandPieces,
         numberOfContract: doc.numberOfContract,
         signatureDate: doc.signatureDate,
         trainedPerson: doc.trainedPerson,
@@ -275,6 +289,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       cui: form.customerControl?.cui || '',
       contractDate: form.contractDate,
       monthOfWarranty: form.monthOfWarranty,
+      monthOfWarrantyHandPieces: form.monthOfWarrantyHandPieces,
       numberOfContract: form.numberOfContract,
       signatureDate: form.signatureDate,
       trainedPerson: form.trainedPerson,

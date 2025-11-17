@@ -66,6 +66,7 @@ public class DocumentDataService {
         existing.setCui(dto.getCui());
         existing.setContractDate(dto.getContractDate());
         existing.setMonthOfWarranty(dto.getMonthOfWarranty());
+        existing.setMonthOfWarrantyHandPieces(dto.getMonthOfWarrantyHandPieces());
         existing.setNumberOfContract(dto.getNumberOfContract());
 
         existing.setEquipmentId1(dto.getEquipmentId1());
@@ -323,6 +324,7 @@ public class DocumentDataService {
         map.put("cui", data.getCui() != null ? data.getCui() : "");
         map.put("contractDate", data.getContractDate() != null ? data.getContractDate().format(formatter) : "");
         map.put("monthOfWarranty", data.getMonthOfWarranty() != null ? String.valueOf(data.getMonthOfWarranty()) : "");
+        map.put("monthOfWarrantyHandPieces", data.getMonthOfWarrantyHandPieces() != null ? String.valueOf(data.getMonthOfWarrantyHandPieces()) : "");
         map.put("numberOfContract", data.getNumberOfContract() != null ? data.getNumberOfContract() : "");
 
         map.put("nameOfEquipment1", data.getEquipmentName1() != null ? data.getEquipmentName1() : "");

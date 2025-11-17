@@ -15,6 +15,7 @@ export class EquipmentFormComponent implements OnInit{
 
   id: any;
   model: any;
+  productCode: any;
   producerList: ProducerDto[] = [];
   producerSelected: any;
 
@@ -37,6 +38,7 @@ export class EquipmentFormComponent implements OnInit{
         console.log(response);
         this.id = response.id;
         this.model = response.model;
+        this.productCode = response.productCode;
         this.producerSelected = response.producerId;
       })
     }
@@ -53,6 +55,7 @@ export class EquipmentFormComponent implements OnInit{
      var equipment = {
        id: this.id,
        model: this.model,
+       productCode: this.productCode,
        producerId: this.producerSelected
      }
      this.httpClient.post("/api/equipment", equipment).subscribe((response) =>{

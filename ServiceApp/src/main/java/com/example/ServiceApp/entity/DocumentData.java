@@ -26,6 +26,7 @@ public class DocumentData {
     private String cui;
     private LocalDate contractDate;
     private Integer monthOfWarranty;
+    private Integer monthOfWarrantyHandPieces;
     private String numberOfContract;
 
     @Column(name = "equipment_id1")
