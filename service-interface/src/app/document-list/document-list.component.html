@@ -84,9 +84,11 @@
           <mat-icon>done_all</mat-icon>
         </button>
         <a routerLink="/documents-form/{{doc.id}}">
-          <button mat-raised-button>Edit</button>
+          <button mat-raised-button mat-raised-button color="primary">Edit
+          <mat-icon>edit</mat-icon>
+          </button>
         </a>
-        <button mat-icon-button color="primary" (click)="delete(doc)">
+        <button mat-icon-button color="warn" (click)="delete(doc)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

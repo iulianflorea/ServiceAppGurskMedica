@@ -16,19 +16,25 @@
         </mat-form-field>
 
         <div class="form-button">
-          <button mat-button type="submit">Save</button>
+          <button mat-raised-button color="primary" type="submit">Save
+            <mat-icon>save</mat-icon>
+          </button>
         </div>
 
       </div>
     </form>
-    <button mat-button (click)="backupManualDbDoc()">Backup DB</button>
+    <button mat-raised-button color="accent" (click)="backupManualDbDoc()">Backup DB
+      <mat-icon>restore</mat-icon>
+    </button>
 <!--  </div>-->
 
 <!--  <div class="sql">-->
     <h1>Import Database</h1>
     <form *ngIf="userIsAdmin" (submit)="onSubmit()" class="sql-form">
       <input type="file" (change)="onFileSelected($event)" accept=".sql" required/>
-      <button mat-button type="submit">Import</button>
+      <button mat-raised-button color="primary" type="submit">Import
+        <mat-icon>upload</mat-icon>
+      </button>
     </form>
 
     <p *ngIf="!userIsAdmin" style="color: red;">⚠️ Doar administratorii pot face import SQL.</p>

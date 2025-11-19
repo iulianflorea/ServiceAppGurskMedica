@@ -13,7 +13,9 @@
         <input matInput formControlName="productCode"/>
       </mat-form-field>
 
-      <button mat-button type="submit">Trimite</button>
+      <button mat-button mat-raised-button color="primary" type="submit">Trimite
+      <mat-icon>send</mat-icon>
+      </button>
       <p *ngIf="responseMessage">{{ responseMessage }}</p>
     </form>
   </div>

@@ -12,9 +12,13 @@
         <input matInput type="password" formControlName="password"/>
       </mat-form-field>
 
-      <h6>If you don't have account, register <h3 routerLink="/register">>here<</h3></h6>
+      <h6>If you don't have account,<button routerLink="/register" mat-raised-button color="transparent"> register here
+      <mat-icon>login</mat-icon>
+      </button> </h6>
 
-      <button mat-raised-button type="submit" color="primary">Login</button>
+      <button mat-raised-button type="submit" color="primary">Login
+        <mat-icon>login</mat-icon>
+      </button>
     </form>
   </div>
 </div>

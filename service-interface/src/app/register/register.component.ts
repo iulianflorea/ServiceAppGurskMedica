@@ -5,14 +5,15 @@ import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatButtonModule} from "@angular/material/button";
 import {HttpClient} from "@angular/common/http";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
+import {MatIconModule} from "@angular/material/icon";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatButtonModule]
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, ReactiveFormsModule, MatButtonModule, RouterLink, MatIconModule]
 })
 export class RegisterComponent {
 

@@ -1,4 +1,5 @@
 <div class="intervention-container">
+  <h2> You're Interventions</h2>
   <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
     <mat-form-field>
       <mat-label>Search</mat-label>
@@ -16,12 +17,9 @@
         autocomplete="off"
       >
     </div>
-
     <button mat-flat-button color="primary" type="submit">Search</button>
-
   </form>
 
-  <h1> You're Interventions</h1>
   <button mat-mini-fab color="accent" routerLink="/intervention-sheet"
           aria-label="Add new intervention sheet" class="add-button">
     <mat-icon>plus_one</mat-icon>
@@ -127,25 +125,25 @@
 </app-pop-up-task>
 
 
-<div *ngIf="isMobile" class="intervention-container">
-  <mat-card *ngFor="let item of searchResult" class="mobile-card">
-    <mat-card-content>
-      <p><strong>No.:</strong> {{ item.id }}</p>
-      <p><strong>Type of Intervention:</strong> {{ item.typeOfIntervention }}</p>
-      <p><strong>Equipment:</strong> {{ item.equipmentName }}</p>
-      <p><strong>Serial No.:</strong> {{ item.serialNumber }}</p>
-      <p><strong>Date:</strong> {{ item.dateOfIntervention }}</p>
-      <p><strong>Warranty:</strong> {{ item.dateOfExpireWarranty }}</p>
-      <p><strong>Months Warranty:</strong> {{ item.yearsOfWarranty }}</p>
-      <p><strong>Customer:</strong> {{ item.customerName }}</p>
-      <p><strong>Engineer:</strong> {{ item.employeeName }}</p>
-      <p><strong>Noticed:</strong> {{ item.noticed }}</p>
-      <p><strong>Fixed:</strong> {{ item.fixed }}</p>
-      <p><strong>Note:</strong> {{ item.engineerNote }}</p>
-    </mat-card-content>
+<!--<div *ngIf="isMobile" class="intervention-container">-->
+<!--  <mat-card *ngFor="let item of searchResult" class="mobile-card">-->
+<!--    <mat-card-content>-->
+<!--      <p><strong>No.:</strong> {{ item.id }}</p>-->
+<!--      <p><strong>Type of Intervention:</strong> {{ item.typeOfIntervention }}</p>-->
+<!--      <p><strong>Equipment:</strong> {{ item.equipmentName }}</p>-->
+<!--      <p><strong>Serial No.:</strong> {{ item.serialNumber }}</p>-->
+<!--      <p><strong>Date:</strong> {{ item.dateOfIntervention }}</p>-->
+<!--      <p><strong>Warranty:</strong> {{ item.dateOfExpireWarranty }}</p>-->
+<!--      <p><strong>Months Warranty:</strong> {{ item.yearsOfWarranty }}</p>-->
+<!--      <p><strong>Customer:</strong> {{ item.customerName }}</p>-->
+<!--      <p><strong>Engineer:</strong> {{ item.employeeName }}</p>-->
+<!--      <p><strong>Noticed:</strong> {{ item.noticed }}</p>-->
+<!--      <p><strong>Fixed:</strong> {{ item.fixed }}</p>-->
+<!--      <p><strong>Note:</strong> {{ item.engineerNote }}</p>-->
+<!--    </mat-card-content>-->
 
-    <mat-card-actions>
-      <button mat-stroked-button color="primary" (click)="openModal(item)">View</button>
-    </mat-card-actions>
-  </mat-card>
-</div>
+<!--    <mat-card-actions>-->
+<!--      <button mat-stroked-button color="primary" (click)="openModal(item)">View</button>-->
+<!--    </mat-card-actions>-->
+<!--  </mat-card>-->
+<!--</div>-->

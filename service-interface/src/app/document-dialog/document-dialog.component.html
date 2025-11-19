@@ -1,5 +1,7 @@
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Închide</button>
+  <button mat-button mat-raised-button color="warn" mat-dialog-close>Închide
+    <mat-icon>cancel</mat-icon>
+  </button>
 </mat-dialog-actions>
 <h2>Documente intervenție cu numarul: {{data.intervention.id}}</h2>
 <input type="file" (change)="onFileSelected($event)" />
@@ -7,13 +9,13 @@
   <tr *ngFor="let doc of documents">
     <td>{{ doc.name }}</td>
     <td>
-      <button mat-icon-button (click)="previewDocument(doc)">
+      <button mat-icon-button color="accent" (click)="previewDocument(doc)">
         <mat-icon>visibility</mat-icon>
       </button>
-      <button mat-icon-button (click)="downloadDocument(doc)">
+      <button mat-icon-button color="primary" (click)="downloadDocument(doc)">
         <mat-icon>download</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteDocument(doc.name)">
+      <button mat-icon-button color="warn" (click)="deleteDocument(doc.name)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>

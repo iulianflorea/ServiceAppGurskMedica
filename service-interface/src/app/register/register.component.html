@@ -21,8 +21,14 @@
         <mat-label>Password</mat-label>
         <input matInput type="password" formControlName="password"/>
       </mat-form-field>
-
-      <button mat-raised-button type="submit" color="primary">Register</button>
+      <div class="form-button">
+        <button mat-raised-button type="submit" color="primary">Register
+          <mat-icon>login</mat-icon>
+        </button>
+        <button mat-raised-button type="submit" routerLink="/login" color="warn">cancel
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </div>
     </form>
   </div>
 </div>
