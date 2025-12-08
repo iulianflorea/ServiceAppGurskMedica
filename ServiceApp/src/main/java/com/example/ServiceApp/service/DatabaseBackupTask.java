@@ -26,33 +26,70 @@ public class DatabaseBackupTask {
     public void scheduledDatabaseBackup() {
         runBackup();
     }
+//VARIANTA PENTRU WINDOWS
+//
+//    public void runBackup() {
+//        try {
+//            Files.createDirectories(Paths.get(backupService.getSqlPath().orElseThrow()));
+//            String backupFileName = String.format("backup-%s.sql",
+//                    new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date()));
+//            String backupPath = backupService.getSqlPath().orElseThrow() + "/" + backupFileName;
+//
+//            String mysqldumpPath = "\"C:/Program Files/MySQL/MySQL Server 8.0/bin/mysqldump.exe\""; // adaptează dacă e nevoie
+//
+//            String command = String.format(
+//                    "%s -u%s -p%s %s -r \"%s\"",
+//                    mysqldumpPath, dbUser, dbPassword, dbName, backupPath
+//            );
+//
+//            System.out.println(backupPath);
+//
+//            Process process = Runtime.getRuntime().exec(command);
+//            int exitCode = process.waitFor();
+//
+//            if (exitCode == 0) {
+//                System.out.println("Backup MySQL realizat cu succes.");
+//            } else {
+//                System.err.println("Backup MySQL a eșuat cu cod: " + exitCode);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    public void runBackup() {
-        try {
-            Files.createDirectories(Paths.get(backupService.getSqlPath().orElseThrow()));
-            String backupFileName = String.format("backup-%s.sql",
-                    new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date()));
-            String backupPath = backupService.getSqlPath().orElseThrow() + "/" + backupFileName;
+//    VARIANTA PENTRU LINUX UBUNTU
+public void runBackup() {
+    try {
+        Files.createDirectories(Paths.get(backupService.getSqlPath().orElseThrow()));
+        String backupFileName = String.format("backup-%s.sql",
+                new SimpleDateFormat("yyyy-MM-dd_HH-mm").format(new Date()));
+        String backupPath = backupService.getSqlPath().orElseThrow() + "/" + backupFileName;
 
-            String mysqldumpPath = "\"C:/Program Files/MySQL/MySQL Server 8.0/bin/mysqldump.exe\""; // adaptează dacă e nevoie
+        // Pe Linux folosim doar "mysqldump" daca este instalat in PATH
+        String[] command = {
+                "mysqldump",
+                "-u" + dbUser,
+                "-p" + dbPassword,  // IMPORTANT: fără spațiu
+                dbName,
+                "-r", backupPath
+        };
 
-            String command = String.format(
-                    "%s -u%s -p%s %s -r \"%s\"",
-                    mysqldumpPath, dbUser, dbPassword, dbName, backupPath
-            );
+        System.out.println("Saving backup to: " + backupPath);
 
-            System.out.println(backupPath);
+        Process process = new ProcessBuilder(command)
+                .redirectErrorStream(true)
+                .start();
 
-            Process process = Runtime.getRuntime().exec(command);
-            int exitCode = process.waitFor();
+        int exitCode = process.waitFor();
 
-            if (exitCode == 0) {
-                System.out.println("Backup MySQL realizat cu succes.");
-            } else {
-                System.err.println("Backup MySQL a eșuat cu cod: " + exitCode);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (exitCode == 0) {
+            System.out.println("Backup MySQL realizat cu succes.");
+        } else {
+            System.err.println("Backup MySQL a eșuat cu cod: " + exitCode);
         }
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 }

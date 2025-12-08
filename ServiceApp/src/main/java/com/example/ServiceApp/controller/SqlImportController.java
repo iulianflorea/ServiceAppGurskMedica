@@ -11,6 +11,44 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+//VARIANTA PENTRU WINDOWS
+//
+//@RestController
+//@RequestMapping("/database")
+//public class SqlImportController {
+//
+//    @PostMapping("/sql-import")
+//    public ResponseEntity<String> importSqlFile(@RequestParam("file") MultipartFile file) {
+//        try {
+//            // Salvează fișierul temporar
+//            File tempFile = File.createTempFile("import-", ".sql");
+//            file.transferTo(tempFile);
+//
+//            // Rulează fișierul SQL cu comanda mysql
+//            ProcessBuilder pb = new ProcessBuilder(
+//                    "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql",
+//                    "-u", "root",
+//                    "-prgbiuli1",  // sau folosește `--defaults-extra-file`
+//                    "serviceapp"
+//            );
+//            pb.redirectInput(tempFile);
+//            Process process = pb.start();
+//
+//            int exitCode = process.waitFor();
+//            if (exitCode == 0) {
+//                return ResponseEntity.ok("SQL importat cu succes.");
+//            } else {
+//                return ResponseEntity.status(500).body("Eroare la import.");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(500).body("Eroare: " + e.getMessage());
+//        }
+//    }
+//
+//}
+
+//VARIANTA PENTRU LINUX UBUNTU
 
 @RestController
 @RequestMapping("/database")
@@ -23,22 +61,27 @@ public class SqlImportController {
             File tempFile = File.createTempFile("import-", ".sql");
             file.transferTo(tempFile);
 
-            // Rulează fișierul SQL cu comanda mysql
-            ProcessBuilder pb = new ProcessBuilder(
-                    "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql",
-                    "-u", "root",
-                    "-prgbiuli1",  // sau folosește `--defaults-extra-file`
-                    "serviceapp"
+            // Comanda Linux pentru import SQL
+            String command = String.format(
+                    "mysql -u%s -p%s %s < %s",
+                    "root",
+                    "rgbiuli1",
+                    "serviceapp",
+                    tempFile.getAbsolutePath()
             );
-            pb.redirectInput(tempFile);
-            Process process = pb.start();
 
+            // Rulăm comanda prin shell (pentru redirecționare <)
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", command);
+
+            Process process = pb.start();
             int exitCode = process.waitFor();
+
             if (exitCode == 0) {
                 return ResponseEntity.ok("SQL importat cu succes.");
             } else {
-                return ResponseEntity.status(500).body("Eroare la import.");
+                return ResponseEntity.status(500).body("Eroare la import. Cod: " + exitCode);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Eroare: " + e.getMessage());
