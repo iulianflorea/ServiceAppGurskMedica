@@ -49,14 +49,13 @@ export class CustomerListComponent implements AfterViewInit {
 
 
   search() {
-    this.searchResult = [];
-    if (this.keyword) {
-      this.httpClient.get(`/api/customer/search?keyword=${this.keyword}`).subscribe((data: any) => {
+    let finalKeyword = this.keyword;
+    if (finalKeyword) {
+      this.searchCustomer(finalKeyword).subscribe((data: any) => {
         console.log(data);
         this.dataSource2 = data;
       })
     }
-    this.searchCustomer(this.keyword).subscribe(data => this.searchResult = data);
   }
 
 

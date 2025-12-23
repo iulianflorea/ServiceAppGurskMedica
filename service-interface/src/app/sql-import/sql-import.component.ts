@@ -26,9 +26,11 @@ export class SqlImportComponent implements OnInit{
   documentPath: any;
 
   // private backupUrl = 'http://localhost:8080/api/backup/manual';
-  private backupUrl = 'http://188.24.7.49:8080/api/backup/manual';
+  // private backupUrl = 'http://188.24.7.49:8080/api/backup/manual';
+  private backupUrl = 'https://gursk.singularity-cloud.com/api/backup/manual';
   // private backupUrlDatabase = 'http://localhost:8080/api/backup/database';
-  private backupUrlDatabase = 'http://188.24.7.49:8080/api/backup/database';
+  // private backupUrlDatabase = 'http://188.24.7.49:8080/api/backup/database';
+  private backupUrlDatabase = 'https://gursk.singularity-cloud.com/api/backup/database';
   backupStatus: string = '';
   backupStatusDatabase: string = '';
 

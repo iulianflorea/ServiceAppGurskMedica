@@ -14,6 +14,9 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/service-interface",
+            "allowedCommonJsDependencies": [
+              "html2pdf.js"
+            ],
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [

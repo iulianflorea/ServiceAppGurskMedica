@@ -57,14 +57,13 @@ export class ProductListComponent implements AfterViewInit{
 
 
   search() {
-    this.searchResult = [];
-    if (this.keyword) {
-      this.httpClient.get(`/api/product/search?keyword=${this.keyword}`).subscribe((data: any) => {
+    let finalKeywork = this.keyword;
+    if (finalKeywork) {
+      this.searchProduct(finalKeywork).subscribe((data: any) => {
         console.log(data);
         this.dataSource2 = data;
       })
     }
-    this.searchProduct(this.keyword).subscribe(data => this.searchResult = data);
   }
 
 
