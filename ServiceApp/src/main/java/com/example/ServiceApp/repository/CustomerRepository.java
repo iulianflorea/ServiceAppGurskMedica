@@ -4,16 +4,17 @@ import com.example.ServiceApp.entity.Customer;
 import com.example.ServiceApp.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@EnableJpaRepositories
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query(value = """
-    SELECT t.* FROM Customer t
+    SELECT t FROM Customer t
     WHERE 
         (:keyword IS NULL OR :keyword = '' OR (
             LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
@@ -22,6 +23,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             LOWER(t.telephone) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
             LOWER(t.email) LIKE LOWER(CONCAT('%', :keyword, '%'))
         ))
-""", nativeQuery = true)
+""")
     List<Customer> searchCustomer(@Param("keyword") String keyword);
 }

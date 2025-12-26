@@ -13,17 +13,17 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query(value = """
-    SELECT t.* FROM Product t
-    JOIN producer p ON p.id = t.producer_id
-    WHERE 
-        (:keyword IS NULL OR :keyword = '' OR (
-            LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
-            LOWER(t.cod) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
-            CAST(t.quantity AS CHAR) LIKE CONCAT('%', :keyword, '%') OR 
-            LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-        ))
-""", nativeQuery = true)
+    @Query("""
+        SELECT t FROM Product t
+        JOIN t.producer p
+        WHERE 
+            (:keyword IS NULL OR :keyword = '' OR (
+                LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
+                LOWER(t.cod) LIKE LOWER(CONCAT('%', :keyword, '%')) OR 
+                CAST(t.quantity AS string) LIKE CONCAT('%', :keyword, '%') OR 
+                LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            ))
+    """)
     List<Product> searchProduct(@Param("keyword") String keyword);
 
     Optional<Product> findByCodIgnoreCase(String cod);

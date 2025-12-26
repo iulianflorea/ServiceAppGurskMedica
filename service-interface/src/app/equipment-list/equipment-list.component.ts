@@ -48,19 +48,16 @@ export class EquipmentListComponent implements AfterViewInit {
     }
   }
 
-  searchInterventionSheet(keyword: string): Observable<EquipmentDto[]> {
+  searchEquipments(keyword: string): Observable<EquipmentDto[]> {
     return this.httpClient.get<EquipmentDto[]>(`/api/equipment/search?keyword=${keyword}`);
   }
 
   search() {
-    // this.searchResult = [];
-
     let finalKeyword = this.keyword;
     if (finalKeyword) {
-      this.searchInterventionSheet(finalKeyword).subscribe(data => {
+      this.searchEquipments(finalKeyword).subscribe(data => {
         console.log(data);
         this.dataSource2.data = data;
-        // this.searchResult = data;
       });
     }
   }

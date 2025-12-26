@@ -48,6 +48,10 @@ export class CustomerListComponent implements AfterViewInit {
   }
 
 
+  searchCustomer(keyword: string): Observable<CustomerDto[]> {
+    return this.httpClient.get<CustomerDto[]>(`/api/customer/search?keyword=${keyword}`);
+  }
+
   search() {
     let finalKeyword = this.keyword;
     if (finalKeyword) {
@@ -59,7 +63,5 @@ export class CustomerListComponent implements AfterViewInit {
   }
 
 
-  searchCustomer(keyword: string): Observable<CustomerDto[]> {
-    return this.httpClient.get<CustomerDto[]>(`/api/customer/search?keyword=${keyword}`);
-  }
+
 }
