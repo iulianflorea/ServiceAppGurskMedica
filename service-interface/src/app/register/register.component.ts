@@ -7,6 +7,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {HttpClient} from "@angular/common/http";
 import {Router, RouterLink} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-register',
@@ -44,7 +45,7 @@ export class RegisterComponent {
       email: this.registerForm.value.email,
       password: this.registerForm.value.password
     }
-    this.httpClient.post( "/api/v1/auth/register", registerBody).subscribe((response) => {
+    this.httpClient.post( `${environment.apiUrl}/v1/auth/register`, registerBody).subscribe((response) => {
       console.log(response);
       alert("You are registered now");
       this.router.navigate([""]);

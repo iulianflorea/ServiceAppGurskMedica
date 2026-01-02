@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://gursk.singularity-cloud.com",
+    "target": "https://doc.singularity-cloud.com",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",

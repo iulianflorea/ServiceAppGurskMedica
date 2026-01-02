@@ -19,6 +19,7 @@ import {DocumentDialogComponent} from "../document-dialog/document-dialog.compon
 import {BreakpointObserver} from "@angular/cdk/layout";
 // @ts-ignore
 import { Datepicker } from 'vanillajs-datepicker';
+import {environment} from "../../environments/environment";
 
 
 
@@ -118,7 +119,7 @@ export class DashboardComponent implements AfterViewInit {
     window.addEventListener('resize', () => {
       this.isMobile = window.innerWidth < 768;
     });
-    this.httpClient.get("/api/intervention-sheet/employeeIntervention/" + localStorage.getItem("token")).subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/intervention-sheet/employeeIntervention/` + localStorage.getItem("token")).subscribe((response) => {
       console.log(response);
       this.dataSource = response as InterventionSheetDto[];
       this.dataSource2.data = this.dataSource;

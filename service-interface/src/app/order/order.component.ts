@@ -2,6 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormArray, Validators, FormControl} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {hide} from "@popperjs/core";
+import {environment} from "../../environments/environment.prod";
 
 interface Client {
   id: number;
@@ -67,7 +68,7 @@ export class OrderComponent implements OnInit {
 
   // === CLIENT ===
   loadClients(): void {
-    this.http.get<Client[]>('/api/customer/customer-list').subscribe(data => {
+    this.http.get<Client[]>(`${environment.apiUrl}/customer/customer-list`).subscribe(data => {
       this.clients = data;
       this.filteredClients = data;
     });
@@ -89,7 +90,7 @@ export class OrderComponent implements OnInit {
 
   // === PRODUSE ===
   loadProducts(): void {
-    this.http.get<Product[]>('/api/product/getAll').subscribe(data => {
+    this.http.get<Product[]>(`${environment.apiUrl}/product/getAll`).subscribe(data => {
       this.products = data;
 
       this.productsFormArray.controls.forEach((group, index) => {
@@ -134,7 +135,7 @@ export class OrderComponent implements OnInit {
         formData.append("pdfFile", this.selectedPdfFile);
       }
 
-      this.http.post('/api/orders', formData).subscribe({
+      this.http.post(`${environment.apiUrl}/orders`, formData).subscribe({
         next: () => alert('Comanda a fost trimisă cu succes!'),
         error: (err) => {
           console.error(err);

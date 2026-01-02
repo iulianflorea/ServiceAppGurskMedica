@@ -11,6 +11,7 @@ import {InterventionSheetListComponent} from "../intervention-sheet-list/interve
 import {CommonModule} from "@angular/common";
 // @ts-ignore
 import html2pdf from "html2pdf.js";
+import {environment} from "../../environments/environment.prod";
 
 
 
@@ -151,7 +152,7 @@ export class PopUpTaskComponent {
   delete(interventionSheetDto: InterventionSheetDto) {
     const id = interventionSheetDto.id;
     if (confirm("Sure you want to delete it?")) {
-      this.httpClient.delete("/api/intervention-sheet/" + id).subscribe((response) => {
+      this.httpClient.delete(`${environment.apiUrl}/intervention-sheet/` + id).subscribe((response) => {
         console.log(response);
         alert(" The intervention was deleted");
         this.closeModal();

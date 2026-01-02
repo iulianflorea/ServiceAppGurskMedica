@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/interventions")
-@CrossOrigin(origins = "http://188.24.7.49:4200")
+@CrossOrigin(origins = "https://doc.singularity-cloud.com")
 public class DocumentController {
 
 
@@ -69,30 +69,6 @@ public class DocumentController {
     }
 
 
-//    @GetMapping("/{id}/documents/{filename:.+}")
-//    public ResponseEntity<Resource> getDocument(@PathVariable Long id,
-//                                                @PathVariable String filename) {
-//        try {
-//            Path filePath = rootLocation.resolve("intervention-" + id).resolve(filename);
-//            Resource resource = new UrlResource(filePath.toUri());
-//
-//            if (!resource.exists() || !resource.isReadable()) {
-//                return ResponseEntity.notFound().build();
-//            }
-//
-//            String contentType = Files.probeContentType(filePath);
-//            if (contentType == null) {
-//                contentType = "application/octet-stream";
-//            }
-//
-//            return ResponseEntity.ok()
-//                    .contentType(MediaType.parseMediaType(contentType))
-//                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
-//                    .body(resource);
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
 @GetMapping("/{id}/documents/{filename:.+}")
 public ResponseEntity<Resource> getDocument(@PathVariable Long id,
                                             @PathVariable String filename) {

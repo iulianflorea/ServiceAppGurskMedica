@@ -3,6 +3,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {EmployeeDto} from "../dtos/employeeDto";
 import {HttpClient} from "@angular/common/http";
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-employee-list',
@@ -25,7 +26,7 @@ export class EmployeeListComponent implements AfterViewInit{
   }
 
   ngOnInit() {
-    this.httpClient.get("/api/employee/find-all").subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/employee/find-all`).subscribe((response) => {
       console.log(response);
       this.dataSource = response as EmployeeDto[];
       this.dataSource2.data = this.dataSource;
@@ -35,7 +36,7 @@ export class EmployeeListComponent implements AfterViewInit{
   delete(employee: EmployeeDto) {
     const id = employee.id;
     if (confirm("Sure you want to delete it?")) {
-      this.httpClient.delete("/api/employee/delete/" + id).subscribe((response) => {
+      this.httpClient.delete(`${environment.apiUrl}/employee/delete/` + id).subscribe((response) => {
         console.log(response);
         alert("Employee was deleted");
         this.ngOnInit();

@@ -7,6 +7,7 @@ import {SignaturePadComponent} from '../signature-pad/signature-pad.component';
 import {MatAutocomplete} from '@angular/material/autocomplete';
 // @ts-ignore
 import {Datepicker} from 'vanillajs-datepicker';
+import {environment} from "../../environments/environment.prod";
 
 interface CustomerDto {
   id: number;
@@ -103,8 +104,8 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
 
     // Load customers & equipments
     forkJoin({
-      customers: this.http.get<CustomerDto[]>('/api/customer/customer-list'),
-      equipments: this.http.get<EquipmentDto[]>('/api/equipment/find-all')
+      customers: this.http.get<CustomerDto[]>(`${environment.apiUrl}/customer/customer-list`),
+      equipments: this.http.get<EquipmentDto[]>(`${environment.apiUrl}/equipment/find-all`)
     }).subscribe(({customers, equipments}) => {
       this.customerList = customers || [];
       this.equipmentList = equipments || [];
@@ -239,7 +240,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
   }
 
   private loadDocumentForEdit(id: number) {
-    this.http.get<any>(`/api/documents/get-by-id/${id}`).subscribe(doc => {
+    this.http.get<any>(`${environment.apiUrl}/documents/get-by-id/${id}`).subscribe(doc => {
       const customer = this.customerList.find(c => c.id === doc.customerId) || {
         id: doc.customerId, name: doc.customerName, cui: doc.cui
       };
@@ -311,7 +312,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       dto['signatureBase64'] = this.signaturePadComponent.getSignatureImage();
     }
 
-    this.http.post('/api/documents', dto).subscribe({
+    this.http.post(`${environment.apiUrl}/documents`, dto).subscribe({
       next: () => {
         this.loading = true;
         alert('Document saved');

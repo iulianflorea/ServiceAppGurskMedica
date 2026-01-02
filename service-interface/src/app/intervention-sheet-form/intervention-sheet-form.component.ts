@@ -11,6 +11,7 @@ import {map, Observable, startWith} from "rxjs";
 // @ts-ignore
 import { Datepicker } from 'vanillajs-datepicker';
 import {UserDto} from "../dtos/userDto";
+import {environment} from "../../environments/environment.prod";
 
 
 @Component({
@@ -104,7 +105,7 @@ export class InterventionSheetFormComponent implements OnInit {
     );
 
     if (this.route.snapshot.params['id'] !== undefined) {
-      this.httpClient.get("/api/intervention-sheet/" + this.route.snapshot.params['id']).subscribe((response: InterventionSheetDto) => {
+      this.httpClient.get(`${environment.apiUrl}/intervention-sheet/` + this.route.snapshot.params['id']).subscribe((response: InterventionSheetDto) => {
         this.id = response.id;
         this.customerSelected = response.customerId;
         this.customerControl.setValue(response.customerName);
@@ -157,28 +158,28 @@ export class InterventionSheetFormComponent implements OnInit {
 
 
   getEquipmentList() {
-    this.httpClient.get("/api/equipment/find-all").subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/equipment/find-all`).subscribe((response) => {
       console.log(response);
       this.equipmentList = response as EquipmentDto[];
     })
   }
 
   getCustomerList() {
-    this.httpClient.get("/api/customer/customer-list").subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/customer/customer-list`).subscribe((response) => {
       console.log(response);
       this.customerList = response as CustomerDto[];
     })
   }
 
   getEmployeeList() {
-    this.httpClient.get("/api/user/findAll").subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/user/findAll`).subscribe((response) => {
       console.log(response);
       this.employeeList = response as UserDto[];
     })
   }
 
   getType() {
-    this.httpClient.get<string[]>("/api/intervention-sheet/type").subscribe((data) => {
+    this.httpClient.get<string[]>(`${environment.apiUrl}/intervention-sheet/type`).subscribe((data) => {
       this.typeOfInterventionList = data;
     })
   }
@@ -204,7 +205,7 @@ export class InterventionSheetFormComponent implements OnInit {
       interventionSheet.id = this.id; // doar dacă e definit
     }
 
-    this.httpClient.post("/api/intervention-sheet", interventionSheet).subscribe((response) => {
+    this.httpClient.post(`${environment.apiUrl}/intervention-sheet`, interventionSheet).subscribe((response) => {
       alert("Intervention sheet was saved");
       this.router.navigate(["/intervention-sheet-list"]);
     });
@@ -213,7 +214,7 @@ export class InterventionSheetFormComponent implements OnInit {
 
   getById(interventionSheet: InterventionSheetDto) {
     const id = interventionSheet.id;
-    this.httpClient.get("/api/intervention-sheet/" + id).subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/intervention-sheet/` + id).subscribe((response) => {
       console.log(response);
     })
   }

@@ -86,7 +86,7 @@ public class ProductService {
         // Image handling
         if (image != null && !image.isEmpty()) {
             String imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-            Path uploadPath = Paths.get("C:/Users/iulia/ServiceApp/ServiceAppGurskMedica/uploads/");
+            Path uploadPath = Paths.get("/home/julian-s-server/Desktop/ServiceAppGurskMedica/uploads");
 //            Path uploadPath = Paths.get("/uploads/");
             try {
                 if (!Files.exists(uploadPath)) {

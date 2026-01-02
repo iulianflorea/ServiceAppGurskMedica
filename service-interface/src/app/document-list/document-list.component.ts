@@ -8,6 +8,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 // @ts-ignore
 import { Datepicker } from 'vanillajs-datepicker';
+import {environment} from "../../environments/environment.prod";
 
 export interface DocumentData {
   id: number;
@@ -80,7 +81,7 @@ export class DocumentListComponent implements OnInit {
 
   loadDocuments(): void {
     this.loading = true;
-    this.http.get<DocumentData[]>('/api/documents/get-all').subscribe({
+    this.http.get<DocumentData[]>(`${environment.apiUrl}/documents/get-all`).subscribe({
       next: (data) => {
         console.log(data);
         this.documents = data;
@@ -98,7 +99,7 @@ export class DocumentListComponent implements OnInit {
   delete(documentDataDto: DocumentDataDto) {
     const id = documentDataDto.id;
     if (confirm("Sure you want to delete it?")) {
-      this.http.delete("/api/documents/" + id).subscribe((response) => {
+      this.http.delete(`${environment.apiUrl}/documents/` + id).subscribe((response) => {
         console.log(response);
         alert(" The intervention was deleted");
         this.ngOnInit();
@@ -108,20 +109,20 @@ export class DocumentListComponent implements OnInit {
 
   getById(documentDataDto: DocumentDataDto) {
     const id = documentDataDto.id;
-    this.http.get("/api/documents/" + id).subscribe((response) => {
+    this.http.get(`${environment.apiUrl}/documents/` + id).subscribe((response) => {
       console.log(response);
     })
   }
 
   update(documentDataDto: DocumentDataDto) {
-    this.http.put("/api/documents/update", documentDataDto).subscribe((response) => {
+    this.http.put(`${environment.apiUrl}/documents/update`, documentDataDto).subscribe((response) => {
       console.log(response);
     })
   }
 
   downloadDocx(id: number, type: string): void {
     this.loading = true;
-    this.http.get(`/api/documents/export/${id}/${type}`, { responseType: 'blob' })
+    this.http.get(`${environment.apiUrl}/documents/export/${id}/${type}`, { responseType: 'blob' })
       .subscribe({
         next: (blob) => {
           const fileName = `${type}_${id}.docx`;
@@ -145,7 +146,7 @@ export class DocumentListComponent implements OnInit {
   }
 
   searchCocuments(keyword: string): Observable<DocumentDataDto[]> {
-    return this.http.get<DocumentDataDto[]>(`/api/documents/search?keyword=${keyword}`);
+    return this.http.get<DocumentDataDto[]>(`${environment.apiUrl}/documents/search?keyword=${keyword}`);
   }
 
   search() {

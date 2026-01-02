@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProductDto} from "../dtos/productDto";
 import {EquipmentDto} from "../dtos/equipmentDto";
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-equipment-form',
@@ -34,7 +35,7 @@ export class EquipmentFormComponent implements OnInit{
     console.log("id", this.route.snapshot.params['id']);
     if (this.route.snapshot.params['id'] !== undefined) {
       // @ts-ignore
-      this.httpClient.get("/api/equipment/find-by-id/" + this.route.snapshot.params['id']).subscribe((response: EquipmentDto) => {
+      this.httpClient.get(`${environment.apiUrl}/equipment/find-by-id/` + this.route.snapshot.params['id']).subscribe((response: EquipmentDto) => {
         console.log(response);
         this.id = response.id;
         this.model = response.model;
@@ -45,7 +46,7 @@ export class EquipmentFormComponent implements OnInit{
   }
 
   getProducerList() {
-    this.httpClient.get("/api/producer/getAll").subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/producer/getAll`).subscribe((response) => {
       console.log(response);
       this.producerList = response as ProducerDto[];
     })
@@ -58,7 +59,7 @@ export class EquipmentFormComponent implements OnInit{
        productCode: this.productCode,
        producerId: this.producerSelected
      }
-     this.httpClient.post("/api/equipment", equipment).subscribe((response) =>{
+     this.httpClient.post(`${environment.apiUrl}/equipment`, equipment).subscribe((response) =>{
        console.log(response);
        alert("Equipment was saved");
        this.router.navigate(["/equipment-list"])

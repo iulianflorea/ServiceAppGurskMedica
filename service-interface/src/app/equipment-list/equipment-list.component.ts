@@ -7,6 +7,7 @@ import {HttpClient} from "@angular/common/http";
 import {ProductDto} from "../dtos/productDto";
 import {Observable} from "rxjs";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-equipment-list',
@@ -30,7 +31,7 @@ export class EquipmentListComponent implements AfterViewInit {
   }
 
   ngOnInit() {
-    this.httpClient.get("/api/equipment/find-all").subscribe((response) =>{
+    this.httpClient.get(`${environment.apiUrl}/equipment/find-all`).subscribe((response) =>{
       console.log(response);
       this.dataSource = response as EquipmentDto[];
       this.dataSource2.data = this.dataSource;
@@ -40,7 +41,7 @@ export class EquipmentListComponent implements AfterViewInit {
   delete(equipment: EquipmentDto) {
     const id = equipment.id;
     if(confirm("Sure you want delete it?")) {
-      this.httpClient.delete("/api/equipment/delete/" + id).subscribe((response) => {
+      this.httpClient.delete(`${environment.apiUrl}/equipment/delete/` + id).subscribe((response) => {
         console.log(response);
         alert("The equipment was deleted");
         this.ngOnInit();
@@ -49,7 +50,7 @@ export class EquipmentListComponent implements AfterViewInit {
   }
 
   searchEquipments(keyword: string): Observable<EquipmentDto[]> {
-    return this.httpClient.get<EquipmentDto[]>(`/api/equipment/search?keyword=${keyword}`);
+    return this.httpClient.get<EquipmentDto[]>(`${environment.apiUrl}/equipment/search?keyword=${keyword}`);
   }
 
   search() {

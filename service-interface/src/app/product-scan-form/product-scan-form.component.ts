@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-product-scan-form',
@@ -29,7 +30,7 @@ export class ProductScanFormComponent {
 
       console.log('Trimis:', formData);
 
-      this.http.post("/api/product/scan", formData).subscribe({
+      this.http.post(`${environment.apiUrl}/product/scan`, formData).subscribe({
         next: (res: any) => {
           this.responseMessage = 'Produs actualizat cu succes!';
           this.scanForm.reset(); // resetează complet

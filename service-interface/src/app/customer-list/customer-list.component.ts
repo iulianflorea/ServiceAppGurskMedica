@@ -5,6 +5,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {HttpClient} from "@angular/common/http";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {Observable} from "rxjs";
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-customer-list',
@@ -29,7 +30,7 @@ export class CustomerListComponent implements AfterViewInit {
   }
 
   ngOnInit() {
-    this.httpClient.get("/api/customer/customer-list").subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/customer/customer-list`).subscribe((response) => {
       console.log(response);
       this.dataSource = response as CustomerDto[];
       this.dataSource2.data = this.dataSource;
@@ -39,7 +40,7 @@ export class CustomerListComponent implements AfterViewInit {
   delete(customer: CustomerDto) {
     const id = customer.id;
     if (confirm("sure you want to delete it?")) {
-      this.httpClient.delete("/api/customer/" + id).subscribe((response) => {
+      this.httpClient.delete(`${environment.apiUrl}/customer/` + id).subscribe((response) => {
         console.log(response);
         alert("Customer was deleted");
         this.ngOnInit();
@@ -49,7 +50,7 @@ export class CustomerListComponent implements AfterViewInit {
 
 
   searchCustomer(keyword: string): Observable<CustomerDto[]> {
-    return this.httpClient.get<CustomerDto[]>(`/api/customer/search?keyword=${keyword}`);
+    return this.httpClient.get<CustomerDto[]>(`${environment.apiUrl}/customer/search?keyword=${keyword}`);
   }
 
   search() {

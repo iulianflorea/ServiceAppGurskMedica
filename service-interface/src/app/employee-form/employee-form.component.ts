@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EmployeeDto} from "../dtos/employeeDto";
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-employee-form',
@@ -29,7 +30,7 @@ export class EmployeeFormComponent implements OnInit {
   ngOnInit() {
     console.log("id", this.route.snapshot.params['id']);
     if (this.route.snapshot.params['id'] !== undefined) {
-      this.httpClient.get("/api/employee/find-by-id/" + this.route.snapshot.params['id']).subscribe((response: EmployeeDto) => {
+      this.httpClient.get(`${environment.apiUrl}/employee/find-by-id/` + this.route.snapshot.params['id']).subscribe((response: EmployeeDto) => {
         console.log(response);
         this.id = this.route.snapshot.params['id'];
         this.name = response.name;
@@ -44,7 +45,7 @@ export class EmployeeFormComponent implements OnInit {
       name: this.name,
       cnp: this.cnp
     }
-    this.httpClient.post("/api/employee", employee).subscribe((response) => {
+    this.httpClient.post(`${environment.apiUrl}/employee`, employee).subscribe((response) => {
       console.log(response);
       alert("Employee was saved");
       this.router.navigate(["/employee-list"]);

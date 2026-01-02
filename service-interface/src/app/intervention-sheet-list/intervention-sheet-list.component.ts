@@ -19,6 +19,7 @@ import {DocumentDialogComponent} from "../document-dialog/document-dialog.compon
 import {BreakpointObserver} from "@angular/cdk/layout";
 // @ts-ignore
 import { Datepicker } from 'vanillajs-datepicker';
+import {environment} from "../../environments/environment";
 
 
 
@@ -114,7 +115,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
     window.addEventListener('resize', () => {
       this.isMobile = window.innerWidth < 768;
     });
-    this.httpClient.get("/api/intervention-sheet/find-all").subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/intervention-sheet/find-all`).subscribe((response) => {
       console.log(response);
       this.dataSource = response as InterventionSheetDto[];
       this.dataSource2.data = this.dataSource;
@@ -125,7 +126,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
   delete(interventionSheet: InterventionSheetDto) {
     const id = interventionSheet.id;
     if (confirm("Sure you want to delete it?")) {
-      this.httpClient.delete("/api/intervention-sheet/" + id).subscribe((response) => {
+      this.httpClient.delete(`${environment.apiUrl}/intervention-sheet/` + id).subscribe((response) => {
         console.log(response);
         alert(" The intervention was deleted");
         this.ngOnInit();
@@ -135,13 +136,13 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
   getById(interventionSheet: InterventionSheetDto) {
     const id = interventionSheet.id;
-    this.httpClient.get("/api/intervention-sheet/" + id).subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/intervention-sheet/` + id).subscribe((response) => {
       console.log(response);
     })
   }
 
   update(interventionSheet: InterventionSheetDto) {
-    this.httpClient.put("/api/intervention-sheet/update", interventionSheet).subscribe((response) => {
+    this.httpClient.put(`${environment.apiUrl}/intervention-sheet/update`, interventionSheet).subscribe((response) => {
       console.log(response);
     })
   }
@@ -149,7 +150,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
   // @ts-ignore
   searchInterventionSheet(keyword: string): Observable<InterventionSheetDto[]> {
-    return this.httpClient.get<InterventionSheetDto[]>(`/api/intervention-sheet/search?keyword=${keyword}`);
+    return this.httpClient.get<InterventionSheetDto[]>(`${environment.apiUrl}/intervention-sheet/search?keyword=${keyword}`);
   }
 
   search() {

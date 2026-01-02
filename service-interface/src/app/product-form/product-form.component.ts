@@ -4,6 +4,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProductDto} from "../dtos/productDto";
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-product-form',
@@ -55,7 +56,7 @@ export class ProductFormComponent implements OnInit {
     console.log("id", this.route.snapshot.params['id']);
     if (this.route.snapshot.params['id'] !== undefined) {
       // @ts-ignore
-      this.httpClient.get("/api/product/getById/" + this.route.snapshot.params['id']).subscribe((response: ProductDto) => {
+      this.httpClient.get(`${environment.apiUrl}/product/getById/` + this.route.snapshot.params['id']).subscribe((response: ProductDto) => {
         console.log(response);
         this.id = response.id;
         this.name = response.name;
@@ -68,7 +69,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   getProducerList() {
-    this.httpClient.get("/api/producer/getAll").subscribe((response) => {
+    this.httpClient.get(`${environment.apiUrl}/producer/getAll`).subscribe((response) => {
       console.log(response);
       this.producerList = response as ProducerDto[];
     })
@@ -80,7 +81,6 @@ export class ProductFormComponent implements OnInit {
     if (this.id !== undefined && this.id !== null) {
       formData.append('id', this.id.toString());
     }
-
     formData.append("name", this.name);
     formData.append("cod", this.cod);
     formData.append("quantity", this.quantity.toString());
@@ -91,7 +91,7 @@ export class ProductFormComponent implements OnInit {
       formData.append("image", this.selectedFile);
     }
 
-    this.httpClient.post("/api/product", formData).subscribe((response) => {
+    this.httpClient.post(`${environment.apiUrl}/product`, formData).subscribe((response) => {
       console.log(response);
       alert("Product was saved");
       this.router.navigate(["/product-list"]);

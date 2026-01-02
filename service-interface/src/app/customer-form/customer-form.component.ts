@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CustomerDto} from "../dtos/customerDto";
 import {UserDto} from "../dtos/userDto";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-customer-form',
@@ -34,7 +35,7 @@ export class CustomerFormComponent implements OnInit {
   ngOnInit(): void {
     console.log("id", this.route.snapshot.params['id']);
     if (this.route.snapshot.params['id'] !== undefined) {
-      this.httpClient.get("/api/customer/" + this.route.snapshot.params['id']).subscribe((response: CustomerDto) => {
+      this.httpClient.get(`${environment.apiUrl}/customer/` + this.route.snapshot.params['id']).subscribe((response: CustomerDto) => {
         console.log(response);
         this.id = this.route.snapshot.params['id'];
         this.name = response.name;
@@ -56,7 +57,7 @@ export class CustomerFormComponent implements OnInit {
       telephone: this.telephone,
       email: this.email
     }
-    this.httpClient.post("/api/customer", customer).subscribe((response) => {
+    this.httpClient.post(`${environment.apiUrl}/customer`, customer).subscribe((response) => {
       console.log(response);
       alert("Customer was saved");
       this.router.navigate(["/customer-list"]);

@@ -4,6 +4,7 @@ import {AuthenticationService} from "../auth-guard/AuthenticationService";
 import {FormControl, FormGroup} from "@angular/forms";
 import {BackupDto} from "../dtos/bacupDto";
 import {Observable} from "rxjs";
+import {environment} from "../../environments/environment.prod";
 
 
 declare global {
@@ -25,12 +26,9 @@ export class SqlImportComponent implements OnInit{
   sqlPath: any;
   documentPath: any;
 
-  // private backupUrl = 'http://localhost:8080/api/backup/manual';
-  // private backupUrl = 'http://188.24.7.49:8080/api/backup/manual';
-  private backupUrl = 'https://gursk.singularity-cloud.com/api/backup/manual';
-  // private backupUrlDatabase = 'http://localhost:8080/api/backup/database';
-  // private backupUrlDatabase = 'http://188.24.7.49:8080/api/backup/database';
-  private backupUrlDatabase = 'https://gursk.singularity-cloud.com/api/backup/database';
+  private backupUrl = `${environment.apiUrl}/backup/manual`;
+  private backupUrlDatabase = `${environment.apiUrl}/backup/database`;
+
   backupStatus: string = '';
   backupStatusDatabase: string = '';
 
@@ -45,7 +43,7 @@ export class SqlImportComponent implements OnInit{
   )
 
   ngOnInit() {
-    this.http.get<BackupDto>("/api/backup/admin/findById/1").subscribe((response) => {
+    this.http.get<BackupDto>(`${environment.apiUrl}/backup/admin/findById/1`).subscribe((response) => {
       this.id = response.id;
       this.pathsForm.patchValue({
         sqlPath: response.sqlPath,
@@ -61,7 +59,7 @@ export class SqlImportComponent implements OnInit{
       documentPath: this.pathsForm.value.documentPath
     };
 
-    this.http.post("/api/backup/admin/set-path", paths).subscribe((response) => {
+    this.http.post(`${environment.apiUrl}/backup/admin/set-path`, paths).subscribe((response) => {
       console.log("Response:", response);
       alert("paths was saved");
     });
@@ -81,7 +79,7 @@ export class SqlImportComponent implements OnInit{
     const formData = new FormData();
     formData.append('file', this.selectedFile);
 
-    this.http.post('/api/database/sql-import', formData, {responseType: 'text'})
+    this.http.post(`${environment.apiUrl}/database/sql-import`, formData, {responseType: 'text'})
       .subscribe({
         next: () => alert('Import successful!'),
         error: (err) => alert('Import failed: ' + err.message)
