@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/backup")
+@RequestMapping("/backup")
 public class DatabaseBackupController {
 
     private final DatabaseBackupTask dbBackupTask;
