@@ -81,7 +81,7 @@ export class DocumentListComponent implements OnInit {
 
   loadDocuments(): void {
     this.loading = true;
-    this.http.get<DocumentData[]>(`${environment.apiUrl}/documents/get-all`).subscribe({
+    this.http.get<DocumentDataDto[]>(`${environment.apiUrl}/documents/get-all`).subscribe({
       next: (data) => {
         console.log(data);
         this.documents = data;

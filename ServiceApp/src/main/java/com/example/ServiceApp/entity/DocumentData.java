@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -29,55 +31,11 @@ public class DocumentData {
     private Integer monthOfWarrantyHandPieces;
     private String numberOfContract;
 
-    @Column(name = "equipment_id1")
-    private Long equipmentId1;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "equipment_id1", insertable = false, updatable = false)
-    private Equipment equipment1;
-
-    @Column(name = "equipment_id2")
-    private Long equipmentId2;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "equipment_id2", insertable = false, updatable = false)
-    private Equipment equipment2;
-
-    @Column(name = "equipment_id3")
-    private Long equipmentId3;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "equipment_id3", insertable = false, updatable = false)
-    private Equipment equipment3;
-
-    @Column(name = "equipment_id4")
-    private Long equipmentId4;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "equipment_id4", insertable = false, updatable = false)
-    private Equipment equipment4;
-
-    @Column(name = "equipment_id5")
-    private Long equipmentId5;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "equipment_id5", insertable = false, updatable = false)
-    private Equipment equipment5;
-
-    @Column(name = "equipment_id6")
-    private Long equipmentId6;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "equipment_id6", insertable = false, updatable = false)
-    private Equipment equipment6;
-
-    private String productCode1;
-    private String productCode2;
-    private String productCode3;
-    private String productCode4;
-    private String productCode5;
-    private String productCode6;
-
-    private String serialNumber1;
-    private String serialNumber2;
-    private String serialNumber3;
-    private String serialNumber4;
-    private String serialNumber5;
-    private String serialNumber6;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_data_id", insertable = false, updatable = false)
+    @OrderBy("sortOrder ASC")
+    @Builder.Default
+    private List<DocumentEquipment> equipments = new ArrayList<>();
 
     private LocalDate signatureDate;
     private String trainedPerson;

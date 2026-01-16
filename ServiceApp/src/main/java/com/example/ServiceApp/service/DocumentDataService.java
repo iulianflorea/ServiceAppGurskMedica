@@ -1,67 +1,86 @@
 package com.example.ServiceApp.service;
 
 import com.example.ServiceApp.dto.DocumentDataDto;
+import com.example.ServiceApp.dto.DocumentEquipmentDto;
 import com.example.ServiceApp.entity.DocumentData;
-import com.example.ServiceApp.entity.InterventionSheet;
+import com.example.ServiceApp.entity.DocumentEquipment;
 import com.example.ServiceApp.mapper.DocumentDataMapper;
 import com.example.ServiceApp.repository.DocumentDataRepository;
+import com.example.ServiceApp.repository.DocumentEquipmentRepository;
 import org.apache.poi.xwpf.usermodel.*;
-import org.springframework.cglib.core.Local;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRow;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DocumentDataService {
 
     private final DocumentDataRepository documentDataRepository;
+    private final DocumentEquipmentRepository documentEquipmentRepository;
 
-    public DocumentDataService(DocumentDataRepository documentDataRepository) {
+    public DocumentDataService(DocumentDataRepository documentDataRepository,
+                               DocumentEquipmentRepository documentEquipmentRepository) {
         this.documentDataRepository = documentDataRepository;
+        this.documentEquipmentRepository = documentEquipmentRepository;
     }
 
-    // ✅ CREATE
+    @Transactional
     public DocumentDataDto create(DocumentDataDto dto) {
-        DocumentData entity = DocumentDataMapper.toEntity(dto);
-        if (dto.getId() == null) {
-            DocumentData saved = documentDataRepository.save(entity);
-            System.out.println(dto.getCustomerName());
-            return DocumentDataMapper.toDto(saved);
-        } else {
-            update(dto.getId(), dto);
+        if (dto.getId() != null) {
+            return update(dto.getId(), dto);
         }
-        return DocumentDataMapper.toDto(entity);
+
+        DocumentData entity = DocumentDataMapper.toEntity(dto);
+
+        // Save document first without equipments to get the ID
+        List<DocumentEquipment> equipments = entity.getEquipments();
+        entity.setEquipments(new ArrayList<>());
+        DocumentData saved = documentDataRepository.save(entity);
+
+        // Save equipments directly through repository
+        if (equipments != null && !equipments.isEmpty()) {
+            for (int i = 0; i < equipments.size(); i++) {
+                DocumentEquipment eq = equipments.get(i);
+                eq.setDocumentDataId(saved.getId());
+                eq.setSortOrder(i);
+            }
+            documentEquipmentRepository.saveAll(equipments);
+        }
+
+        // Reload to get equipments in the response
+        return DocumentDataMapper.toDto(documentDataRepository.findById(saved.getId()).orElse(saved));
     }
 
-    // ✅ READ (all)
     public List<DocumentDataDto> getAll() {
         Pageable topFifty = PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "contractDate"));
         Page<DocumentData> list = documentDataRepository.findAllByOrderByContractDateDesc(topFifty);
         return DocumentDataMapper.toDtoList(list.getContent());
     }
 
-    // ✅ READ (by id)
     public DocumentDataDto getById(Long id) {
         Optional<DocumentData> optional = documentDataRepository.findById(id);
         return optional.map(DocumentDataMapper::toDto).orElse(null);
     }
 
-    // ✅ UPDATE
+    @Transactional
     public DocumentDataDto update(Long id, DocumentDataDto dto) {
         Optional<DocumentData> optional = documentDataRepository.findById(id);
         if (optional.isEmpty()) {
             return null;
         }
         DocumentData existing = optional.get();
-        // actualizăm câmpurile
+
         existing.setCustomerId(dto.getCustomerId());
         existing.setCui(dto.getCui());
         existing.setContractDate(dto.getContractDate());
@@ -69,26 +88,59 @@ public class DocumentDataService {
         existing.setMonthOfWarrantyHandPieces(dto.getMonthOfWarrantyHandPieces());
         existing.setNumberOfContract(dto.getNumberOfContract());
 
-        existing.setEquipmentId1(dto.getEquipmentId1());
-        existing.setEquipmentId2(dto.getEquipmentId2());
-        existing.setEquipmentId3(dto.getEquipmentId3());
-        existing.setEquipmentId4(dto.getEquipmentId4());
-        existing.setEquipmentId5(dto.getEquipmentId5());
-        existing.setEquipmentId6(dto.getEquipmentId6());
+        // Update equipments: keep existing, add new, remove deleted
+        // Get current equipment IDs directly from database (not from collection)
+        List<DocumentEquipment> currentEquipments = documentEquipmentRepository.findByDocumentDataIdOrderBySortOrderAsc(existing.getId());
+        Set<Long> existingEquipmentIds = currentEquipments.stream()
+                .map(DocumentEquipment::getId)
+                .collect(Collectors.toSet());
 
-        existing.setProductCode1(dto.getProductCode1());
-        existing.setProductCode2(dto.getProductCode2());
-        existing.setProductCode3(dto.getProductCode3());
-        existing.setProductCode4(dto.getProductCode4());
-        existing.setProductCode5(dto.getProductCode5());
-        existing.setProductCode6(dto.getProductCode6());
+        if (dto.getEquipments() != null && !dto.getEquipments().isEmpty()) {
+            // Collect IDs of equipments from DTO (existing ones have IDs)
+            Set<Long> dtoEquipmentIds = dto.getEquipments().stream()
+                    .map(DocumentEquipmentDto::getId)
+                    .filter(eqId -> eqId != null)
+                    .collect(Collectors.toSet());
 
-        existing.setSerialNumber1(dto.getSerialNumber1());
-        existing.setSerialNumber2(dto.getSerialNumber2());
-        existing.setSerialNumber3(dto.getSerialNumber3());
-        existing.setSerialNumber4(dto.getSerialNumber4());
-        existing.setSerialNumber5(dto.getSerialNumber5());
-        existing.setSerialNumber6(dto.getSerialNumber6());
+            // Find IDs to delete (in DB but not in DTO)
+            List<Long> idsToDelete = existingEquipmentIds.stream()
+                    .filter(eqId -> !dtoEquipmentIds.contains(eqId))
+                    .collect(Collectors.toList());
+
+            // Delete removed equipments directly by IDs
+            if (!idsToDelete.isEmpty()) {
+                documentEquipmentRepository.deleteAllByIdIn(idsToDelete);
+            }
+
+            // Update existing equipments directly through repository
+            List<DocumentEquipment> toSave = new ArrayList<>();
+
+            for (int i = 0; i < dto.getEquipments().size(); i++) {
+                DocumentEquipmentDto eqDto = dto.getEquipments().get(i);
+
+                DocumentEquipment eq = DocumentEquipment.builder()
+                        .id(eqDto.getId())  // null for new, existing ID for update
+                        .documentDataId(existing.getId())
+                        .equipmentId(eqDto.getEquipmentId())
+                        .equipmentName(eqDto.getEquipmentName())
+                        .productCode(eqDto.getProductCode())
+                        .serialNumber(eqDto.getSerialNumber())
+                        .sortOrder(i)
+                        .build();
+                toSave.add(eq);
+            }
+
+            // Save all equipments (updates and new)
+            if (!toSave.isEmpty()) {
+                documentEquipmentRepository.saveAll(toSave);
+            }
+
+        } else {
+            // Delete all equipments if list is empty or null
+            if (!existingEquipmentIds.isEmpty()) {
+                documentEquipmentRepository.deleteAllByIdIn(new ArrayList<>(existingEquipmentIds));
+            }
+        }
 
         existing.setSignatureDate(dto.getSignatureDate());
         existing.setTrainedPerson(dto.getTrainedPerson());
@@ -101,7 +153,6 @@ public class DocumentDataService {
         return DocumentDataMapper.toDto(updated);
     }
 
-    // ✅ DELETE
     public boolean delete(Long id) {
         if (!documentDataRepository.existsById(id)) {
             return false;
@@ -115,9 +166,7 @@ public class DocumentDataService {
         return DocumentDataMapper.toDtoList(documentDataList);
     }
 
-
     public ByteArrayOutputStream generateDocument(DocumentDataDto data, String type) throws Exception {
-        // 1️⃣ Alegem fișierul template
         String templateFile = switch (type.toLowerCase()) {
             case "predare" -> "pv_predare_primire.docx";
             case "garantie" -> "certificat_garantie.docx";
@@ -126,14 +175,29 @@ public class DocumentDataService {
             default -> throw new IllegalArgumentException("Tip necunoscut: " + type);
         };
 
-        // 2️⃣ Încărcăm template-ul original (cu imagine, formatare etc.)
+        // Debug logging
+        System.out.println("=== GENERATE DOCUMENT DEBUG ===");
+        System.out.println("CustomerName: " + data.getCustomerName());
+        System.out.println("CUI: " + data.getCui());
+        System.out.println("ContractDate: " + data.getContractDate());
+        System.out.println("Equipments count: " + (data.getEquipments() != null ? data.getEquipments().size() : 0));
+        if (data.getEquipments() != null) {
+            for (int i = 0; i < data.getEquipments().size(); i++) {
+                DocumentEquipmentDto eq = data.getEquipments().get(i);
+                System.out.println("  Equipment " + i + ": name=" + eq.getEquipmentName() + ", code=" + eq.getProductCode() + ", serial=" + eq.getSerialNumber());
+            }
+        }
+        System.out.println("================================");
+
         try (InputStream templateStream = new ClassPathResource("templates/" + templateFile).getInputStream();
              XWPFDocument document = new XWPFDocument(templateStream)) {
 
-            // 3️⃣ Înlocuim doar textul (fără să atingem alt conținut)
+            // Replace placeholders in text
             replacePlaceholders(document, buildValueMap(data));
 
-            // 4️⃣ Scriem documentul completat într-un ByteArrayOutputStream
+            // Generate dynamic equipment rows in tables
+            generateEquipmentRows(document, data.getEquipments());
+
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             document.write(out);
 
@@ -141,8 +205,150 @@ public class DocumentDataService {
         }
     }
 
+    private void generateEquipmentRows(XWPFDocument document, List<DocumentEquipmentDto> equipments) {
+        if (equipments == null || equipments.isEmpty()) {
+            return;
+        }
+
+        for (XWPFTable table : document.getTables()) {
+            int templateRowIndex = findTemplateRow(table);
+            if (templateRowIndex == -1) {
+                continue;
+            }
+
+            XWPFTableRow templateRow = table.getRow(templateRowIndex);
+
+            // First, clone the template row for all additional equipments (before modifying the template)
+            List<XWPFTableRow> allRows = new ArrayList<>();
+            allRows.add(templateRow);  // First row is the template itself
+
+            for (int i = 1; i < equipments.size(); i++) {
+                // Clone template row BEFORE any modifications
+                XWPFTableRow clonedRow = cloneRow(table, templateRow, templateRowIndex + i);
+                allRows.add(clonedRow);
+            }
+
+            // Now replace placeholders in each row with corresponding equipment data
+            for (int i = 0; i < equipments.size(); i++) {
+                DocumentEquipmentDto eq = equipments.get(i);
+                replaceInRow(allRows.get(i), eq, i + 1);
+            }
+        }
+    }
+
+    private int findTemplateRow(XWPFTable table) {
+        for (int i = 0; i < table.getRows().size(); i++) {
+            XWPFTableRow row = table.getRow(i);
+            for (XWPFTableCell cell : row.getTableCells()) {
+                String text = cell.getText();
+                if (text != null && (text.contains("${nameOfEquipment}") ||
+                        text.contains("${equipmentName}") ||
+                        text.contains("${productCode}") ||
+                        text.contains("${serialNumber}"))) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private XWPFTableRow cloneRow(XWPFTable table, XWPFTableRow sourceRow, int insertPosition) {
+        // Create new row in the table at the specified position
+        XWPFTableRow newRow = table.insertNewTableRow(insertPosition);
+
+        // Copy cells from source row
+        List<XWPFTableCell> sourceCells = sourceRow.getTableCells();
+        for (int i = 0; i < sourceCells.size(); i++) {
+            XWPFTableCell sourceCell = sourceCells.get(i);
+            XWPFTableCell newCell;
+
+            if (i == 0) {
+                newCell = newRow.getCell(0);
+                if (newCell == null) {
+                    newCell = newRow.createCell();
+                }
+            } else {
+                newCell = newRow.createCell();
+            }
+
+            // Copy text content from each paragraph
+            List<XWPFParagraph> sourceParagraphs = sourceCell.getParagraphs();
+            if (sourceParagraphs != null && !sourceParagraphs.isEmpty()) {
+                // Remove default paragraph if exists
+                while (newCell.getParagraphs().size() > 0) {
+                    newCell.removeParagraph(0);
+                }
+
+                for (XWPFParagraph sourcePara : sourceParagraphs) {
+                    XWPFParagraph newPara = newCell.addParagraph();
+                    // Copy paragraph text with all runs
+                    for (XWPFRun sourceRun : sourcePara.getRuns()) {
+                        XWPFRun newRun = newPara.createRun();
+                        newRun.setText(sourceRun.getText(0));
+                        // Copy basic formatting
+                        newRun.setBold(sourceRun.isBold());
+                        newRun.setItalic(sourceRun.isItalic());
+                        if (sourceRun.getFontSizeAsDouble() != null) {
+                            newRun.setFontSize(sourceRun.getFontSizeAsDouble());
+                        }
+                        newRun.setFontFamily(sourceRun.getFontFamily());
+                    }
+                }
+            }
+        }
+
+        return newRow;
+    }
+
+    private void replaceInRow(XWPFTableRow row, DocumentEquipmentDto eq, int index) {
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("${nameOfEquipment}", eq.getEquipmentName() != null ? eq.getEquipmentName() : "");
+        replacements.put("${equipmentName}", eq.getEquipmentName() != null ? eq.getEquipmentName() : "");
+        replacements.put("${productCode}", eq.getProductCode() != null ? eq.getProductCode() : "");
+        replacements.put("${serialNumber}", eq.getSerialNumber() != null ? eq.getSerialNumber() : "");
+        replacements.put("${nr}", String.valueOf(index));
+
+        // Get cells - try both methods to ensure we get all cells
+        List<XWPFTableCell> cells = row.getTableCells();
+        if (cells == null || cells.isEmpty()) {
+            // Fallback: manually iterate through CTRow cells
+            for (int i = 0; i < row.getCtRow().sizeOfTcArray(); i++) {
+                XWPFTableCell cell = row.getCell(i);
+                if (cell != null) {
+                    replaceCellContent(cell, replacements);
+                }
+            }
+        } else {
+            for (XWPFTableCell cell : cells) {
+                replaceCellContent(cell, replacements);
+            }
+        }
+    }
+
+    private void replaceCellContent(XWPFTableCell cell, Map<String, String> replacements) {
+        // Try getting paragraphs normally first
+        List<XWPFParagraph> paragraphs = cell.getParagraphs();
+        if (paragraphs != null && !paragraphs.isEmpty()) {
+            for (XWPFParagraph paragraph : paragraphs) {
+                replaceInParagraph(paragraph, replacements);
+            }
+        } else {
+            // Fallback: directly replace in cell text
+            String cellText = cell.getText();
+            if (cellText != null) {
+                for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                    if (cellText.contains(entry.getKey())) {
+                        cellText = cellText.replace(entry.getKey(), entry.getValue());
+                    }
+                }
+                // Clear and set new text
+                cell.removeParagraph(0);
+                cell.setText(cellText);
+            }
+        }
+    }
+
     private void replacePlaceholders(XWPFDocument document, Map<String, String> values) {
-        // Normalize keys: ensure map has keys with ${...} form as well as original
         Map<String, String> placeholders = new LinkedHashMap<>();
         for (Map.Entry<String, String> e : values.entrySet()) {
             String k = e.getKey();
@@ -150,8 +356,7 @@ public class DocumentDataService {
             if (k == null) continue;
             if (k.startsWith("${") && k.endsWith("}")) {
                 placeholders.put(k, v);
-                // also put bare name (optional)
-                String bare = k.substring(2, k.length()-1);
+                String bare = k.substring(2, k.length() - 1);
                 placeholders.putIfAbsent(bare, v);
             } else {
                 placeholders.put("${" + k + "}", v);
@@ -159,12 +364,10 @@ public class DocumentDataService {
             }
         }
 
-        // paragraphs outside tables
         for (XWPFParagraph paragraph : document.getParagraphs()) {
             replaceInParagraph(paragraph, placeholders);
         }
 
-        // paragraphs inside tables
         for (XWPFTable table : document.getTables()) {
             for (XWPFTableRow row : table.getRows()) {
                 for (XWPFTableCell cell : row.getTableCells()) {
@@ -175,7 +378,6 @@ public class DocumentDataService {
             }
         }
 
-        // headers and footers (optional but often needed)
         try {
             for (XWPFHeader header : document.getHeaderList()) {
                 for (XWPFParagraph p : header.getParagraphs()) replaceInParagraph(p, placeholders);
@@ -184,18 +386,13 @@ public class DocumentDataService {
                 for (XWPFParagraph p : footer.getParagraphs()) replaceInParagraph(p, placeholders);
             }
         } catch (UnsupportedOperationException ignored) {
-            // some documents may not support headers/footers in this context
         }
     }
 
-    /**
-     * Replace placeholders inside a single paragraph, supporting placeholders spanning multiple runs.
-     */
     private void replaceInParagraph(XWPFParagraph paragraph, Map<String, String> placeholders) {
         List<XWPFRun> runs = paragraph.getRuns();
         if (runs == null || runs.isEmpty()) return;
 
-        // Build array of text pieces and cumulative lengths
         List<String> runTexts = new ArrayList<>(runs.size());
         for (XWPFRun r : runs) {
             String t = r.getText(0);
@@ -207,12 +404,10 @@ public class DocumentDataService {
         String fullText = concat.toString();
         if (fullText.isEmpty()) return;
 
-        // Find next placeholder occurrence (left to right). We'll loop until none remain.
         while (true) {
             int foundPos = -1;
             String foundKey = null;
             String foundValue = null;
-
 
             for (Map.Entry<String, String> entry : placeholders.entrySet()) {
                 String key = entry.getKey();
@@ -225,12 +420,11 @@ public class DocumentDataService {
                 }
             }
 
-            if (foundPos == -1) break; // no more placeholders
+            if (foundPos == -1) break;
 
             int startIndex = foundPos;
-            int endIndex = startIndex + foundKey.length(); // exclusive
+            int endIndex = startIndex + foundKey.length();
 
-            // map startIndex and endIndex to run indices and offsets
             int runStart = -1, runEnd = -1;
             int offsetInRunStart = -1, offsetInRunEnd = -1;
             int running = 0;
@@ -247,43 +441,28 @@ public class DocumentDataService {
                 running += len;
                 if (runStart != -1 && runEnd != -1) break;
             }
-            // Edge cases: placeholder starts/ends at run boundaries
-            if (runStart == -1) {
-                // starts at or after concatenated length? skip (defensive)
-                break;
-            }
+
+            if (runStart == -1) break;
             if (runEnd == -1) {
-                // ends beyond last run -> set to last run end
                 runEnd = runTexts.size() - 1;
                 offsetInRunEnd = runTexts.get(runEnd).length();
             }
 
-            // Build new texts for runStart and runEnd (and remove middle runs)
             String startRunText = runTexts.get(runStart);
             String endRunText = runTexts.get(runEnd);
 
             String prefix = startRunText.substring(0, offsetInRunStart);
             String suffix = endRunText.substring(offsetInRunEnd);
 
-            String replacement = foundValue; // already ensured non-null string
+            String newRunText = prefix + foundValue + suffix;
 
-            String newRunText = prefix + replacement + suffix;
-
-            // Apply changes:
-            // 1) set text of runStart to newRunText
-            // 2) remove runs from runStart+1 to runEnd (inclusive), because content moved into runStart
-            // Note: need to preserve formatting of original runStart (we are modifying text only)
             XWPFRun targetRun = runs.get(runStart);
-            // set text in target run (replace existing)
             setRunText(targetRun, newRunText);
 
-            // remove subsequent runs (from runEnd down to runStart+1)
             for (int rem = runEnd; rem > runStart; rem--) {
                 paragraph.removeRun(rem);
             }
 
-            // Recompute runTexts and fullText to continue loop
-            // rebuild runTexts from paragraph.getRuns() (structure changed)
             runs = paragraph.getRuns();
             runTexts.clear();
             for (XWPFRun r : runs) {
@@ -296,25 +475,17 @@ public class DocumentDataService {
         }
     }
 
-    /**
-     * Helper to set the text of a run reliably (clears existing text and sets new one).
-     */
     private void setRunText(XWPFRun run, String text) {
-        // Clear existing texts (some runs may have multiple text nodes)
         int textCount = run.getCTR().sizeOfTArray();
         for (int i = textCount - 1; i >= 0; i--) {
             run.getCTR().removeT(i);
         }
-        // create new text node with the content
         if (text != null && !text.isEmpty()) {
-            XWPFRun newRun = run; // reuse same run object (preserves formatting)
-            newRun.setText(text, 0);
+            run.setText(text, 0);
         } else {
-            // If empty string, ensure there's an empty text node to avoid null issues
             run.setText("", 0);
         }
     }
-
 
     private Map<String, String> buildValueMap(DocumentDataDto data) {
         Map<String, String> map = new HashMap<>();
@@ -327,35 +498,12 @@ public class DocumentDataService {
         map.put("monthOfWarrantyHandPieces", data.getMonthOfWarrantyHandPieces() != null ? String.valueOf(data.getMonthOfWarrantyHandPieces()) : "");
         map.put("numberOfContract", data.getNumberOfContract() != null ? data.getNumberOfContract() : "");
 
-        map.put("nameOfEquipment1", data.getEquipmentName1() != null ? data.getEquipmentName1() : "");
-        map.put("nameOfEquipment2", data.getEquipmentName2() != null ? data.getEquipmentName2() : "");
-        map.put("nameOfEquipment3", data.getEquipmentName3() != null ? data.getEquipmentName3() : "");
-        map.put("nameOfEquipment4", data.getEquipmentName4() != null ? data.getEquipmentName4() : "");
-        map.put("nameOfEquipment5", data.getEquipmentName5() != null ? data.getEquipmentName5() : "");
-        map.put("nameOfEquipment6", data.getEquipmentName6() != null ? data.getEquipmentName6() : "");
-
-        map.put("productCode1", data.getProductCode1() != null ? data.getProductCode1() : "");
-        map.put("productCode2", data.getProductCode2() != null ? data.getProductCode2() : "");
-        map.put("productCode3", data.getProductCode3() != null ? data.getProductCode3() : "");
-        map.put("productCode4", data.getProductCode4() != null ? data.getProductCode4() : "");
-        map.put("productCode5", data.getProductCode5() != null ? data.getProductCode5() : "");
-        map.put("productCode6", data.getProductCode6() != null ? data.getProductCode6() : "");
-
-        map.put("serialNumber1", data.getSerialNumber1() != null ? data.getSerialNumber1() : "");
-        map.put("serialNumber2", data.getSerialNumber2() != null ? data.getSerialNumber2() : "");
-        map.put("serialNumber3", data.getSerialNumber3() != null ? data.getSerialNumber3() : "");
-        map.put("serialNumber4", data.getSerialNumber4() != null ? data.getSerialNumber4() : "");
-        map.put("serialNumber5", data.getSerialNumber5() != null ? data.getSerialNumber5() : "");
-        map.put("serialNumber6", data.getSerialNumber6() != null ? data.getSerialNumber6() : "");
-
         map.put("signatureDate", data.getSignatureDate() != null ? data.getSignatureDate().format(formatter) : "");
         map.put("trainedPerson", data.getTrainedPerson() != null ? data.getTrainedPerson() : "");
         map.put("function", data.getJobFunction() != null ? data.getJobFunction() : "");
         map.put("phone", data.getPhone() != null ? data.getPhone() : "");
         map.put("contactPerson", data.getContactPerson() != null ? data.getContactPerson() : "");
+
         return map;
     }
-
-
-
 }

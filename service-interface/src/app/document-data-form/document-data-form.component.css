@@ -57,22 +57,46 @@
   margin-top: 30px;
 }
 
-/* 6 rânduri x 3 coloane echipamente */
+.equipment-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.equipment-header .subtitle {
+  margin: 0;
+}
+
+.add-equipment-btn {
+  transform: scale(0.85);
+}
+
+/* Rânduri echipamente dinamice */
 .equipment-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr 1fr auto;
   gap: 16px;
   margin-bottom: 10px;
+  align-items: center;
 }
 
 .equipment-field {
   width: 100%;
 }
 
+.remove-equipment-btn {
+  margin-top: -4px;
+}
+
 /* Responsive: pe mobil fiecare field trece pe rând */
 @media (max-width: 768px) {
   .equipment-row {
     grid-template-columns: 1fr;
+  }
+
+  .remove-equipment-btn {
+    justify-self: end;
   }
 }
 

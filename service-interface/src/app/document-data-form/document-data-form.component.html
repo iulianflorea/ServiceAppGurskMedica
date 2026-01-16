@@ -3,7 +3,7 @@
   <h2 *ngIf="id" class="title">Update Document</h2>
 
   <!-- ========================= -->
-  <!-- SECȚIUNEA 1: CLIENT + CONTRACT -->
+  <!-- SECTION 1: CLIENT + CONTRACT -->
   <!-- ========================= -->
   <div class="section">
     <div class="col">
@@ -58,39 +58,51 @@
   </div>
 
   <!-- ========================= -->
-  <!-- SECȚIUNEA 2: ECHIPAMENTE -->
+  <!-- SECTION 2: EQUIPMENTS (DYNAMIC) -->
   <!-- ========================= -->
   <div class="equipment-section">
-    <h3 class="subtitle">Equipments</h3>
+    <div class="equipment-header">
+      <h3 class="subtitle">Equipments</h3>
+      <button mat-mini-fab color="primary" (click)="addEquipment()" type="button" class="add-equipment-btn">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
 
-    <ng-container *ngFor="let i of [0,1,2,3,4,5]; let idx = index">
-      <div class="equipment-row">
-        <mat-form-field appearance="fill" class="equipment-field">
-          <mat-label>Equipment {{ idx + 1 }}</mat-label>
-          <input matInput [matAutocomplete]="autoEq" [formControl]="equipmentControls[idx]">
-        </mat-form-field>
+    <div formArrayName="equipments">
+      <ng-container *ngFor="let equipment of equipmentsArray.controls; let i = index">
+        <div class="equipment-row" [formGroupName]="i">
+          <mat-form-field appearance="fill" class="equipment-field">
+            <mat-label>Equipment {{ i + 1 }}</mat-label>
+            <input matInput [matAutocomplete]="autoEq" formControlName="equipmentControl">
+          </mat-form-field>
 
-        <mat-autocomplete #autoEq="matAutocomplete" [displayWith]="displayEquipment">
-          <mat-option *ngFor="let e of filteredEquipment[idx] | async" [value]="e">
-            {{ e.model }}
-          </mat-option>
-        </mat-autocomplete>
+          <mat-autocomplete #autoEq="matAutocomplete" [displayWith]="displayEquipment">
+            <mat-option *ngFor="let e of filteredEquipmentOptions[i] | async" [value]="e">
+              {{ e.model }}
+            </mat-option>
+          </mat-autocomplete>
 
-        <mat-form-field appearance="fill" class="equipment-field">
-          <mat-label>Product Code</mat-label>
-          <input matInput [formControlName]="'productCode' + (idx + 1)">
-        </mat-form-field>
+          <mat-form-field appearance="fill" class="equipment-field">
+            <mat-label>Product Code</mat-label>
+            <input matInput formControlName="productCode">
+          </mat-form-field>
 
-        <mat-form-field appearance="fill" class="equipment-field">
-          <mat-label>Serial Number</mat-label>
-          <input matInput [formControlName]="'serialNumber' + (idx + 1)">
-        </mat-form-field>
-      </div>
-    </ng-container>
+          <mat-form-field appearance="fill" class="equipment-field">
+            <mat-label>Serial Number</mat-label>
+            <input matInput formControlName="serialNumber">
+          </mat-form-field>
+
+          <button mat-icon-button color="warn" (click)="removeEquipment(i)" type="button"
+                  [disabled]="equipmentsArray.length <= 1" class="remove-equipment-btn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+    </div>
   </div>
 
   <!-- ========================= -->
-  <!-- SECȚIUNEA 3: TRAINING + CONTACT -->
+  <!-- SECTION 3: TRAINING + CONTACT -->
   <!-- ========================= -->
   <h3 class="subtitle">Training Information</h3>
   <div class="section">

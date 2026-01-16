@@ -1,3 +1,12 @@
+export interface DocumentEquipmentDto {
+  id?: number;
+  equipmentId?: number;
+  equipmentName?: string;
+  productCode?: string;
+  serialNumber?: string;
+  sortOrder?: number;
+}
+
 export class DocumentDataDto {
   id?: number;
   customerName?: string;
@@ -5,16 +14,14 @@ export class DocumentDataDto {
   monthOfWarranty?: number;
   monthOfWarrantyHandPieces?: number;
   numberOfContract?: string;
-  productCode?: string;
-  serialNumber?: string;
   trainedPerson?: string;
-  function?: string;
+  jobFunction?: string;
   phone?: string;
   contactPerson?: string;
   customerId?: number;
   contractDate?: string;
   signatureDate?: string;
-  jobFunction?: string;
   email?: string;
   signatureBase64?: string;
+  equipments?: DocumentEquipmentDto[];
 }

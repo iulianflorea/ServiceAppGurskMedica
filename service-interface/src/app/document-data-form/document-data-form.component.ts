@@ -1,13 +1,13 @@
-import {Component, OnInit, QueryList, ViewChild, ViewChildren, ElementRef, AfterViewInit} from '@angular/core';
-import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
+import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import {FormBuilder, FormGroup, FormControl, FormArray, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {Observable, forkJoin, startWith, map, delay} from 'rxjs';
+import {Observable, forkJoin, startWith, map} from 'rxjs';
 import {SignaturePadComponent} from '../signature-pad/signature-pad.component';
-import {MatAutocomplete} from '@angular/material/autocomplete';
 // @ts-ignore
 import {Datepicker} from 'vanillajs-datepicker';
 import {environment} from "../../environments/environment.prod";
+import {DocumentEquipmentDto} from "../dtos/documentDataDto";
 
 interface CustomerDto {
   id: number;
@@ -36,13 +36,10 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
   filteredCustomers!: Observable<CustomerDto[]>;
 
   equipmentList: EquipmentDto[] = [];
-  equipmentControls: FormControl[] = [];
-  filteredEquipment: Observable<EquipmentDto[]>[] = [];
+  filteredEquipmentOptions: Observable<EquipmentDto[]>[] = [];
 
   @ViewChild(SignaturePadComponent) signaturePadComponent!: SignaturePadComponent;
-  @ViewChildren(MatAutocomplete) equipmentAutos!: QueryList<MatAutocomplete>;
 
-  // FormControls separate pentru date Bootstrap
   @ViewChild('contractDateInput') contractDateInput!: ElementRef<HTMLInputElement>;
   @ViewChild('signatureDateInput') signatureDateInput!: ElementRef<HTMLInputElement>;
   contractDateControl = new FormControl('');
@@ -61,8 +58,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
 
-    // Initialize form
-    const group: any = {
+    this.documentForm = this.fb.group({
       customerControl: new FormControl(null, Validators.required),
       cui: [{value: '', disabled: true}],
       contractDate: [''],
@@ -74,18 +70,9 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       jobFunction: [''],
       phone: [''],
       email: [''],
-      contactPerson: ['']
-    };
-
-    for (let i = 1; i <= 6; i++) {
-      group['equipmentName' + i] = [''];
-      group['productCode' + i] = [''];
-      group['serialNumber' + i] = [''];
-      this.equipmentControls.push(new FormControl(''));
-      this.filteredEquipment.push(new Observable<EquipmentDto[]>());
-    }
-
-    this.documentForm = this.fb.group(group);
+      contactPerson: [''],
+      equipments: this.fb.array([])
+    });
 
     // Sincronizare date Bootstrap cu FormControls
     this.contractDateControl.valueChanges.subscribe(val => {
@@ -116,32 +103,9 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
         map(name => name ? this._filterCustomers(name) : this.customerList.slice())
       );
 
-      for (let i = 0; i < 6; i++) {
-        const ctrl = this.equipmentControls[i];
-        this.documentForm.addControl('equipmentControl' + (i + 1), ctrl);
-        this.filteredEquipment[i] = ctrl.valueChanges.pipe(
-          startWith(''),
-          map(value => typeof value === 'string' ? value : value?.model),
-          map(model => model ? this._filterEquipment(model) : this.equipmentList.slice())
-        );
-
-        ctrl.valueChanges.subscribe(val => {
-          if (val && typeof val === 'object' && 'id' in val) {
-            const idx = i + 1;
-
-            // Completezi automat modelul
-            this.documentForm.get('equipmentName' + idx)?.setValue(val.model || '');
-
-            // Completezi automat productCode
-            this.documentForm.get('productCode' + idx)?.setValue(val.productCode || '');
-          } else {
-            // Dacă ștergi selecția, golește câmpurile
-            const idx = i + 1;
-            this.documentForm.get('equipmentName' + idx)?.setValue('');
-            this.documentForm.get('productCode' + idx)?.setValue('');
-          }
-        });
-
+      // Add one empty equipment row by default
+      if (!this.id) {
+        this.addEquipment();
       }
 
       if (this.id) {
@@ -198,18 +162,44 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-
-  private onContractDateChange(): void {
-    const date = this.contractDatePicker.getDate();
-    if (date) {
-      this.contractDateControl.setValue(this.formatDate(date));
-    }
+  get equipmentsArray(): FormArray {
+    return this.documentForm.get('equipments') as FormArray;
   }
 
-  private onSignatureDateChange(): void {
-    const date = this.signatureDatePicker.getDate();
-    if (date) {
-      this.signatureDateControl.setValue(this.formatDate(date));
+  addEquipment(): void {
+    const equipmentGroup = this.fb.group({
+      id: [null],  // DocumentEquipment ID for existing records
+      equipmentControl: new FormControl(null),
+      equipmentName: [''],
+      productCode: [''],
+      serialNumber: ['']
+    });
+
+    const index = this.equipmentsArray.length;
+
+    // Setup autocomplete filter for this equipment
+    const filteredOptions = equipmentGroup.get('equipmentControl')!.valueChanges.pipe(
+      startWith(''),
+      map((value: any) => typeof value === 'string' ? value : value?.model),
+      map((model: string) => model ? this._filterEquipment(model) : this.equipmentList.slice())
+    );
+    this.filteredEquipmentOptions.push(filteredOptions);
+
+    // Auto-fill equipment name and product code when equipment is selected
+    equipmentGroup.get('equipmentControl')!.valueChanges.subscribe((val: any) => {
+      if (val && typeof val === 'object' && 'id' in val) {
+        equipmentGroup.get('equipmentName')?.setValue(val.model || '');
+        equipmentGroup.get('productCode')?.setValue(val.productCode || '');
+      }
+    });
+
+    this.equipmentsArray.push(equipmentGroup);
+  }
+
+  removeEquipment(index: number): void {
+    if (this.equipmentsArray.length > 1) {
+      this.equipmentsArray.removeAt(index);
+      this.filteredEquipmentOptions.splice(index, 1);
     }
   }
 
@@ -261,16 +251,25 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
         contactPerson: doc.contactPerson
       });
 
-      for (let i = 0; i < 6; i++) {
-        const eqId = doc['equipmentId' + (i + 1)];
-        if (eqId) {
-          const eqObj = this.equipmentList.find(e => e.id === eqId);
+      // Load equipments
+      if (doc.equipments && doc.equipments.length > 0) {
+        doc.equipments.forEach((eq: DocumentEquipmentDto) => {
+          this.addEquipment();
+          const lastIndex = this.equipmentsArray.length - 1;
+          const group = this.equipmentsArray.at(lastIndex) as FormGroup;
+
+          group.get('id')?.setValue(eq.id || null);  // Save DocumentEquipment ID
+          const eqObj = this.equipmentList.find(e => e.id === eq.equipmentId);
           if (eqObj) {
-            this.equipmentControls[i].setValue(eqObj, {emitEvent: false});
-            this.documentForm.get('productCode' + (i + 1))?.setValue(doc['productCode' + (i + 1)] || '');
-            this.documentForm.get('serialNumber' + (i + 1))?.setValue(doc['serialNumber' + (i + 1)] || '');
+            group.get('equipmentControl')?.setValue(eqObj, {emitEvent: false});
           }
-        }
+          group.get('equipmentName')?.setValue(eq.equipmentName || '');
+          group.get('productCode')?.setValue(eq.productCode || '');
+          group.get('serialNumber')?.setValue(eq.serialNumber || '');
+        });
+      } else {
+        // Add one empty row if no equipments
+        this.addEquipment();
       }
     });
   }
@@ -283,6 +282,26 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
 
     this.loading = true;
     const form = this.documentForm.value;
+
+    // Build equipments array
+    const equipments: DocumentEquipmentDto[] = [];
+    for (let i = 0; i < this.equipmentsArray.length; i++) {
+      const eqGroup = this.equipmentsArray.at(i).value;
+      const eqControl = eqGroup.equipmentControl;
+
+      // Only add if equipment is selected or has data
+      if (eqControl?.id || eqGroup.productCode || eqGroup.serialNumber || eqGroup.equipmentName) {
+        equipments.push({
+          id: eqGroup.id || null,  // DocumentEquipment ID (null for new)
+          equipmentId: eqControl?.id || null,
+          equipmentName: eqGroup.equipmentName || '',
+          productCode: eqGroup.productCode || '',
+          serialNumber: eqGroup.serialNumber || '',
+          sortOrder: i
+        });
+      }
+    }
+
     const dto: any = {
       id: this.id || null,
       customerId: form.customerControl?.id || null,
@@ -297,16 +316,9 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       jobFunction: form.jobFunction,
       phone: form.phone,
       email: form.email,
-      contactPerson: form.contactPerson
+      contactPerson: form.contactPerson,
+      equipments: equipments
     };
-
-    for (let i = 1; i <= 6; i++) {
-      const eqControl = this.documentForm.get('equipmentControl' + i);
-      dto['equipmentId' + i] = eqControl?.value?.id || null;
-      dto['equipmentName' + i] = form['equipmentName' + i] || '';
-      dto['productCode' + i] = form['productCode' + i] || '';
-      dto['serialNumber' + i] = form['serialNumber' + i] || '';
-    }
 
     if (this.signaturePadComponent && !this.signaturePadComponent.isEmpty()) {
       dto['signatureBase64'] = this.signaturePadComponent.getSignatureImage();

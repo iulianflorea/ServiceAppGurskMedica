@@ -26,7 +26,6 @@ public class DocumentDataController {
         this.documentDataService = documentDataService;
     }
 
-    // ✅ CREATE
     @PostMapping
     public ResponseEntity<DocumentDataDto> create(@RequestBody DocumentDataDto dto) {
         DocumentDataDto created = documentDataService.create(dto);
