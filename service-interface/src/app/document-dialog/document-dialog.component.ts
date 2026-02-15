@@ -62,7 +62,7 @@ export class DocumentDialogComponent implements OnInit {
 
   previewDocument(doc: any): void {
     const encodedName = encodeURIComponent(doc.name);
-    const url = `$${environment.apiUrl}/interventions/${this.data.intervention.id}/documents/${encodedName}`;
+    const url = `${environment.apiUrl}/interventions/${this.data.intervention.id}/documents/${encodedName}`;
 
     this.http.get(url, {
       headers: this.documentService.getAuthHeaders(),
