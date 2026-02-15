@@ -7,6 +7,16 @@
     </div>
 
     <div class="buttons">
+      <div class="example-button-container" *ngIf="isLoggedIn()">
+        <button mat-fab
+                (click)="toggleAttendance()"
+                [disabled]="isLoading"
+                [matTooltip]="isCheckedIn ? 'Check-out (Intrare: ' + getCheckInTimeFormatted() + ')' : 'Check-in'"
+                [ngClass]="isCheckedIn ? 'attendance-btn checked-in' : 'attendance-btn checked-out'">
+          <mat-icon>{{ isCheckedIn ? 'logout' : 'login' }}</mat-icon>
+        </button>
+      </div>
+
       <div class="example-button-container">
         <button mat-fab color="warn" routerLink="/dashboard">
           <mat-icon>home</mat-icon>
@@ -23,6 +33,7 @@
       <button routerLink="/product-list" mat-button>Products</button>
       <button routerLink="/equipment-list" mat-button>Equipments</button>
       <button routerLink="/intervention-sheet-list" mat-button>Interventions</button>
+      <button routerLink="/attendance-list" mat-button>Pontaj</button>
       <mat-slide-toggle
         [checked]="isDarkMode"
         (change)="toggleDarkMode($event)">
@@ -39,6 +50,14 @@
 <!--      <h2>Service Gursk</h2>-->
       <img src="assets/logo.png" alt="Logo" width="150" />
     </div>
+
+    <button mat-mini-fab
+            *ngIf="isLoggedIn()"
+            (click)="toggleAttendance()"
+            [disabled]="isLoading"
+            [ngClass]="isCheckedIn ? 'attendance-btn-mobile checked-in' : 'attendance-btn-mobile checked-out'">
+      <mat-icon>{{ isCheckedIn ? 'logout' : 'login' }}</mat-icon>
+    </button>
 
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
@@ -61,6 +80,7 @@
       <button mat-menu-item routerLink="/product-list"><mat-icon>inventory</mat-icon>Products</button>
       <button mat-menu-item routerLink="/equipment-list"><mat-icon>build</mat-icon>Equipments</button>
       <button mat-menu-item routerLink="/intervention-sheet-list"><mat-icon>assignment</mat-icon>Interventions</button>
+      <button mat-menu-item routerLink="/attendance-list"><mat-icon>access_time</mat-icon>Pontaj</button>
     </mat-menu>
   </div>
 </div>

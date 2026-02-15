@@ -51,6 +51,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {DocumentListComponent} from './document-list/document-list.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { DocumentDataFormComponent } from './document-data-form/document-data-form.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 @NgModule({
@@ -114,6 +115,7 @@ import { DocumentDataFormComponent } from './document-data-form/document-data-fo
     CommonModule,
     RouterModule,
     MatCheckboxModule,
+    MatTooltipModule,
   ],
   providers: [
     {

@@ -18,8 +18,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/interventions")
-@CrossOrigin(origins = "https://doc.singularity-cloud.com")
+@RequestMapping("/interventions")
+@CrossOrigin(origins = "*")
 public class DocumentController {
 
 

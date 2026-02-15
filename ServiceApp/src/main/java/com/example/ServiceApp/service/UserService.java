@@ -15,4 +15,6 @@ public interface UserService {
     void delete(Long id);
 
     User findByEmail(String email);
+
+    void resetPassword(Long userId, String newPassword);
 }

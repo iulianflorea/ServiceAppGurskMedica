@@ -1,0 +1,98 @@
+<div class="schedule-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>schedule</mat-icon>
+        Program de lucru
+      </mat-card-title>
+      <mat-card-subtitle>Configurare program standard de lucru</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content *ngIf="!isLoading">
+      <form [formGroup]="form">
+        <div class="form-section">
+          <h3>Ore de lucru</h3>
+
+          <div class="time-row">
+            <span class="time-label">Ora început:</span>
+            <mat-form-field appearance="outline" class="time-field">
+              <mat-select formControlName="startHour">
+                <mat-option *ngFor="let h of hours" [value]="h">{{ h }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span class="time-separator">:</span>
+            <mat-form-field appearance="outline" class="time-field">
+              <mat-select formControlName="startMinute">
+                <mat-option *ngFor="let m of minutes" [value]="m">{{ m }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="time-row">
+            <span class="time-label">Ora sfârșit:</span>
+            <mat-form-field appearance="outline" class="time-field">
+              <mat-select formControlName="endHour">
+                <mat-option *ngFor="let h of hours" [value]="h">{{ h }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span class="time-separator">:</span>
+            <mat-form-field appearance="outline" class="time-field">
+              <mat-select formControlName="endMinute">
+                <mat-option *ngFor="let m of minutes" [value]="m">{{ m }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Zile de lucru</h3>
+          <div class="days-container">
+            <div *ngFor="let day of weekDays"
+                 class="day-chip"
+                 [class.selected]="selectedDays[day.value]"
+                 (click)="toggleDay(day.value)">
+              {{ day.label }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Parametri</h3>
+
+          <mat-form-field appearance="outline" class="param-field">
+            <mat-label>Pauză (minute)</mat-label>
+            <input matInput type="number" formControlName="breakMinutes">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="param-field">
+            <mat-label>Ore standard/zi</mat-label>
+            <input matInput type="number" step="0.5" formControlName="standardWorkHours">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="param-field">
+            <mat-label>Multiplicator weekend</mat-label>
+            <input matInput type="number" step="0.1" formControlName="weekendBonusMultiplier">
+            <mat-hint>Ex: 1.5 = +50% pentru ore weekend</mat-hint>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-content *ngIf="isLoading" class="loading">
+      <mat-icon>hourglass_empty</mat-icon>
+      <span>Se încarcă...</span>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button routerLink="/attendance-list">
+        <mat-icon>arrow_back</mat-icon>
+        Înapoi la pontaj
+      </button>
+      <button mat-raised-button color="primary" (click)="onSave()" [disabled]="form.invalid || isSaving">
+        <mat-icon *ngIf="!isSaving">save</mat-icon>
+        <mat-icon *ngIf="isSaving">hourglass_empty</mat-icon>
+        Salvează
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

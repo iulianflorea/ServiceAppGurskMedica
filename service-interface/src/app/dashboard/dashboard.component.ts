@@ -19,7 +19,8 @@ import {DocumentDialogComponent} from "../document-dialog/document-dialog.compon
 import {BreakpointObserver} from "@angular/cdk/layout";
 // @ts-ignore
 import { Datepicker } from 'vanillajs-datepicker';
-import {environment} from "../../environments/environment";
+import {environment} from "../../environments/environment.prod";
+
 
 
 

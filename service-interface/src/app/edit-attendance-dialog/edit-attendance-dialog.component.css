@@ -1,0 +1,51 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.time-label {
+  min-width: 80px;
+  font-weight: 500;
+}
+
+.time-field {
+  width: 80px;
+}
+
+.time-separator {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+mat-dialog-content {
+  min-width: 300px;
+}
+
+@media (max-width: 500px) {
+  mat-dialog-content {
+    min-width: auto;
+  }
+
+  .time-row {
+    flex-wrap: wrap;
+  }
+
+  .time-label {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}

@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  apiUrl: 'https://doc.singularity-cloud.com'
+  production: false,
+  apiUrl: 'http://localhost:8080'
 };

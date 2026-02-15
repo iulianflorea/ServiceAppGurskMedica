@@ -5,6 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { DocumentService } from "../services/document.service";
 import { InterventionSheetListComponent } from "../intervention-sheet-list/intervention-sheet-list.component";
 import {HttpClient} from "@angular/common/http";
+import {environment} from "../../environments/environment.prod";
 
 @Component({
   selector: 'app-document-dialog',
@@ -33,7 +34,7 @@ export class DocumentDialogComponent implements OnInit {
       next: (docs) => {
         this.documents = docs.map(doc => ({
           ...doc,
-          url: `${this.documentService.apiUrl}/${this.data.intervention.id}/documents/${doc.name}`
+          url: `${environment.apiUrl}/interventions/${this.data.intervention.id}/documents/${doc.name}`
         }));
       },
       error: (err) => console.error('Error loading documents', err)
@@ -61,7 +62,7 @@ export class DocumentDialogComponent implements OnInit {
 
   previewDocument(doc: any): void {
     const encodedName = encodeURIComponent(doc.name);
-    const url = `${this.documentService.apiUrl}/${this.data.intervention.id}/documents/${encodedName}`;
+    const url = `$${environment.apiUrl}/interventions/${this.data.intervention.id}/documents/${encodedName}`;
 
     this.http.get(url, {
       headers: this.documentService.getAuthHeaders(),

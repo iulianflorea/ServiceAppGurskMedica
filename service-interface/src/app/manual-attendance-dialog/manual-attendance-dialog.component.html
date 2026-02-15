@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>Adaugă pontaj manual</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Angajat</mat-label>
+      <mat-select formControlName="userId">
+        <mat-option *ngFor="let user of users" [value]="user.id">
+          {{ user.firstname }} {{ user.lastname }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Data</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="time-row">
+      <span class="time-label">Ora intrare:</span>
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-select formControlName="checkInHour">
+          <mat-option *ngFor="let h of hours" [value]="h">{{ h }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span class="time-separator">:</span>
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-select formControlName="checkInMinute">
+          <mat-option *ngFor="let m of minutes" [value]="m">{{ m }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="time-row">
+      <span class="time-label">Ora ieșire:</span>
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-select formControlName="checkOutHour">
+          <mat-option *ngFor="let h of hours" [value]="h">{{ h }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span class="time-separator">:</span>
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-select formControlName="checkOutMinute">
+          <mat-option *ngFor="let m of minutes" [value]="m">{{ m }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Note</mat-label>
+      <textarea matInput formControlName="notes" rows="3"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Anulează</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid || isLoading">
+    <mat-icon *ngIf="isLoading">hourglass_empty</mat-icon>
+    Salvează
+  </button>
+</mat-dialog-actions>

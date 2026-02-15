@@ -35,6 +35,7 @@ package com.example.ServiceApp.controller;//package com.example.ServiceApp.contr
 //}
 
 import com.example.ServiceApp.config.JwtService;
+import com.example.ServiceApp.dto.PasswordResetDto;
 import com.example.ServiceApp.dto.UserDto;
 import com.example.ServiceApp.entity.User;
 import com.example.ServiceApp.mapper.UserMapper;
@@ -99,6 +100,11 @@ public class UserController {
         String email = jwtService.extractUsername(token);
         User user = userService.findByEmail(email);
         return userMapper.toDto(user); // dacă ai un mapper, altfel construiești manual DTO-ul
+    }
+
+    @PostMapping("/admin/reset-password")
+    public void resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
+        userService.resetPassword(passwordResetDto.getUserId(), passwordResetDto.getNewPassword());
     }
 }
 

@@ -40,6 +40,11 @@ public class SecurityConfiguration{
                         .requestMatchers("/api/interventions/*/documents/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/interventions/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/interventions/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/attendance/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/attendance/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/work-schedule").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/work-schedule").hasRole("ADMIN")
+                        .requestMatchers("/user/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess
