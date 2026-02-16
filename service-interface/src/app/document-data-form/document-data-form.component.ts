@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {Observable, forkJoin, startWith, map} from 'rxjs';
 import {SignaturePadComponent} from '../signature-pad/signature-pad.component';
-import {environment} from "../../environments/environment";
+import {environment} from "../../environments/environment.prod";
 import {DocumentEquipmentDto, DocumentTrainedPersonDto} from "../dtos/documentDataDto";
 
 interface CustomerDto {
