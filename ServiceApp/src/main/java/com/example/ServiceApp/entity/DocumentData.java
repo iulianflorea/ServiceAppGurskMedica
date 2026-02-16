@@ -37,10 +37,12 @@ public class DocumentData {
     @Builder.Default
     private List<DocumentEquipment> equipments = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_data_id", insertable = false, updatable = false)
+    @OrderBy("sortOrder ASC")
+    @Builder.Default
+    private List<DocumentTrainedPerson> trainedPersons = new ArrayList<>();
+
     private LocalDate signatureDate;
-    private String trainedPerson;
-    private String jobFunction;
-    private String phone;
-    private String email;
     private String contactPerson;
 }

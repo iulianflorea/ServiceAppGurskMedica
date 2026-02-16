@@ -27,10 +27,9 @@ public class DocumentDataDto {
     @Builder.Default
     private List<DocumentEquipmentDto> equipments = new ArrayList<>();
 
+    @Builder.Default
+    private List<DocumentTrainedPersonDto> trainedPersons = new ArrayList<>();
+
     private LocalDate signatureDate;
-    private String trainedPerson;
-    private String jobFunction;
-    private String phone;
-    private String email;
     private String contactPerson;
 }

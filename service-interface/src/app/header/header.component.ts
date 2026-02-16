@@ -133,4 +133,5 @@ export class HeaderComponent {
     }
   }
 
+  protected readonly localStorage = localStorage;
 }

@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatTableDataSource} from "@angular/material/table";
@@ -6,9 +6,7 @@ import {DocumentDataDto} from "../dtos/documentDataDto";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-// @ts-ignore
-import { Datepicker } from 'vanillajs-datepicker';
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 export interface DocumentData {
   id: number;
@@ -21,9 +19,6 @@ export interface DocumentData {
   productCode: string;
   serialNumber: string;
   dateOfContract: string;
-  trainedPerson: string;
-  function: string;
-  phone: string;
   contactPerson: string;
 }
 
@@ -58,25 +53,15 @@ export class DocumentListComponent implements OnInit {
   @Input() item: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('dateInput') dateInput!: ElementRef<HTMLInputElement>;
-  datepicker!: Datepicker;
-
   ngAfterViewInit() {
     this.documents2.paginator = this.paginator;
     this.documents2.sort = this.sort;
+  }
 
-    this.datepicker = new Datepicker(this.dateInput.nativeElement, {
-      format: 'dd/mm/yyyy',
-      autohide: true
-    });
-
-    // Ascultă evenimentul de schimbare dată
-    this.dateInput.nativeElement.addEventListener('changeDate', (event: any) => {
-      const selected = this.datepicker.getDate();
-      if (selected) {
-        this.selectedDate = selected;
-      }
-    });
+  onDateChange(event: any) {
+    if (event.value) {
+      this.selectedDate = event.value;
+    }
   }
 
   loadDocuments(): void {

@@ -2,8 +2,10 @@ package com.example.ServiceApp.mapper;
 
 import com.example.ServiceApp.dto.DocumentDataDto;
 import com.example.ServiceApp.dto.DocumentEquipmentDto;
+import com.example.ServiceApp.dto.DocumentTrainedPersonDto;
 import com.example.ServiceApp.entity.DocumentData;
 import com.example.ServiceApp.entity.DocumentEquipment;
+import com.example.ServiceApp.entity.DocumentTrainedPerson;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,13 @@ public class DocumentDataMapper {
                     .collect(Collectors.toList());
         }
 
+        List<DocumentTrainedPersonDto> trainedPersonDtos = new ArrayList<>();
+        if (entity.getTrainedPersons() != null) {
+            trainedPersonDtos = entity.getTrainedPersons().stream()
+                    .map(DocumentDataMapper::toTrainedPersonDto)
+                    .collect(Collectors.toList());
+        }
+
         return DocumentDataDto.builder()
                 .id(entity.getId())
                 .customerId(entity.getCustomerId())
@@ -37,11 +46,8 @@ public class DocumentDataMapper {
                 .monthOfWarrantyHandPieces(entity.getMonthOfWarrantyHandPieces())
                 .numberOfContract(entity.getNumberOfContract())
                 .equipments(equipmentDtos)
+                .trainedPersons(trainedPersonDtos)
                 .signatureDate(entity.getSignatureDate())
-                .trainedPerson(entity.getTrainedPerson())
-                .jobFunction(entity.getJobFunction())
-                .phone(entity.getPhone())
-                .email(entity.getEmail())
                 .contactPerson(entity.getContactPerson())
                 .build();
     }
@@ -64,6 +70,21 @@ public class DocumentDataMapper {
                 .build();
     }
 
+    public static DocumentTrainedPersonDto toTrainedPersonDto(DocumentTrainedPerson entity) {
+        if (entity == null) {
+            return null;
+        }
+        return DocumentTrainedPersonDto.builder()
+                .id(entity.getId())
+                .trainedPersonName(entity.getTrainedPersonName())
+                .jobFunction(entity.getJobFunction())
+                .phone(entity.getPhone())
+                .email(entity.getEmail())
+                .signatureBase64(entity.getSignatureBase64())
+                .sortOrder(entity.getSortOrder())
+                .build();
+    }
+
     public static DocumentData toEntity(DocumentDataDto dto) {
         if (dto == null) {
             return null;
@@ -76,6 +97,13 @@ public class DocumentDataMapper {
                     .collect(Collectors.toList());
         }
 
+        List<DocumentTrainedPerson> trainedPersons = new ArrayList<>();
+        if (dto.getTrainedPersons() != null) {
+            trainedPersons = dto.getTrainedPersons().stream()
+                    .map(DocumentDataMapper::toTrainedPersonEntity)
+                    .collect(Collectors.toList());
+        }
+
         return DocumentData.builder()
                 .id(dto.getId())
                 .customerId(dto.getCustomerId())
@@ -85,11 +113,8 @@ public class DocumentDataMapper {
                 .monthOfWarrantyHandPieces(dto.getMonthOfWarrantyHandPieces())
                 .numberOfContract(dto.getNumberOfContract())
                 .equipments(equipments)
+                .trainedPersons(trainedPersons)
                 .signatureDate(dto.getSignatureDate())
-                .trainedPerson(dto.getTrainedPerson())
-                .jobFunction(dto.getJobFunction())
-                .phone(dto.getPhone())
-                .email(dto.getEmail())
                 .contactPerson(dto.getContactPerson())
                 .build();
     }
@@ -104,6 +129,21 @@ public class DocumentDataMapper {
                 .equipmentName(dto.getEquipmentName())
                 .productCode(dto.getProductCode())
                 .serialNumber(dto.getSerialNumber())
+                .sortOrder(dto.getSortOrder())
+                .build();
+    }
+
+    public static DocumentTrainedPerson toTrainedPersonEntity(DocumentTrainedPersonDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        return DocumentTrainedPerson.builder()
+                .id(dto.getId())
+                .trainedPersonName(dto.getTrainedPersonName())
+                .jobFunction(dto.getJobFunction())
+                .phone(dto.getPhone())
+                .email(dto.getEmail())
+                .signatureBase64(dto.getSignatureBase64())
                 .sortOrder(dto.getSortOrder())
                 .build();
     }

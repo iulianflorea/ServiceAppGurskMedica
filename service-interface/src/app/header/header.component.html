@@ -2,7 +2,6 @@
 <div class="container-header" *ngIf="!isMobile">
   <div class="header">
     <div class="title-logo">
-<!--      <h1>Service Gursk</h1>-->
       <img src="assets/logo.png" alt="Logo" width="200" />
     </div>
 
@@ -24,8 +23,7 @@
       </div>
 
       <button routerLink="/import-database" mat-button>Restore DB</button>
-      <button mat-button (click)="logout()" routerLink="/login">Logout</button>
-      <button routerLink="/login" mat-button>Login</button>
+      <button routerLink="/login" mat-button *ngIf="!isLoggedIn()">Login</button>
       <button routerLink="/scan" mat-button>Scan</button>
       <button routerLink="/documents" mat-button>documents</button>
       <button routerLink="/order" mat-button>Order</button>
@@ -34,10 +32,11 @@
       <button routerLink="/equipment-list" mat-button>Equipments</button>
       <button routerLink="/intervention-sheet-list" mat-button>Interventions</button>
       <button routerLink="/attendance-list" mat-button>Pontaj</button>
+      <button mat-button (click)="logout()" routerLink="/login" *ngIf="isLoggedIn()">Logout</button>
       <mat-slide-toggle
         [checked]="isDarkMode"
         (change)="toggleDarkMode($event)">
-        🌙 Dark Mode
+        🌙
       </mat-slide-toggle>
     </div>
   </div>
@@ -46,41 +45,71 @@
 <!-- MOBILE -->
 <div class="container-header" *ngIf="isMobile">
   <div class="mobile-header">
-    <div class="mobile-title">
-<!--      <h2>Service Gursk</h2>-->
-      <img src="assets/logo.png" alt="Logo" width="150" />
-    </div>
 
-    <button mat-mini-fab
-            *ngIf="isLoggedIn()"
-            (click)="toggleAttendance()"
-            [disabled]="isLoading"
-            [ngClass]="isCheckedIn ? 'attendance-btn-mobile checked-in' : 'attendance-btn-mobile checked-out'">
-      <mat-icon>{{ isCheckedIn ? 'logout' : 'login' }}</mat-icon>
-    </button>
-
-    <button mat-icon-button [matMenuTriggerFor]="menu">
+    <button class="hamburger-btn" [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
 
-    <mat-slide-toggle
-      [checked]="isDarkMode"
-      (change)="toggleDarkMode($event)">
-      🌙 Dark Mode
-    </mat-slide-toggle>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item routerLink="/dashboard"><mat-icon>home</mat-icon>Dashboard</button>
-      <button mat-menu-item routerLink="/import-database"><mat-icon>restore</mat-icon>Restore DB</button>
-      <button mat-menu-item routerLink="/order"><mat-icon>shop</mat-icon>Order</button>
-      <button mat-menu-item (click)="logout()" routerLink="/login"><mat-icon>logout</mat-icon>Logout</button>
-      <button mat-menu-item routerLink="/login"><mat-icon>login</mat-icon>Login</button>
-      <button mat-menu-item routerLink="/scan"><mat-icon>Scan</mat-icon>Scan</button>
-      <button mat-menu-item routerLink="/customer-list"><mat-icon>people</mat-icon>Customers</button>
-      <button mat-menu-item routerLink="/documents"><mat-icon>Doc</mat-icon>Documents</button>
-      <button mat-menu-item routerLink="/product-list"><mat-icon>inventory</mat-icon>Products</button>
-      <button mat-menu-item routerLink="/equipment-list"><mat-icon>build</mat-icon>Equipments</button>
-      <button mat-menu-item routerLink="/intervention-sheet-list"><mat-icon>assignment</mat-icon>Interventions</button>
-      <button mat-menu-item routerLink="/attendance-list"><mat-icon>access_time</mat-icon>Pontaj</button>
+    <div class="mobile-title">
+      <img src="assets/logo.png" alt="Logo" width="130" />
+    </div>
+
+    <div class="mobile-right">
+      <mat-slide-toggle
+        [checked]="isDarkMode"
+        (change)="toggleDarkMode($event)"
+        class="mobile-dark-toggle">
+      </mat-slide-toggle>
+
+      <button mat-mini-fab
+              *ngIf="isLoggedIn()"
+              (click)="toggleAttendance()"
+              [disabled]="isLoading"
+              [ngClass]="isCheckedIn ? 'attendance-btn-mobile checked-in' : 'attendance-btn-mobile checked-out'">
+        <mat-icon>{{ isCheckedIn ? 'logout' : 'login' }}</mat-icon>
+      </button>
+    </div>
+
+    <mat-menu #menu="matMenu" class="mobile-nav-menu">
+      <button mat-menu-item routerLink="/dashboard">
+        <mat-icon>home</mat-icon><span>Dashboard</span>
+      </button>
+      <button mat-menu-item routerLink="/documents">
+        <mat-icon>description</mat-icon><span>Documents</span>
+      </button>
+      <button mat-menu-item routerLink="/intervention-sheet-list">
+        <mat-icon>assignment</mat-icon><span>Interventions</span>
+      </button>
+      <button mat-menu-item routerLink="/order">
+        <mat-icon>shopping_cart</mat-icon><span>Order</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item routerLink="/customer-list">
+        <mat-icon>people</mat-icon><span>Customers</span>
+      </button>
+      <button mat-menu-item routerLink="/product-list">
+        <mat-icon>inventory_2</mat-icon><span>Products</span>
+      </button>
+      <button mat-menu-item routerLink="/equipment-list">
+        <mat-icon>build</mat-icon><span>Equipments</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item routerLink="/attendance-list">
+        <mat-icon>access_time</mat-icon><span>Pontaj</span>
+      </button>
+      <button mat-menu-item routerLink="/scan">
+        <mat-icon>qr_code_scanner</mat-icon><span>Scan</span>
+      </button>
+      <button mat-menu-item routerLink="/import-database">
+        <mat-icon>restore</mat-icon><span>Restore DB</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item routerLink="/login" *ngIf="!isLoggedIn()">
+        <mat-icon>login</mat-icon><span>Login</span>
+      </button>
+      <button mat-menu-item (click)="logout()" routerLink="/login" *ngIf="isLoggedIn()">
+        <mat-icon>logout</mat-icon><span>Logout</span>
+      </button>
     </mat-menu>
   </div>
 </div>

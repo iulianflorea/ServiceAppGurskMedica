@@ -2,14 +2,20 @@ package com.example.ServiceApp.service;
 
 import com.example.ServiceApp.dto.DocumentDataDto;
 import com.example.ServiceApp.dto.DocumentEquipmentDto;
+import com.example.ServiceApp.dto.DocumentTrainedPersonDto;
 import com.example.ServiceApp.entity.DocumentData;
 import com.example.ServiceApp.entity.DocumentEquipment;
+import com.example.ServiceApp.entity.DocumentTrainedPerson;
 import com.example.ServiceApp.mapper.DocumentDataMapper;
 import com.example.ServiceApp.repository.DocumentDataRepository;
 import com.example.ServiceApp.repository.DocumentEquipmentRepository;
+import com.example.ServiceApp.repository.DocumentTrainedPersonRepository;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +34,14 @@ public class DocumentDataService {
 
     private final DocumentDataRepository documentDataRepository;
     private final DocumentEquipmentRepository documentEquipmentRepository;
+    private final DocumentTrainedPersonRepository documentTrainedPersonRepository;
 
     public DocumentDataService(DocumentDataRepository documentDataRepository,
-                               DocumentEquipmentRepository documentEquipmentRepository) {
+                               DocumentEquipmentRepository documentEquipmentRepository,
+                               DocumentTrainedPersonRepository documentTrainedPersonRepository) {
         this.documentDataRepository = documentDataRepository;
         this.documentEquipmentRepository = documentEquipmentRepository;
+        this.documentTrainedPersonRepository = documentTrainedPersonRepository;
     }
 
     @Transactional
@@ -43,9 +52,11 @@ public class DocumentDataService {
 
         DocumentData entity = DocumentDataMapper.toEntity(dto);
 
-        // Save document first without equipments to get the ID
+        // Save document first without equipments/trainedPersons to get the ID
         List<DocumentEquipment> equipments = entity.getEquipments();
         entity.setEquipments(new ArrayList<>());
+        List<DocumentTrainedPerson> trainedPersons = entity.getTrainedPersons();
+        entity.setTrainedPersons(new ArrayList<>());
         DocumentData saved = documentDataRepository.save(entity);
 
         // Save equipments directly through repository
@@ -58,16 +69,28 @@ public class DocumentDataService {
             documentEquipmentRepository.saveAll(equipments);
         }
 
-        // Reload to get equipments in the response
+        // Save trained persons directly through repository
+        if (trainedPersons != null && !trainedPersons.isEmpty()) {
+            for (int i = 0; i < trainedPersons.size(); i++) {
+                DocumentTrainedPerson tp = trainedPersons.get(i);
+                tp.setDocumentDataId(saved.getId());
+                tp.setSortOrder(i);
+            }
+            documentTrainedPersonRepository.saveAll(trainedPersons);
+        }
+
+        // Reload to get equipments and trainedPersons in the response
         return DocumentDataMapper.toDto(documentDataRepository.findById(saved.getId()).orElse(saved));
     }
 
+    @Transactional(readOnly = true)
     public List<DocumentDataDto> getAll() {
         Pageable topFifty = PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "contractDate"));
         Page<DocumentData> list = documentDataRepository.findAllByOrderByContractDateDesc(topFifty);
         return DocumentDataMapper.toDtoList(list.getContent());
     }
 
+    @Transactional(readOnly = true)
     public DocumentDataDto getById(Long id) {
         Optional<DocumentData> optional = documentDataRepository.findById(id);
         return optional.map(DocumentDataMapper::toDto).orElse(null);
@@ -89,37 +112,30 @@ public class DocumentDataService {
         existing.setNumberOfContract(dto.getNumberOfContract());
 
         // Update equipments: keep existing, add new, remove deleted
-        // Get current equipment IDs directly from database (not from collection)
         List<DocumentEquipment> currentEquipments = documentEquipmentRepository.findByDocumentDataIdOrderBySortOrderAsc(existing.getId());
         Set<Long> existingEquipmentIds = currentEquipments.stream()
                 .map(DocumentEquipment::getId)
                 .collect(Collectors.toSet());
 
         if (dto.getEquipments() != null && !dto.getEquipments().isEmpty()) {
-            // Collect IDs of equipments from DTO (existing ones have IDs)
             Set<Long> dtoEquipmentIds = dto.getEquipments().stream()
                     .map(DocumentEquipmentDto::getId)
                     .filter(eqId -> eqId != null)
                     .collect(Collectors.toSet());
 
-            // Find IDs to delete (in DB but not in DTO)
             List<Long> idsToDelete = existingEquipmentIds.stream()
                     .filter(eqId -> !dtoEquipmentIds.contains(eqId))
                     .collect(Collectors.toList());
 
-            // Delete removed equipments directly by IDs
             if (!idsToDelete.isEmpty()) {
                 documentEquipmentRepository.deleteAllByIdIn(idsToDelete);
             }
 
-            // Update existing equipments directly through repository
             List<DocumentEquipment> toSave = new ArrayList<>();
-
             for (int i = 0; i < dto.getEquipments().size(); i++) {
                 DocumentEquipmentDto eqDto = dto.getEquipments().get(i);
-
                 DocumentEquipment eq = DocumentEquipment.builder()
-                        .id(eqDto.getId())  // null for new, existing ID for update
+                        .id(eqDto.getId())
                         .documentDataId(existing.getId())
                         .equipmentId(eqDto.getEquipmentId())
                         .equipmentName(eqDto.getEquipmentName())
@@ -130,23 +146,61 @@ public class DocumentDataService {
                 toSave.add(eq);
             }
 
-            // Save all equipments (updates and new)
             if (!toSave.isEmpty()) {
                 documentEquipmentRepository.saveAll(toSave);
             }
-
         } else {
-            // Delete all equipments if list is empty or null
             if (!existingEquipmentIds.isEmpty()) {
                 documentEquipmentRepository.deleteAllByIdIn(new ArrayList<>(existingEquipmentIds));
             }
         }
 
+        // Update trained persons: keep existing, add new, remove deleted
+        List<DocumentTrainedPerson> currentTrainedPersons = documentTrainedPersonRepository.findByDocumentDataIdOrderBySortOrderAsc(existing.getId());
+        Set<Long> existingTrainedPersonIds = currentTrainedPersons.stream()
+                .map(DocumentTrainedPerson::getId)
+                .collect(Collectors.toSet());
+
+        if (dto.getTrainedPersons() != null && !dto.getTrainedPersons().isEmpty()) {
+            Set<Long> dtoTrainedPersonIds = dto.getTrainedPersons().stream()
+                    .map(DocumentTrainedPersonDto::getId)
+                    .filter(tpId -> tpId != null)
+                    .collect(Collectors.toSet());
+
+            List<Long> idsToDelete = existingTrainedPersonIds.stream()
+                    .filter(tpId -> !dtoTrainedPersonIds.contains(tpId))
+                    .collect(Collectors.toList());
+
+            if (!idsToDelete.isEmpty()) {
+                documentTrainedPersonRepository.deleteAllByIdIn(idsToDelete);
+            }
+
+            List<DocumentTrainedPerson> toSave = new ArrayList<>();
+            for (int i = 0; i < dto.getTrainedPersons().size(); i++) {
+                DocumentTrainedPersonDto tpDto = dto.getTrainedPersons().get(i);
+                DocumentTrainedPerson tp = DocumentTrainedPerson.builder()
+                        .id(tpDto.getId())
+                        .documentDataId(existing.getId())
+                        .trainedPersonName(tpDto.getTrainedPersonName())
+                        .jobFunction(tpDto.getJobFunction())
+                        .phone(tpDto.getPhone())
+                        .email(tpDto.getEmail())
+                        .signatureBase64(tpDto.getSignatureBase64())
+                        .sortOrder(i)
+                        .build();
+                toSave.add(tp);
+            }
+
+            if (!toSave.isEmpty()) {
+                documentTrainedPersonRepository.saveAll(toSave);
+            }
+        } else {
+            if (!existingTrainedPersonIds.isEmpty()) {
+                documentTrainedPersonRepository.deleteAllByIdIn(new ArrayList<>(existingTrainedPersonIds));
+            }
+        }
+
         existing.setSignatureDate(dto.getSignatureDate());
-        existing.setTrainedPerson(dto.getTrainedPerson());
-        existing.setJobFunction(dto.getJobFunction());
-        existing.setPhone(dto.getPhone());
-        existing.setEmail(dto.getEmail());
         existing.setContactPerson(dto.getContactPerson());
 
         DocumentData updated = documentDataRepository.save(existing);
@@ -161,6 +215,7 @@ public class DocumentDataService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<DocumentDataDto> search(String keyword) {
         List<DocumentData> documentDataList = documentDataRepository.searchDocument(keyword);
         return DocumentDataMapper.toDtoList(documentDataList);
@@ -189,14 +244,30 @@ public class DocumentDataService {
         }
         System.out.println("================================");
 
-        try (InputStream templateStream = new ClassPathResource("templates/" + templateFile).getInputStream();
+        // Try filesystem first (for development - picks up changes without restart),
+        // fall back to classpath (for production / packaged JAR)
+        Resource templateResource;
+        File fsFile = new File("ServiceApp/src/main/resources/templates/" + templateFile);
+        if (fsFile.exists()) {
+            templateResource = new FileSystemResource(fsFile);
+            System.out.println("Loading template from filesystem: " + fsFile.getAbsolutePath());
+        } else {
+            templateResource = new ClassPathResource("templates/" + templateFile);
+            System.out.println("Loading template from classpath: templates/" + templateFile);
+        }
+
+        try (InputStream templateStream = templateResource.getInputStream();
              XWPFDocument document = new XWPFDocument(templateStream)) {
 
-            // Replace placeholders in text
+            // Generate dynamic table rows BEFORE placeholder replacement
+            generateEquipmentRows(document, data.getEquipments());
+            generateTrainedPersonRows(document, data.getTrainedPersons());
+
+            // Replace remaining placeholders in text
             replacePlaceholders(document, buildValueMap(data));
 
-            // Generate dynamic equipment rows in tables
-            generateEquipmentRows(document, data.getEquipments());
+            // Add page numbers to footer
+            addPageNumbers(document);
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             document.write(out);
@@ -206,33 +277,101 @@ public class DocumentDataService {
     }
 
     private void generateEquipmentRows(XWPFDocument document, List<DocumentEquipmentDto> equipments) {
+        System.out.println("=== GENERATE EQUIPMENT ROWS ===");
+        System.out.println("Equipments: " + (equipments != null ? equipments.size() : "null"));
         if (equipments == null || equipments.isEmpty()) {
+            System.out.println("No equipments, returning.");
             return;
         }
 
+        System.out.println("Tables in document: " + document.getTables().size());
         for (XWPFTable table : document.getTables()) {
             int templateRowIndex = findTemplateRow(table);
+            System.out.println("Table rows: " + table.getRows().size() + ", templateRowIndex: " + templateRowIndex);
             if (templateRowIndex == -1) {
                 continue;
             }
 
             XWPFTableRow templateRow = table.getRow(templateRowIndex);
+            // Save original template XML BEFORE modifying the template row
+            CTRow originalTemplateCTRow = (CTRow) templateRow.getCtRow().copy();
 
-            // First, clone the template row for all additional equipments (before modifying the template)
-            List<XWPFTableRow> allRows = new ArrayList<>();
-            allRows.add(templateRow);  // First row is the template itself
+            // Replace first equipment in the template row (via POI wrappers - works fine)
+            replaceInRow(templateRow, equipments.get(0), 1);
+            System.out.println("  Replaced equipment 0 in template row " + templateRowIndex);
 
+            // For additional equipments, clone the ORIGINAL template XML and replace via XML string
             for (int i = 1; i < equipments.size(); i++) {
-                // Clone template row BEFORE any modifications
-                XWPFTableRow clonedRow = cloneRow(table, templateRow, templateRowIndex + i);
-                allRows.add(clonedRow);
+                CTRow copiedCTRow = (CTRow) originalTemplateCTRow.copy();
+                replaceInCTRow(copiedCTRow, equipments.get(i), i + 1);
+                table.getCTTbl().addNewTr().set(copiedCTRow);
+                System.out.println("  Added equipment " + i + " row via XML");
+            }
+        }
+    }
+
+    private void generateTrainedPersonRows(XWPFDocument document, List<DocumentTrainedPersonDto> trainedPersons) {
+        System.out.println("=== GENERATE TRAINED PERSON ROWS ===");
+        System.out.println("TrainedPersons: " + (trainedPersons != null ? trainedPersons.size() : "null"));
+        if (trainedPersons == null || trainedPersons.isEmpty()) {
+            System.out.println("No trained persons, returning.");
+            return;
+        }
+
+        for (XWPFTable table : document.getTables()) {
+            int templateRowIndex = findTrainedPersonTemplateRow(table);
+            if (templateRowIndex == -1) {
+                continue;
             }
 
-            // Now replace placeholders in each row with corresponding equipment data
-            for (int i = 0; i < equipments.size(); i++) {
-                DocumentEquipmentDto eq = equipments.get(i);
-                replaceInRow(allRows.get(i), eq, i + 1);
+            // Remove any pre-existing empty rows below the template row
+            int totalRows = table.getRows().size();
+            for (int r = totalRows - 1; r > templateRowIndex; r--) {
+                table.removeRow(r);
             }
+
+            XWPFTableRow templateRow = table.getRow(templateRowIndex);
+            // Save original template XML BEFORE modifying
+            CTRow originalTemplateCTRow = (CTRow) templateRow.getCtRow().copy();
+
+            // Replace first trained person in template row
+            replaceInTrainedPersonRow(templateRow, trainedPersons.get(0), 1);
+            System.out.println("  Replaced trained person 0 in template row " + templateRowIndex);
+
+            // For additional trained persons, clone original template and replace via XML
+            for (int i = 1; i < trainedPersons.size(); i++) {
+                CTRow copiedCTRow = (CTRow) originalTemplateCTRow.copy();
+                replaceInCTRow(copiedCTRow, trainedPersons.get(i), i + 1, true);
+                table.getCTTbl().addNewTr().set(copiedCTRow);
+                System.out.println("  Added trained person " + i + " row via XML");
+            }
+        }
+    }
+
+    private int findTrainedPersonTemplateRow(XWPFTable table) {
+        for (int i = 0; i < table.getRows().size(); i++) {
+            XWPFTableRow row = table.getRow(i);
+            for (XWPFTableCell cell : row.getTableCells()) {
+                String text = cell.getText();
+                if (text != null && (text.contains("${trainedPersons}") ||
+                        text.contains("${jobFunction}") ||
+                        text.contains("${signatureBase64}"))) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private void replaceInTrainedPersonRow(XWPFTableRow row, DocumentTrainedPersonDto tp, int index) {
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("${trainedPersons}", tp.getTrainedPersonName() != null ? tp.getTrainedPersonName() : "");
+        replacements.put("${jobFunction}", tp.getJobFunction() != null ? tp.getJobFunction() : "");
+        replacements.put("${signatureBase64}", "");
+        replacements.put("${nr}", String.valueOf(index));
+
+        for (XWPFTableCell cell : row.getTableCells()) {
+            replaceCellContent(cell, replacements);
         }
     }
 
@@ -250,54 +389,6 @@ public class DocumentDataService {
             }
         }
         return -1;
-    }
-
-    private XWPFTableRow cloneRow(XWPFTable table, XWPFTableRow sourceRow, int insertPosition) {
-        // Create new row in the table at the specified position
-        XWPFTableRow newRow = table.insertNewTableRow(insertPosition);
-
-        // Copy cells from source row
-        List<XWPFTableCell> sourceCells = sourceRow.getTableCells();
-        for (int i = 0; i < sourceCells.size(); i++) {
-            XWPFTableCell sourceCell = sourceCells.get(i);
-            XWPFTableCell newCell;
-
-            if (i == 0) {
-                newCell = newRow.getCell(0);
-                if (newCell == null) {
-                    newCell = newRow.createCell();
-                }
-            } else {
-                newCell = newRow.createCell();
-            }
-
-            // Copy text content from each paragraph
-            List<XWPFParagraph> sourceParagraphs = sourceCell.getParagraphs();
-            if (sourceParagraphs != null && !sourceParagraphs.isEmpty()) {
-                // Remove default paragraph if exists
-                while (newCell.getParagraphs().size() > 0) {
-                    newCell.removeParagraph(0);
-                }
-
-                for (XWPFParagraph sourcePara : sourceParagraphs) {
-                    XWPFParagraph newPara = newCell.addParagraph();
-                    // Copy paragraph text with all runs
-                    for (XWPFRun sourceRun : sourcePara.getRuns()) {
-                        XWPFRun newRun = newPara.createRun();
-                        newRun.setText(sourceRun.getText(0));
-                        // Copy basic formatting
-                        newRun.setBold(sourceRun.isBold());
-                        newRun.setItalic(sourceRun.isItalic());
-                        if (sourceRun.getFontSizeAsDouble() != null) {
-                            newRun.setFontSize(sourceRun.getFontSizeAsDouble());
-                        }
-                        newRun.setFontFamily(sourceRun.getFontFamily());
-                    }
-                }
-            }
-        }
-
-        return newRow;
     }
 
     private void replaceInRow(XWPFTableRow row, DocumentEquipmentDto eq, int index) {
@@ -322,6 +413,39 @@ public class DocumentDataService {
             for (XWPFTableCell cell : cells) {
                 replaceCellContent(cell, replacements);
             }
+        }
+    }
+
+    private void replaceInCTRow(CTRow ctRow, DocumentEquipmentDto eq, int index) {
+        replaceInCTRow(ctRow, eq, index, false);
+    }
+
+    private void replaceInCTRow(CTRow ctRow, Object dto, int index, boolean isTrainedPerson) {
+        // Build replacement map
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("${nr}", String.valueOf(index));
+
+        if (isTrainedPerson && dto instanceof DocumentTrainedPersonDto tp) {
+            replacements.put("${trainedPersons}", tp.getTrainedPersonName() != null ? tp.getTrainedPersonName() : "");
+            replacements.put("${jobFunction}", tp.getJobFunction() != null ? tp.getJobFunction() : "");
+            replacements.put("${signatureBase64}", "");
+        } else if (dto instanceof DocumentEquipmentDto eq) {
+            replacements.put("${nameOfEquipment}", eq.getEquipmentName() != null ? eq.getEquipmentName() : "");
+            replacements.put("${equipmentName}", eq.getEquipmentName() != null ? eq.getEquipmentName() : "");
+            replacements.put("${productCode}", eq.getProductCode() != null ? eq.getProductCode() : "");
+            replacements.put("${serialNumber}", eq.getSerialNumber() != null ? eq.getSerialNumber() : "");
+        }
+
+        // Work directly with the XML string of the row
+        String xml = ctRow.xmlText();
+        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+            xml = xml.replace(entry.getKey(), entry.getValue());
+        }
+        try {
+            CTRow newRow = CTRow.Factory.parse(xml);
+            ctRow.set(newRow);
+        } catch (Exception e) {
+            System.err.println("Error parsing CTRow XML: " + e.getMessage());
         }
     }
 
@@ -487,6 +611,59 @@ public class DocumentDataService {
         }
     }
 
+    private void addPageNumbers(XWPFDocument document) {
+        // Build footer paragraph XML: "Pagina X din Y" centered
+        CTP ctp = CTP.Factory.newInstance();
+
+        // Center-align
+        CTPPr ppr = ctp.addNewPPr();
+        ppr.addNewJc().setVal(STJc.CENTER);
+
+        // "Pagina " text
+        CTR ctr1 = ctp.addNewR();
+        ctr1.addNewRPr().addNewSz().setVal(java.math.BigInteger.valueOf(18));
+        ctr1.addNewT().setStringValue("Pagina ");
+
+        // PAGE field begin
+        CTR ctr2 = ctp.addNewR();
+        ctr2.addNewFldChar().setFldCharType(STFldCharType.BEGIN);
+
+        // PAGE instruction
+        CTR ctr3 = ctp.addNewR();
+        CTText instrPage = ctr3.addNewInstrText();
+        instrPage.setStringValue(" PAGE ");
+
+        // PAGE field end
+        CTR ctr4 = ctp.addNewR();
+        ctr4.addNewFldChar().setFldCharType(STFldCharType.END);
+
+        // " din " text
+        CTR ctr5 = ctp.addNewR();
+        ctr5.addNewRPr().addNewSz().setVal(java.math.BigInteger.valueOf(18));
+        ctr5.addNewT().setStringValue(" din ");
+
+        // NUMPAGES field begin
+        CTR ctr6 = ctp.addNewR();
+        ctr6.addNewFldChar().setFldCharType(STFldCharType.BEGIN);
+
+        // NUMPAGES instruction
+        CTR ctr7 = ctp.addNewR();
+        CTText instrNum = ctr7.addNewInstrText();
+        instrNum.setStringValue(" NUMPAGES ");
+
+        // NUMPAGES field end
+        CTR ctr8 = ctp.addNewR();
+        ctr8.addNewFldChar().setFldCharType(STFldCharType.END);
+
+        // Create footer via XWPFHeaderFooterPolicy
+        CTSectPr sectPr = document.getDocument().getBody().isSetSectPr()
+                ? document.getDocument().getBody().getSectPr()
+                : document.getDocument().getBody().addNewSectPr();
+
+        XWPFHeaderFooterPolicy policy = new XWPFHeaderFooterPolicy(document, sectPr);
+        policy.createFooter(STHdrFtr.DEFAULT, new XWPFParagraph[]{new XWPFParagraph(ctp, document)});
+    }
+
     private Map<String, String> buildValueMap(DocumentDataDto data) {
         Map<String, String> map = new HashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -499,10 +676,22 @@ public class DocumentDataService {
         map.put("numberOfContract", data.getNumberOfContract() != null ? data.getNumberOfContract() : "");
 
         map.put("signatureDate", data.getSignatureDate() != null ? data.getSignatureDate().format(formatter) : "");
-        map.put("trainedPerson", data.getTrainedPerson() != null ? data.getTrainedPerson() : "");
-        map.put("function", data.getJobFunction() != null ? data.getJobFunction() : "");
-        map.put("phone", data.getPhone() != null ? data.getPhone() : "");
         map.put("contactPerson", data.getContactPerson() != null ? data.getContactPerson() : "");
+
+        // Get first trained person's data for standalone placeholders (e.g. certificat_garantie)
+        // Table-based trained person placeholders are handled by generateTrainedPersonRows
+        if (data.getTrainedPersons() != null && !data.getTrainedPersons().isEmpty()) {
+            DocumentTrainedPersonDto first = data.getTrainedPersons().get(0);
+            map.put("trainedPerson", first.getTrainedPersonName() != null ? first.getTrainedPersonName() : "");
+            map.put("function", first.getJobFunction() != null ? first.getJobFunction() : "");
+            map.put("phone", first.getPhone() != null ? first.getPhone() : "");
+            map.put("email", first.getEmail() != null ? first.getEmail() : "");
+        } else {
+            map.put("trainedPerson", "");
+            map.put("function", "");
+            map.put("phone", "");
+            map.put("email", "");
+        }
 
         return map;
     }

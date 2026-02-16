@@ -6,17 +6,12 @@
       <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
     </mat-form-field>
 
-    <div class="mb-3">
-      <label for="dateInput" class="form-label">Caută după dată</label>
-      <input
-        type="text"
-        id="dateInput"
-        #dateInput
-        class="form-control"
-        placeholder="dd/mm/yyyy"
-        autocomplete="off"
-      >
-    </div>
+    <mat-form-field>
+      <mat-label>Caută după dată</mat-label>
+      <input matInput [matDatepicker]="datePicker" [(ngModel)]="selectedDate" [ngModelOptions]="{standalone: true}" (dateChange)="onDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker [touchUi]="isMobile"></mat-datepicker>
+    </mat-form-field>
 
     <button mat-flat-button color="primary" type="submit">Search</button>
   </form>
@@ -72,7 +67,7 @@
 
       <ng-container matColumnDef="employeeName">
         <th mat-header-cell *matHeaderCellDef> Employee name</th>
-        <td mat-cell *matCellDef="let element"> {{element.employeeName}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.employeeName}} {{element.userFirstname}} </td>
       </ng-container>
 
       <ng-container matColumnDef="noticed">

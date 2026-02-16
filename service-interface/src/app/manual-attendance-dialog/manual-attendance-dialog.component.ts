@@ -38,6 +38,7 @@ export class ManualAttendanceDialogComponent implements OnInit {
   form: FormGroup;
   users: UserDto[] = [];
   isLoading = false;
+  isMobile = window.innerWidth <= 768;
 
   constructor(
     private fb: FormBuilder,

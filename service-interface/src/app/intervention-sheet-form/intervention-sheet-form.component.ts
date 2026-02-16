@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {EquipmentDto} from "../dtos/equipmentDto";
 import {CustomerDto} from "../dtos/customerDto";
@@ -8,8 +8,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 import {map, Observable, startWith} from "rxjs";
-// @ts-ignore
-import { Datepicker } from 'vanillajs-datepicker';
 import {UserDto} from "../dtos/userDto";
 import {environment} from "../../environments/environment.prod";
 
@@ -43,8 +41,7 @@ export class InterventionSheetFormComponent implements OnInit {
   @ViewChild(SignaturePadComponent) signaturePadComponent!: SignaturePadComponent;
   signatureBase64: string = '';
 
-  @ViewChild('dateInput') dateInput!: ElementRef<HTMLInputElement>;
-  datepicker!: Datepicker;
+  selectedDateOfIntervention: Date | null = null;
 
   customerControl = new FormControl();
   employeeControl = new FormControl();
@@ -122,36 +119,22 @@ export class InterventionSheetFormComponent implements OnInit {
         this.dateOfIntervention = response.dateOfIntervention || '';
         this.dateOfExpireWarranty = response.dateOfExpireWarranty;
         this.yearsOfWarranty = response.yearsOfWarranty;
-        if (this.dateOfIntervention && this.dateInput) {
-          this.dateInput.nativeElement.value = this.dateOfIntervention;
+        if (this.dateOfIntervention) {
+          this.selectedDateOfIntervention = new Date(this.dateOfIntervention);
         }
       });
     }
   }
 
 
-  ngAfterViewInit() {
-    this.datepicker = new Datepicker(this.dateInput.nativeElement, { autohide: true });
-
-    this.dateInput.nativeElement.addEventListener('changeDate', () => {
-      this.onDateChange();
-    });
-    // fallback: pentru cazurile în care changeDate nu merge
-    this.dateInput.nativeElement.addEventListener('change', () => {
-      this.onDateChange();
-    });
-  }
-
-  onDateChange() {
-    const selectedDate: Date | null = this.datepicker.getDate();
+  onDateChange(event: any) {
+    const selectedDate: Date | null = event.value;
     if (selectedDate) {
       const year = selectedDate.getFullYear();
       const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
       const day = selectedDate.getDate().toString().padStart(2, '0');
       this.dateOfIntervention = `${year}-${month}-${day}`;
-      console.log('Data formatată:', this.dateOfIntervention);
     } else {
-      // dacă s-a șters data
       this.dateOfIntervention = '';
     }
   }

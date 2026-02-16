@@ -10,7 +10,7 @@
       <mat-label>Data</mat-label>
       <input matInput [matDatepicker]="picker" formControlName="date">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-datepicker #picker [touchUi]="isMobile"></mat-datepicker>
     </mat-form-field>
 
     <div class="time-row">

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Injectable, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Injectable, Input, ViewChild} from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
@@ -17,8 +17,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatDialog} from "@angular/material/dialog";
 import {DocumentDialogComponent} from "../document-dialog/document-dialog.component";
 import {BreakpointObserver} from "@angular/cdk/layout";
-// @ts-ignore
-import { Datepicker } from 'vanillajs-datepicker';
+import {MatNativeDateModule} from "@angular/material/core";
 import {environment} from "../../environments/environment.prod";
 
 
@@ -39,6 +38,7 @@ import {environment} from "../../environments/environment.prod";
     NgIf,
     MatInputModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     PopUpTaskComponent,
     ReactiveFormsModule,
     MatCardModule,
@@ -64,25 +64,15 @@ export class DashboardComponent implements AfterViewInit {
   @Input() item: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('dateInput') dateInput!: ElementRef<HTMLInputElement>;
-  datepicker!: Datepicker;
-
   ngAfterViewInit() {
     this.dataSource2.paginator = this.paginator;
     this.dataSource2.sort = this.sort;
+  }
 
-    this.datepicker = new Datepicker(this.dateInput.nativeElement, {
-      format: 'dd/mm/yyyy',
-      autohide: true
-    });
-
-    // Ascultă evenimentul de schimbare dată
-    this.dateInput.nativeElement.addEventListener('changeDate', (event: any) => {
-      const selected = this.datepicker.getDate();
-      if (selected) {
-        this.selectedDate = selected;
-      }
-    });
+  onDateChange(event: any) {
+    if (event.value) {
+      this.selectedDate = event.value;
+    }
   }
 
   constructor(private httpClient: HttpClient,

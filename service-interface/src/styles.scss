@@ -26,7 +26,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin-bottom: 10px;
   }
 
-  table {
+  table:not(.mat-calendar-table) {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
@@ -231,6 +231,32 @@ input, textarea, select {
 
 ::ng-deep .mat-input-element {
   background: transparent !important;
+}
+
+/* Mobile nav menu styling */
+.mobile-nav-menu.mat-mdc-menu-panel {
+  min-width: 220px;
+  border-radius: 12px !important;
+  margin-top: 4px;
+}
+
+.mobile-nav-menu .mat-mdc-menu-item {
+  height: 48px;
+  font-size: 15px;
+  letter-spacing: 0.2px;
+}
+
+.mobile-nav-menu .mat-mdc-menu-item mat-icon {
+  margin-right: 14px;
+  color: #1976d2;
+}
+
+.dark-theme .mobile-nav-menu .mat-mdc-menu-item mat-icon {
+  color: #64b5f6;
+}
+
+.mobile-nav-menu .mat-divider {
+  margin: 4px 0;
 }
 
 

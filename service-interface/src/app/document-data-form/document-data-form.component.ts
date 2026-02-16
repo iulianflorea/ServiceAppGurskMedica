@@ -1,13 +1,11 @@
-import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, FormControl, FormArray, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {Observable, forkJoin, startWith, map} from 'rxjs';
 import {SignaturePadComponent} from '../signature-pad/signature-pad.component';
-// @ts-ignore
-import {Datepicker} from 'vanillajs-datepicker';
-import {environment} from "../../environments/environment.prod";
-import {DocumentEquipmentDto} from "../dtos/documentDataDto";
+import {environment} from "../../environments/environment";
+import {DocumentEquipmentDto, DocumentTrainedPersonDto} from "../dtos/documentDataDto";
 
 interface CustomerDto {
   id: number;
@@ -26,11 +24,12 @@ interface EquipmentDto {
   templateUrl: './document-data-form.component.html',
   styleUrls: ['./document-data-form.component.css']
 })
-export class DocumentDataFormComponent implements OnInit, AfterViewInit {
+export class DocumentDataFormComponent implements OnInit {
 
   id?: number;
   documentForm!: FormGroup;
   loading = false;
+  isMobile = window.innerWidth <= 768;
 
   customerList: CustomerDto[] = [];
   filteredCustomers!: Observable<CustomerDto[]>;
@@ -39,13 +38,10 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
   filteredEquipmentOptions: Observable<EquipmentDto[]>[] = [];
 
   @ViewChild(SignaturePadComponent) signaturePadComponent!: SignaturePadComponent;
+  @ViewChildren('trainedPersonSignaturePad') trainedPersonSignaturePads!: QueryList<SignaturePadComponent>;
 
-  @ViewChild('contractDateInput') contractDateInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('signatureDateInput') signatureDateInput!: ElementRef<HTMLInputElement>;
-  contractDateControl = new FormControl('');
-  signatureDateControl = new FormControl('');
-  contractDatePicker!: Datepicker;
-  signatureDatePicker!: Datepicker;
+  contractDate: Date | null = null;
+  signatureDate: Date | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -66,27 +62,9 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       monthOfWarrantyHandPieces: [''],
       numberOfContract: [''],
       signatureDate: [''],
-      trainedPerson: [''],
-      jobFunction: [''],
-      phone: [''],
-      email: [''],
       contactPerson: [''],
-      equipments: this.fb.array([])
-    });
-
-    // Sincronizare date Bootstrap cu FormControls
-    this.contractDateControl.valueChanges.subscribe(val => {
-      this.documentForm.get('contractDate')?.setValue(val);
-    });
-    this.documentForm.get('contractDate')?.valueChanges.subscribe(val => {
-      this.contractDateControl.setValue(val, {emitEvent: false});
-    });
-
-    this.signatureDateControl.valueChanges.subscribe(val => {
-      this.documentForm.get('signatureDate')?.setValue(val);
-    });
-    this.documentForm.get('signatureDate')?.valueChanges.subscribe(val => {
-      this.signatureDateControl.setValue(val, {emitEvent: false});
+      equipments: this.fb.array([]),
+      trainedPersons: this.fb.array([])
     });
 
     // Load customers & equipments
@@ -106,6 +84,7 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       // Add one empty equipment row by default
       if (!this.id) {
         this.addEquipment();
+        this.addTrainedPerson();
       }
 
       if (this.id) {
@@ -123,47 +102,24 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    const formatLocalDate = (d: Date) => {
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    };
+  onContractDateChange(event: any) {
+    if (event.value) {
+      this.documentForm.get('contractDate')?.setValue(this.formatDate(event.value));
+    }
+  }
 
-    // CONTRACT DATE
-    this.contractDatePicker = new Datepicker(this.contractDateInput.nativeElement, {
-      format: 'yyyy-mm-dd',
-      autohide: true
-    });
-
-    this.contractDateInput.nativeElement.addEventListener('changeDate', () => {
-      const date = this.contractDatePicker.getDate();
-      if (date) {
-        const formatted = formatLocalDate(date);
-        this.contractDateControl.setValue(formatted);
-        this.documentForm.get('contractDate')?.setValue(formatted);
-      }
-    });
-
-    // SIGNATURE DATE
-    this.signatureDatePicker = new Datepicker(this.signatureDateInput.nativeElement, {
-      format: 'yyyy-mm-dd',
-      autohide: true
-    });
-
-    this.signatureDateInput.nativeElement.addEventListener('changeDate', () => {
-      const date = this.signatureDatePicker.getDate();
-      if (date) {
-        const formatted = formatLocalDate(date);
-        this.signatureDateControl.setValue(formatted);
-        this.documentForm.get('signatureDate')?.setValue(formatted);
-      }
-    });
+  onSignatureDateChange(event: any) {
+    if (event.value) {
+      this.documentForm.get('signatureDate')?.setValue(this.formatDate(event.value));
+    }
   }
 
   get equipmentsArray(): FormArray {
     return this.documentForm.get('equipments') as FormArray;
+  }
+
+  get trainedPersonsArray(): FormArray {
+    return this.documentForm.get('trainedPersons') as FormArray;
   }
 
   addEquipment(): void {
@@ -201,6 +157,31 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       this.equipmentsArray.removeAt(index);
       this.filteredEquipmentOptions.splice(index, 1);
     }
+  }
+
+  addTrainedPerson(): void {
+    const group = this.fb.group({
+      id: [null],
+      trainedPersonName: [''],
+      jobFunction: [''],
+      phone: [''],
+      email: [''],
+      signatureBase64: ['']
+    });
+    this.trainedPersonsArray.push(group);
+  }
+
+  removeTrainedPerson(index: number): void {
+    this.trainedPersonsArray.removeAt(index);
+  }
+
+  clearTrainedPersonSignature(index: number): void {
+    const pads = this.trainedPersonSignaturePads?.toArray();
+    if (pads && pads[index]) {
+      pads[index].clear();
+    }
+    const group = this.trainedPersonsArray.at(index) as FormGroup;
+    group.get('signatureBase64')?.setValue('');
   }
 
   private _filterCustomers(name: string) {
@@ -244,12 +225,15 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
         monthOfWarrantyHandPieces: doc.monthOfWarrantyHandPieces,
         numberOfContract: doc.numberOfContract,
         signatureDate: doc.signatureDate,
-        trainedPerson: doc.trainedPerson,
-        jobFunction: doc.jobFunction,
-        phone: doc.phone,
-        email: doc.email,
         contactPerson: doc.contactPerson
       });
+
+      if (doc.contractDate) {
+        this.contractDate = new Date(doc.contractDate);
+      }
+      if (doc.signatureDate) {
+        this.signatureDate = new Date(doc.signatureDate);
+      }
 
       // Load equipments
       if (doc.equipments && doc.equipments.length > 0) {
@@ -270,6 +254,24 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       } else {
         // Add one empty row if no equipments
         this.addEquipment();
+      }
+
+      // Load trained persons
+      if (doc.trainedPersons && doc.trainedPersons.length > 0) {
+        doc.trainedPersons.forEach((tp: DocumentTrainedPersonDto) => {
+          this.addTrainedPerson();
+          const lastIndex = this.trainedPersonsArray.length - 1;
+          const group = this.trainedPersonsArray.at(lastIndex) as FormGroup;
+
+          group.get('id')?.setValue(tp.id || null);
+          group.get('trainedPersonName')?.setValue(tp.trainedPersonName || '');
+          group.get('jobFunction')?.setValue(tp.jobFunction || '');
+          group.get('phone')?.setValue(tp.phone || '');
+          group.get('email')?.setValue(tp.email || '');
+          group.get('signatureBase64')?.setValue(tp.signatureBase64 || '');
+        });
+      } else {
+        this.addTrainedPerson();
       }
     });
   }
@@ -302,6 +304,32 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       }
     }
 
+    // Build trained persons array with signatures
+    const trainedPersons: DocumentTrainedPersonDto[] = [];
+    const pads = this.trainedPersonSignaturePads?.toArray() || [];
+    for (let i = 0; i < this.trainedPersonsArray.length; i++) {
+      const tpGroup = this.trainedPersonsArray.at(i).value;
+
+      // Only add if has any data
+      if (tpGroup.trainedPersonName || tpGroup.jobFunction || tpGroup.phone || tpGroup.email) {
+        let sig = tpGroup.signatureBase64 || '';
+        // Capture signature from pad if available and not empty
+        if (pads[i] && !pads[i].isEmpty()) {
+          sig = pads[i].getSignatureImage();
+        }
+
+        trainedPersons.push({
+          id: tpGroup.id || null,
+          trainedPersonName: tpGroup.trainedPersonName || '',
+          jobFunction: tpGroup.jobFunction || '',
+          phone: tpGroup.phone || '',
+          email: tpGroup.email || '',
+          signatureBase64: sig,
+          sortOrder: i
+        });
+      }
+    }
+
     const dto: any = {
       id: this.id || null,
       customerId: form.customerControl?.id || null,
@@ -312,12 +340,9 @@ export class DocumentDataFormComponent implements OnInit, AfterViewInit {
       monthOfWarrantyHandPieces: form.monthOfWarrantyHandPieces,
       numberOfContract: form.numberOfContract,
       signatureDate: form.signatureDate,
-      trainedPerson: form.trainedPerson,
-      jobFunction: form.jobFunction,
-      phone: form.phone,
-      email: form.email,
       contactPerson: form.contactPerson,
-      equipments: equipments
+      equipments: equipments,
+      trainedPersons: trainedPersons
     };
 
     if (this.signaturePadComponent && !this.signaturePadComponent.isEmpty()) {

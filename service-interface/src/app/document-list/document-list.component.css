@@ -21,6 +21,10 @@
   overflow: hidden;
 }
 
+table {
+  width: 100%;
+}
+
 .search-bar {
   display: flex;
   gap: 16px;

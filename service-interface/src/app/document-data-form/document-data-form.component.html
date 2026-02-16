@@ -25,14 +25,22 @@
       </mat-form-field>
     </div>
 
-    <div class="col2">
-      <label for="contractDate" class="form-label">Contract Date</label>
-      <input type="text" id="contractDate" #contractDateInput class="form-control" placeholder="dd/mm/yyyy" autocomplete="off" [formControl]="contractDateControl">
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Contract Date</mat-label>
+        <input matInput [matDatepicker]="contractPicker" [(ngModel)]="contractDate" [ngModelOptions]="{standalone: true}" (dateChange)="onContractDateChange($event)">
+        <mat-datepicker-toggle matSuffix [for]="contractPicker"></mat-datepicker-toggle>
+        <mat-datepicker #contractPicker [touchUi]="isMobile"></mat-datepicker>
+      </mat-form-field>
     </div>
 
-    <div class="col2">
-      <label for="signatureDate" class="form-label">Signature Date</label>
-      <input type="text" id="signatureDate" #signatureDateInput class="form-control" placeholder="dd/mm/yyyy" autocomplete="off" [formControl]="signatureDateControl">
+    <div class="col">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Signature Date</mat-label>
+        <input matInput [matDatepicker]="signPicker" [(ngModel)]="signatureDate" [ngModelOptions]="{standalone: true}" (dateChange)="onSignatureDateChange($event)">
+        <mat-datepicker-toggle matSuffix [for]="signPicker"></mat-datepicker-toggle>
+        <mat-datepicker #signPicker [touchUi]="isMobile"></mat-datepicker>
+      </mat-form-field>
     </div>
 
     <div class="col">
@@ -102,38 +110,60 @@
   </div>
 
   <!-- ========================= -->
-  <!-- SECTION 3: TRAINING + CONTACT -->
+  <!-- SECTION 3: TRAINED PERSONS (DYNAMIC) -->
   <!-- ========================= -->
-  <h3 class="subtitle">Training Information</h3>
-  <div class="section">
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Trained Person</mat-label>
-        <input matInput formControlName="trainedPerson">
-      </mat-form-field>
+  <div class="trained-person-section">
+    <div class="trained-person-header">
+      <h3 class="subtitle">Training Information</h3>
+      <button mat-mini-fab color="primary" (click)="addTrainedPerson()" type="button" class="add-equipment-btn">
+        <mat-icon>add</mat-icon>
+      </button>
     </div>
 
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Job Function</mat-label>
-        <input matInput formControlName="jobFunction">
-      </mat-form-field>
-    </div>
+    <div formArrayName="trainedPersons">
+      <ng-container *ngFor="let tp of trainedPersonsArray.controls; let i = index">
+        <div class="trained-person-row" [formGroupName]="i">
+          <div class="trained-person-fields">
+            <mat-form-field appearance="fill" class="trained-person-field">
+              <mat-label>Trained Person {{ i + 1 }}</mat-label>
+              <input matInput formControlName="trainedPersonName">
+            </mat-form-field>
 
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone">
-      </mat-form-field>
-    </div>
+            <mat-form-field appearance="fill" class="trained-person-field">
+              <mat-label>Job Function</mat-label>
+              <input matInput formControlName="jobFunction">
+            </mat-form-field>
 
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email">
-      </mat-form-field>
-    </div>
+            <mat-form-field appearance="fill" class="trained-person-field">
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone">
+            </mat-form-field>
 
+            <mat-form-field appearance="fill" class="trained-person-field">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email">
+            </mat-form-field>
+
+            <button mat-icon-button color="warn" (click)="removeTrainedPerson(i)" type="button"
+                    class="remove-equipment-btn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+
+          <div class="trained-person-signature">
+            <span class="signature-label">Signature:</span>
+            <app-signature-pad #trainedPersonSignaturePad></app-signature-pad>
+            <button mat-stroked-button type="button" color="warn" (click)="clearTrainedPersonSignature(i)" class="clear-sig-btn">
+              Clear Signature
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- CONTACT PERSON (separate) -->
+  <div class="section" style="margin-top: 20px;">
     <div class="col">
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Contact Person</mat-label>

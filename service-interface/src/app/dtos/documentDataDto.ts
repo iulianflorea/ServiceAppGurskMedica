@@ -7,6 +7,16 @@ export interface DocumentEquipmentDto {
   sortOrder?: number;
 }
 
+export interface DocumentTrainedPersonDto {
+  id?: number;
+  trainedPersonName?: string;
+  jobFunction?: string;
+  phone?: string;
+  email?: string;
+  signatureBase64?: string;
+  sortOrder?: number;
+}
+
 export class DocumentDataDto {
   id?: number;
   customerName?: string;
@@ -14,14 +24,11 @@ export class DocumentDataDto {
   monthOfWarranty?: number;
   monthOfWarrantyHandPieces?: number;
   numberOfContract?: string;
-  trainedPerson?: string;
-  jobFunction?: string;
-  phone?: string;
   contactPerson?: string;
   customerId?: number;
   contractDate?: string;
   signatureDate?: string;
-  email?: string;
   signatureBase64?: string;
   equipments?: DocumentEquipmentDto[];
+  trainedPersons?: DocumentTrainedPersonDto[];
 }

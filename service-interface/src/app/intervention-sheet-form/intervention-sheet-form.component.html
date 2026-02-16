@@ -87,17 +87,12 @@
         </div>
       </div>
 
-      <div class="mb-3">
-        <label for="dateIntervention" class="form-label">Data intervenției</label>
-        <input
-          type="text"
-          id="dateIntervention"
-          #dateInput
-          class="form-control"
-          placeholder="dd/mm/yyyy"
-          autocomplete="off"
-        >
-      </div>
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Data intervenției</mat-label>
+        <input matInput [matDatepicker]="interventionDatePicker" [(ngModel)]="selectedDateOfIntervention" [ngModelOptions]="{standalone: true}" (dateChange)="onDateChange($event)">
+        <mat-datepicker-toggle matSuffix [for]="interventionDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #interventionDatePicker [touchUi]="isMobile"></mat-datepicker>
+      </mat-form-field>
       <div class="form-button">
         <button mat-raised-button color="primary" type="submit">Save
           <mat-icon>save</mat-icon>

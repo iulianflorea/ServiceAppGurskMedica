@@ -36,6 +36,7 @@ export class EditAttendanceDialogComponent implements OnInit {
 
   form: FormGroup;
   isLoading = false;
+  isMobile = window.innerWidth <= 768;
   attendance: AttendanceDto;
 
   hours: string[] = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));

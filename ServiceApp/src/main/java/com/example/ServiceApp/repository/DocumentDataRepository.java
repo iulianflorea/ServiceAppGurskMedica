@@ -18,6 +18,7 @@ public interface DocumentDataRepository extends JpaRepository<DocumentData, Long
                 LEFT JOIN t.customer c
                 LEFT JOIN t.equipments eq
                 LEFT JOIN eq.equipment e
+                LEFT JOIN t.trainedPersons tp
                 WHERE
                     :keyword IS NULL OR :keyword = '' OR (
                         LOWER(COALESCE(c.name, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
@@ -28,10 +29,10 @@ public interface DocumentDataRepository extends JpaRepository<DocumentData, Long
                         LOWER(COALESCE(eq.productCode, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
                         LOWER(COALESCE(eq.serialNumber, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
 
-                        LOWER(COALESCE(t.trainedPerson, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-                        LOWER(COALESCE(t.jobFunction, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-                        LOWER(COALESCE(t.phone, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-                        LOWER(COALESCE(t.email, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                        LOWER(COALESCE(tp.trainedPersonName, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                        LOWER(COALESCE(tp.jobFunction, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                        LOWER(COALESCE(tp.phone, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+                        LOWER(COALESCE(tp.email, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
                         LOWER(COALESCE(t.contactPerson, '')) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
 
                         CAST(t.monthOfWarranty AS string) LIKE CONCAT('%', :keyword, '%') OR
