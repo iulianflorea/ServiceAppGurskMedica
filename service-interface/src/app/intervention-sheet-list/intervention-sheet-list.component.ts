@@ -56,7 +56,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
   keyword: string = '';
   // searchResult: InterventionSheetDto[] = [];
-  selectedDate: Date = new Date();
+  selectedDate: Date | null = null;
 
 
 
@@ -94,6 +94,7 @@ export class InterventionSheetListComponent implements AfterViewInit {
   }
 
   saveDate() {
+    if (!this.selectedDate) return;
     this.selectedDate.setMinutes(this.selectedDate.getMinutes() - this.selectedDate.getTimezoneOffset());
     const savedDate = this.selectedDate.toISOString().substring(0, 10);
     console.log('Data selectată:', savedDate);

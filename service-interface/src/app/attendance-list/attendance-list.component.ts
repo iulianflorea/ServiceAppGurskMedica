@@ -23,7 +23,7 @@ import { UserDto } from '../dtos/userDto';
 import { ManualAttendanceDialogComponent } from '../manual-attendance-dialog/manual-attendance-dialog.component';
 import { EditAttendanceDialogComponent } from '../edit-attendance-dialog/edit-attendance-dialog.component';
 import { PasswordResetDialogComponent } from '../password-reset-dialog/password-reset-dialog.component';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-attendance-list',
@@ -202,7 +202,7 @@ export class AttendanceListComponent implements OnInit {
   openManualAttendanceDialog() {
     const dialogRef = this.dialog.open(ManualAttendanceDialogComponent, {
       width: this.isMobile ? '95vw' : '500px',
-      data: { users: this.users }
+      data: { users: this.users, isAdmin: this.isAdmin }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -286,7 +286,7 @@ export class AttendanceListComponent implements OnInit {
   editAttendance(attendance: AttendanceDto) {
     const dialogRef = this.dialog.open(EditAttendanceDialogComponent, {
       width: this.isMobile ? '95vw' : '500px',
-      data: { attendance }
+      data: { attendance, isAdmin: this.isAdmin }
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -102,6 +102,25 @@ public class AttendanceController {
                 .body(pdfBytes);
     }
 
+    @PostMapping("/manual")
+    public ResponseEntity<AttendanceDto> createMyManualAttendance(
+            HttpServletRequest request,
+            @RequestBody ManualAttendanceDto manualAttendanceDto) {
+        String email = extractEmailFromRequest(request);
+        AttendanceDto attendance = attendanceService.createMyManualAttendance(email, manualAttendanceDto);
+        return ResponseEntity.ok(attendance);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AttendanceDto> updateMyAttendance(
+            HttpServletRequest request,
+            @PathVariable Long id,
+            @RequestBody AttendanceDto attendanceDto) {
+        String email = extractEmailFromRequest(request);
+        AttendanceDto updated = attendanceService.updateMyAttendance(email, id, attendanceDto);
+        return ResponseEntity.ok(updated);
+    }
+
     // ==================== ADMIN ENDPOINTS ====================
 
     @GetMapping("/admin/all")

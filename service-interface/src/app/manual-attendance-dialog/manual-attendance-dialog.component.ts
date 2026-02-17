@@ -37,6 +37,7 @@ export class ManualAttendanceDialogComponent implements OnInit {
 
   form: FormGroup;
   users: UserDto[] = [];
+  isAdmin = false;
   isLoading = false;
   isMobile = window.innerWidth <= 768;
 
@@ -44,13 +45,14 @@ export class ManualAttendanceDialogComponent implements OnInit {
     private fb: FormBuilder,
     private attendanceService: AttendanceService,
     private dialogRef: MatDialogRef<ManualAttendanceDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { users: UserDto[] }
+    @Inject(MAT_DIALOG_DATA) public data: { users: UserDto[], isAdmin: boolean }
   ) {
+    this.isAdmin = data?.isAdmin || false;
     this.form = this.fb.group({
-      userId: [null, Validators.required],
-      date: [new Date(), Validators.required],
+      userId: [null, this.isAdmin ? Validators.required : []],
+      date: [null, Validators.required],
       checkInHour: ['09', Validators.required],
-      checkInMinute: ['00', Validators.required],
+      checkInMinute: ['30', Validators.required],
       checkOutHour: ['18', Validators.required],
       checkOutMinute: ['00', Validators.required],
       notes: ['']
@@ -88,7 +90,11 @@ export class ManualAttendanceDialogComponent implements OnInit {
       notes: formValue.notes
     };
 
-    this.attendanceService.createManualAttendance(dto).subscribe({
+    const request$ = this.isAdmin
+      ? this.attendanceService.createManualAttendance(dto)
+      : this.attendanceService.createMyManualAttendance(dto);
+
+    request$.subscribe({
       next: () => {
         this.isLoading = false;
         this.dialogRef.close(true);

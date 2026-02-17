@@ -60,7 +60,10 @@ public class InterventionSheetMapper {
 
     private String getEmployeeName(InterventionSheet interventionSheet) {
         User employee = interventionSheet.getEmployee();
-        return (employee != null) ? employee.getFirstname() : null;
+        if (employee == null) return null;
+        String first = employee.getFirstname() != null ? employee.getFirstname() : "";
+        String last = employee.getLastname() != null ? employee.getLastname() : "";
+        return (first + " " + last).trim();
     }
 
     private String getEquipmentName(InterventionSheet interventionSheet) {

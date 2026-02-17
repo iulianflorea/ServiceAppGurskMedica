@@ -40,6 +40,10 @@ public interface AttendanceService {
 
     AttendanceDto updateAttendance(Long id, AttendanceDto attendanceDto);
 
+    AttendanceDto createMyManualAttendance(String userEmail, ManualAttendanceDto manualAttendanceDto);
+
+    AttendanceDto updateMyAttendance(String userEmail, Long id, AttendanceDto attendanceDto);
+
     void deleteAttendance(Long id);
 
     byte[] generateAllEmployeesExcelReport(LocalDate startDate, LocalDate endDate);

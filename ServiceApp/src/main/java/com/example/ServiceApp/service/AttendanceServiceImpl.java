@@ -328,6 +328,61 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    public AttendanceDto createMyManualAttendance(String userEmail, ManualAttendanceDto manualAttendanceDto) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Attendance attendance = Attendance.builder()
+                .user(user)
+                .date(manualAttendanceDto.getDate())
+                .checkInTime(manualAttendanceDto.getCheckInTime())
+                .checkOutTime(manualAttendanceDto.getCheckOutTime())
+                .notes(manualAttendanceDto.getNotes())
+                .isManual(true)
+                .build();
+
+        if (attendance.getCheckOutTime() != null) {
+            calculateHours(attendance);
+        }
+
+        Attendance saved = attendanceRepository.save(attendance);
+        return attendanceMapper.toDto(saved);
+    }
+
+    @Override
+    public AttendanceDto updateMyAttendance(String userEmail, Long id, AttendanceDto attendanceDto) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Attendance attendance = attendanceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Attendance not found"));
+
+        if (!attendance.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Nu aveți permisiunea să editați acest pontaj");
+        }
+
+        if (attendanceDto.getDate() != null) {
+            attendance.setDate(attendanceDto.getDate());
+        }
+        if (attendanceDto.getCheckInTime() != null) {
+            attendance.setCheckInTime(attendanceDto.getCheckInTime());
+        }
+        if (attendanceDto.getCheckOutTime() != null) {
+            attendance.setCheckOutTime(attendanceDto.getCheckOutTime());
+        }
+        if (attendanceDto.getNotes() != null) {
+            attendance.setNotes(attendanceDto.getNotes());
+        }
+
+        if (attendance.getCheckInTime() != null && attendance.getCheckOutTime() != null) {
+            calculateHours(attendance);
+        }
+
+        Attendance saved = attendanceRepository.save(attendance);
+        return attendanceMapper.toDto(saved);
+    }
+
+    @Override
     public AttendanceDto updateAttendance(Long id, AttendanceDto attendanceDto) {
         Attendance attendance = attendanceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Attendance not found"));

@@ -8,7 +8,7 @@ import {
   WorkScheduleDto,
   AttendanceReportDto
 } from '../dtos/attendanceDto';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +79,18 @@ export class AttendanceService {
       headers: this.getAuthHeaders(),
       params,
       responseType: 'blob'
+    });
+  }
+
+  createMyManualAttendance(dto: ManualAttendanceDto): Observable<AttendanceDto> {
+    return this.http.post<AttendanceDto>(`${this.apiUrl}/manual`, dto, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  updateMyAttendance(id: number, dto: AttendanceDto): Observable<AttendanceDto> {
+    return this.http.put<AttendanceDto>(`${this.apiUrl}/${id}`, dto, {
+      headers: this.getAuthHeaders()
     });
   }
 

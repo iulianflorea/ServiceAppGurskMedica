@@ -107,7 +107,7 @@ export class InterventionSheetFormComponent implements OnInit {
         this.customerSelected = response.customerId;
         this.customerControl.setValue(response.customerName);
         this.employeeSelected = response.employeeId;
-        this.employeeControl.setValue(response.employeeName);
+        this.employeeControl.setValue(response.employeeId);
         this.equipmentSelected = response.equipmentId;
         this.equipmentControl.setValue(response.equipmentName);
         this.typeOfInterventionSelected = response.typeOfIntervention;
@@ -180,7 +180,7 @@ export class InterventionSheetFormComponent implements OnInit {
       engineerNote: this.engineerNote,
       equipmentId: this.equipmentList.find(eq => eq.model === this.equipmentControl.value)?.id,
       customerId: this.customerList.find(c => c.name === this.customerControl.value)?.id,
-      employeeId: this.employeeList.find(e => e.firstname === this.employeeControl.value)?.id,
+      employeeId: this.employeeControl.value,
       signatureBase64: this.signatureBase64
     };
 

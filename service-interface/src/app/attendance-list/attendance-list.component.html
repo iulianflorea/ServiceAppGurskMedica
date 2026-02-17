@@ -45,7 +45,7 @@
           <mat-icon>table_chart</mat-icon>
           Export toți (Excel)
         </button>
-        <button mat-raised-button color="accent" (click)="openManualAttendanceDialog()" *ngIf="isAdmin">
+        <button mat-raised-button color="accent" (click)="openManualAttendanceDialog()">
           <mat-icon>add</mat-icon>
           Adaugă manual
         </button>
@@ -129,7 +129,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acțiuni</th>
           <td mat-cell *matCellDef="let row">
-            <button mat-icon-button color="primary" (click)="editAttendance(row)" matTooltip="Editează" *ngIf="isAdmin">
+            <button mat-icon-button color="primary" (click)="editAttendance(row)" matTooltip="Editează">
               <mat-icon>edit</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="deleteAttendance(row)" matTooltip="Șterge" *ngIf="isAdmin">
@@ -172,11 +172,11 @@
             <mat-icon color="primary">edit</mat-icon>
           </div>
         </mat-card-content>
-        <mat-card-actions *ngIf="isAdmin">
+        <mat-card-actions>
           <button mat-button color="primary" (click)="editAttendance(row)">
             <mat-icon>edit</mat-icon> Editează
           </button>
-          <button mat-button color="warn" (click)="deleteAttendance(row)">
+          <button mat-button color="warn" (click)="deleteAttendance(row)" *ngIf="isAdmin">
             <mat-icon>delete</mat-icon> Șterge
           </button>
         </mat-card-actions>

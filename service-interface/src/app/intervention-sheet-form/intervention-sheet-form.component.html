@@ -23,12 +23,11 @@
         <!-- EMPLOYEE -->
         <mat-form-field appearance="fill" class="w-full">
           <mat-label>Angajat</mat-label>
-          <input type="text" matInput [matAutocomplete]="employeeAuto" [formControl]="employeeControl">
-          <mat-autocomplete #employeeAuto="matAutocomplete">
-            <mat-option *ngFor="let employee of filteredEmployees | async" [value]="employee.firstname">
-              {{ employee.firstname }}
+          <mat-select [formControl]="employeeControl">
+            <mat-option *ngFor="let employee of employeeList" [value]="employee.id">
+              {{ employee.firstname }} {{ employee.lastname }}
             </mat-option>
-          </mat-autocomplete>
+          </mat-select>
         </mat-form-field>
 
         <!-- EQUIPMENT -->
@@ -45,12 +44,11 @@
         <!-- TYPE OF INTERVENTION -->
         <mat-form-field appearance="fill" class="w-full">
           <mat-label>Tip intervenție</mat-label>
-          <input type="text" matInput [matAutocomplete]="typeAuto" [formControl]="typeControl">
-          <mat-autocomplete #typeAuto="matAutocomplete">
-            <mat-option *ngFor="let type of filteredTypes | async" [value]="type">
+          <mat-select [formControl]="typeControl">
+            <mat-option *ngFor="let type of typeOfInterventionList" [value]="type">
               {{ type }}
             </mat-option>
-          </mat-autocomplete>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field>

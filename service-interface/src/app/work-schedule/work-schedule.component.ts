@@ -10,7 +10,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
-
 import { AttendanceService } from '../services/attendance.service';
 import { WorkScheduleDto } from '../dtos/attendanceDto';
 

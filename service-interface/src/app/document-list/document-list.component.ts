@@ -34,7 +34,7 @@ export class DocumentListComponent implements OnInit {
   loading = false;
   documents2 = new MatTableDataSource<DocumentDataDto>(this.documents);
   keyword: string = '';
-  selectedDate: Date = new Date();
+  selectedDate: Date | null = null;
   isMobile: boolean = false;
 
   constructor(

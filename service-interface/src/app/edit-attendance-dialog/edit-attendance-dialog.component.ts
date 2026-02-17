@@ -38,6 +38,7 @@ export class EditAttendanceDialogComponent implements OnInit {
   isLoading = false;
   isMobile = window.innerWidth <= 768;
   attendance: AttendanceDto;
+  isAdmin = false;
 
   hours: string[] = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
   minutes: string[] = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
@@ -46,9 +47,10 @@ export class EditAttendanceDialogComponent implements OnInit {
     private fb: FormBuilder,
     private attendanceService: AttendanceService,
     private dialogRef: MatDialogRef<EditAttendanceDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { attendance: AttendanceDto }
+    @Inject(MAT_DIALOG_DATA) public data: { attendance: AttendanceDto, isAdmin: boolean }
   ) {
     this.attendance = data.attendance;
+    this.isAdmin = data?.isAdmin || false;
     this.form = this.fb.group({
       date: [null, Validators.required],
       checkInHour: ['09', Validators.required],
@@ -113,7 +115,11 @@ export class EditAttendanceDialogComponent implements OnInit {
       notes: formValue.notes
     };
 
-    this.attendanceService.updateAttendance(this.attendance.id, dto).subscribe({
+    const request$ = this.isAdmin
+      ? this.attendanceService.updateAttendance(this.attendance.id!, dto)
+      : this.attendanceService.updateMyAttendance(this.attendance.id!, dto);
+
+    request$.subscribe({
       next: () => {
         this.isLoading = false;
         this.dialogRef.close(true);

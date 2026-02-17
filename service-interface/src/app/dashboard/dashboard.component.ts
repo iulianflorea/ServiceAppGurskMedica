@@ -95,9 +95,10 @@ export class DashboardComponent implements AfterViewInit {
   }
 
 
-  selectedDate: Date = new Date();
+  selectedDate: Date | null = null;
 
   saveDate() {
+    if (!this.selectedDate) return;
     this.selectedDate.setMinutes(this.selectedDate.getMinutes() - this.selectedDate.getTimezoneOffset());
     const savedDate = this.selectedDate.toISOString().substring(0, 10);
     console.log('Data selectată:', savedDate);
