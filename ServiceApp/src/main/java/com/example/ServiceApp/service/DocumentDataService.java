@@ -207,10 +207,13 @@ public class DocumentDataService {
         return DocumentDataMapper.toDto(updated);
     }
 
+    @Transactional
     public boolean delete(Long id) {
         if (!documentDataRepository.existsById(id)) {
             return false;
         }
+        documentEquipmentRepository.deleteByDocumentDataId(id);
+        documentTrainedPersonRepository.deleteByDocumentDataId(id);
         documentDataRepository.deleteById(id);
         return true;
     }

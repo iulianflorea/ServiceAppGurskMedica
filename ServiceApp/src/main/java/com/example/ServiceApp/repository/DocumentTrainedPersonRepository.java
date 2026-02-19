@@ -14,6 +14,8 @@ public interface DocumentTrainedPersonRepository extends JpaRepository<DocumentT
 
     List<DocumentTrainedPerson> findByDocumentDataIdOrderBySortOrderAsc(Long documentDataId);
 
+    void deleteByDocumentDataId(Long documentDataId);
+
     @Modifying
     @Query("DELETE FROM DocumentTrainedPerson e WHERE e.id IN :ids")
     void deleteAllByIdIn(@Param("ids") List<Long> ids);
