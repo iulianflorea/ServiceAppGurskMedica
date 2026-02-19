@@ -1,7 +1,7 @@
 /* ── Wrapper — fixed floating plate ────────────────────────────── */
 .form-wrapper {
   position: fixed;
-  top: 150px;
+  top: 200px;
   left: 20px;
   right: 20px;
   bottom: 50px;

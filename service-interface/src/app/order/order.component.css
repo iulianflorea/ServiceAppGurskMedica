@@ -1,14 +1,49 @@
-.product-row {
-  display: grid;
-  grid-template-columns: 1fr 160px;
-  gap: 0 1rem;
+.order-section-header {
+  display: flex;
   align-items: center;
-  margin-bottom: 4px;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
 }
 
-.product-field,
+.order-section-header .erp-section-title {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.product-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 0;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(63, 81, 181, 0.02);
+  margin-bottom: 8px;
+}
+
+.product-row-index {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3f51b5;
+  background: rgba(63, 81, 181, 0.1);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 16px;
+}
+
+.product-field {
+  flex: 1;
+  min-width: 180px;
+}
+
 .quantity-field {
-  width: 100%;
+  width: 120px;
+  flex-shrink: 0;
 }
 
 .pdf-upload {
@@ -25,6 +60,12 @@
 
 @media (max-width: 600px) {
   .product-row {
-    grid-template-columns: 1fr;
+    flex-wrap: wrap;
+  }
+
+  .product-field,
+  .quantity-field {
+    width: 100%;
+    flex: none;
   }
 }

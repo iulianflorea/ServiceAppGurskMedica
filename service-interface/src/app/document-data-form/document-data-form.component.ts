@@ -6,6 +6,7 @@ import {Observable, forkJoin, startWith, map} from 'rxjs';
 import {SignaturePadComponent} from '../signature-pad/signature-pad.component';
 import {environment} from "../../environments/environment.prod";
 import {DocumentEquipmentDto, DocumentTrainedPersonDto} from "../dtos/documentDataDto";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 interface CustomerDto {
   id: number;
@@ -47,7 +48,8 @@ export class DocumentDataFormComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -365,5 +367,30 @@ export class DocumentDataFormComponent implements OnInit {
 
   cancel(): void {
     window.history.back();
+  }
+
+  downloadDocx(id: number, type: string): void {
+    this.loading = true;
+    this.http.get(`${environment.apiUrl}/documents/export/${id}/${type}`, { responseType: 'blob' })
+      .subscribe({
+        next: (blob) => {
+          const fileName = `${type}_${id}.docx`;
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          this.loading = false;
+          this.snackBar.open(`Documentul ${type} a fost generat cu succes.`, 'OK', { duration: 3000 });
+        },
+        error: (err) => {
+          console.error('Eroare la generarea documentului DOCX:', err);
+          this.loading = false;
+          this.snackBar.open('Eroare la generarea fișierului DOCX.', 'Închide', { duration: 3000 });
+        }
+      });
   }
 }

@@ -3,6 +3,9 @@
   <!-- ERP Header -->
   <div class="erp-header">
     <div class="erp-header-left">
+      <button mat-icon-button routerLink="/intervention-sheet-list" class="back-btn" type="button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
       <div class="erp-title">
         <span class="erp-breadcrumb">Comenzi</span>
         <span class="erp-name">Facturare</span>
@@ -45,14 +48,22 @@
 
       <!-- Section: Produse -->
       <div class="erp-section">
-        <div class="erp-section-title">Produse</div>
+        <div class="order-section-header">
+          <div class="erp-section-title">Produse</div>
+          <button mat-icon-button color="primary" type="button"
+                  (click)="addProduct()" matTooltip="Adaugă produs">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
 
         <div formArrayName="products">
           <div *ngFor="let group of productsFormArray.controls; let i = index"
                [formGroupName]="i" class="product-row">
 
+            <span class="product-row-index">{{ i + 1 }}</span>
+
             <mat-form-field appearance="outline" class="product-field">
-              <mat-label>Produs {{ i + 1 }}</mat-label>
+              <mat-label>Produs</mat-label>
               <input type="text" matInput [matAutocomplete]="productAuto"
                      [value]="getProductName(group.get('productId')?.value)"
                      (input)="onProductInput(i, $event)">
@@ -66,8 +77,14 @@
 
             <mat-form-field appearance="outline" class="quantity-field">
               <mat-label>Cantitate</mat-label>
-              <input type="number" matInput formControlName="quantity" min="0">
+              <input type="number" matInput formControlName="quantity" min="1">
             </mat-form-field>
+
+            <button mat-icon-button color="warn" type="button"
+                    (click)="removeProduct(i)" [disabled]="productsFormArray.length <= 1"
+                    matTooltip="Șterge">
+              <mat-icon>delete</mat-icon>
+            </button>
 
           </div>
         </div>

@@ -13,6 +13,24 @@
       </div>
     </div>
     <div class="erp-header-actions">
+      <ng-container *ngIf="id">
+        <button mat-icon-button color="primary" matTooltip="PV Predare-Primire" type="button"
+                (click)="downloadDocx(id, 'predare')" [disabled]="loading">
+          <mat-icon>assignment</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" matTooltip="Certificat Garanție" type="button"
+                (click)="downloadDocx(id, 'garantie')" [disabled]="loading">
+          <mat-icon>verified</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" matTooltip="PV Punere în Funcțiune" type="button"
+                (click)="downloadDocx(id, 'punere')" [disabled]="loading">
+          <mat-icon>build_circle</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" matTooltip="PV Recepție" type="button"
+                (click)="downloadDocx(id, 'receptie')" [disabled]="loading">
+          <mat-icon>done_all</mat-icon>
+        </button>
+      </ng-container>
       <button mat-raised-button color="primary" type="button" (click)="saveDocument()" [disabled]="loading">
         <mat-icon>save</mat-icon> {{ loading ? 'Salvând...' : 'Salvează' }}
       </button>
@@ -24,108 +42,123 @@
 
   <!-- Scrollable body -->
   <div class="form-body-scroll">
-    <div class="doc-form-body">
+    <div class="erp-form-body">
 
-      <!-- ========================= -->
-      <!-- SECTION 1: CLIENT + CONTRACT -->
-      <!-- ========================= -->
-      <div class="section">
-        <div class="col">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Customer</mat-label>
-            <input matInput [matAutocomplete]="autoCustomer" formControlName="customerControl">
+      <!-- ══════════════════════════════════════════ -->
+      <!-- SECTION 1: CLIENT & CONTRACT               -->
+      <!-- ══════════════════════════════════════════ -->
+      <div class="erp-section">
+        <div class="erp-section-title">Informații Client & Contract</div>
+        <div class="erp-fields-grid">
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Client</mat-label>
+            <input matInput [matAutocomplete]="autoCustomer" formControlName="customerControl"
+                   placeholder="Caută client...">
+            <mat-icon matSuffix>person</mat-icon>
             <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer">
               <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
                 {{ customer.name }}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-        </div>
 
-        <div class="col">
-          <mat-form-field appearance="fill" class="w-full">
+          <mat-form-field appearance="outline" class="field-half">
             <mat-label>CUI</mat-label>
             <input matInput formControlName="cui">
+            <mat-icon matSuffix>badge</mat-icon>
           </mat-form-field>
-        </div>
 
-        <div class="col">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Contract Date</mat-label>
-            <input matInput [matDatepicker]="contractPicker" [(ngModel)]="contractDate" [ngModelOptions]="{standalone: true}" (dateChange)="onContractDateChange($event)">
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Număr Contract</mat-label>
+            <input matInput formControlName="numberOfContract">
+            <mat-icon matSuffix>tag</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Dată Contract</mat-label>
+            <input matInput [matDatepicker]="contractPicker"
+                   [(ngModel)]="contractDate" [ngModelOptions]="{standalone: true}"
+                   (dateChange)="onContractDateChange($event)">
             <mat-datepicker-toggle matSuffix [for]="contractPicker"></mat-datepicker-toggle>
             <mat-datepicker #contractPicker [touchUi]="isMobile"></mat-datepicker>
           </mat-form-field>
-        </div>
 
-        <div class="col">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Signature Date</mat-label>
-            <input matInput [matDatepicker]="signPicker" [(ngModel)]="signatureDate" [ngModelOptions]="{standalone: true}" (dateChange)="onSignatureDateChange($event)">
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Dată Semnătură</mat-label>
+            <input matInput [matDatepicker]="signPicker"
+                   [(ngModel)]="signatureDate" [ngModelOptions]="{standalone: true}"
+                   (dateChange)="onSignatureDateChange($event)">
             <mat-datepicker-toggle matSuffix [for]="signPicker"></mat-datepicker-toggle>
             <mat-datepicker #signPicker [touchUi]="isMobile"></mat-datepicker>
           </mat-form-field>
-        </div>
 
-        <div class="col">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Contract Number</mat-label>
-            <input matInput formControlName="numberOfContract">
-          </mat-form-field>
-        </div>
-
-        <div class="col">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Months of Warranty</mat-label>
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Garanție (luni)</mat-label>
             <input matInput type="number" formControlName="monthOfWarranty">
+            <mat-icon matSuffix>verified</mat-icon>
           </mat-form-field>
-        </div>
 
-        <div class="col">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Months of Warranty Hand Pieces</mat-label>
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Garanție Piese de Mână (luni)</mat-label>
             <input matInput type="number" formControlName="monthOfWarrantyHandPieces">
+            <mat-icon matSuffix>verified</mat-icon>
           </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Persoană de Contact</mat-label>
+            <input matInput formControlName="contactPerson">
+            <mat-icon matSuffix>contact_phone</mat-icon>
+          </mat-form-field>
+
         </div>
       </div>
 
-      <!-- ========================= -->
-      <!-- SECTION 2: EQUIPMENTS (DYNAMIC) -->
-      <!-- ========================= -->
-      <div class="equipment-section">
-        <div class="equipment-header">
-          <h3 class="subtitle">Equipments</h3>
-          <button mat-mini-fab color="primary" (click)="addEquipment()" type="button" class="add-equipment-btn">
-            <mat-icon>add</mat-icon>
+      <!-- ══════════════════════════════════════════ -->
+      <!-- SECTION 2: ECHIPAMENTE                     -->
+      <!-- ══════════════════════════════════════════ -->
+      <div class="erp-section">
+        <div class="doc-section-header">
+          <div class="erp-section-title">Echipamente</div>
+          <button mat-icon-button color="primary" (click)="addEquipment()" type="button"
+                  matTooltip="Adaugă echipament">
+            <mat-icon>add_circle</mat-icon>
           </button>
         </div>
 
         <div formArrayName="equipments">
           <ng-container *ngFor="let equipment of equipmentsArray.controls; let i = index">
-            <div class="equipment-row" [formGroupName]="i">
-              <mat-form-field appearance="fill" class="equipment-field">
-                <mat-label>Equipment {{ i + 1 }}</mat-label>
-                <input matInput [matAutocomplete]="autoEq" formControlName="equipmentControl">
-              </mat-form-field>
+            <div class="doc-row-card" [formGroupName]="i">
+              <span class="doc-row-index">{{ i + 1 }}</span>
+              <div class="doc-row-fields">
 
-              <mat-autocomplete #autoEq="matAutocomplete" [displayWith]="displayEquipment">
-                <mat-option *ngFor="let e of filteredEquipmentOptions[i] | async" [value]="e">
-                  {{ e.model }}
-                </mat-option>
-              </mat-autocomplete>
+                <mat-form-field appearance="outline" class="field-eq-name">
+                  <mat-label>Echipament</mat-label>
+                  <input matInput [matAutocomplete]="autoEq" formControlName="equipmentControl"
+                         placeholder="Caută echipament...">
+                  <mat-icon matSuffix>medical_services</mat-icon>
+                </mat-form-field>
 
-              <mat-form-field appearance="fill" class="equipment-field">
-                <mat-label>Product Code</mat-label>
-                <input matInput formControlName="productCode">
-              </mat-form-field>
+                <mat-autocomplete #autoEq="matAutocomplete" [displayWith]="displayEquipment">
+                  <mat-option *ngFor="let e of filteredEquipmentOptions[i] | async" [value]="e">
+                    {{ e.model }}
+                  </mat-option>
+                </mat-autocomplete>
 
-              <mat-form-field appearance="fill" class="equipment-field">
-                <mat-label>Serial Number</mat-label>
-                <input matInput formControlName="serialNumber">
-              </mat-form-field>
+                <mat-form-field appearance="outline" class="field-eq-code">
+                  <mat-label>Cod Produs</mat-label>
+                  <input matInput formControlName="productCode">
+                </mat-form-field>
 
+                <mat-form-field appearance="outline" class="field-eq-serial">
+                  <mat-label>Număr Serie</mat-label>
+                  <input matInput formControlName="serialNumber">
+                  <mat-icon matSuffix>qr_code</mat-icon>
+                </mat-form-field>
+
+              </div>
               <button mat-icon-button color="warn" (click)="removeEquipment(i)" type="button"
-                      [disabled]="equipmentsArray.length <= 1" class="remove-equipment-btn">
+                      [disabled]="equipmentsArray.length <= 1" matTooltip="Șterge">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -133,70 +166,68 @@
         </div>
       </div>
 
-      <!-- ========================= -->
-      <!-- SECTION 3: TRAINED PERSONS (DYNAMIC) -->
-      <!-- ========================= -->
-      <div class="trained-person-section">
-        <div class="trained-person-header">
-          <h3 class="subtitle">Training Information</h3>
-          <button mat-mini-fab color="primary" (click)="addTrainedPerson()" type="button" class="add-equipment-btn">
-            <mat-icon>add</mat-icon>
+      <!-- ══════════════════════════════════════════ -->
+      <!-- SECTION 3: PERSOANE INSTRUITE              -->
+      <!-- ══════════════════════════════════════════ -->
+      <div class="erp-section">
+        <div class="doc-section-header">
+          <div class="erp-section-title">Persoane Instruite</div>
+          <button mat-icon-button color="primary" (click)="addTrainedPerson()" type="button"
+                  matTooltip="Adaugă persoană">
+            <mat-icon>add_circle</mat-icon>
           </button>
         </div>
 
         <div formArrayName="trainedPersons">
           <ng-container *ngFor="let tp of trainedPersonsArray.controls; let i = index">
-            <div class="trained-person-row" [formGroupName]="i">
-              <div class="trained-person-fields">
-                <mat-form-field appearance="fill" class="trained-person-field">
-                  <mat-label>Trained Person {{ i + 1 }}</mat-label>
+            <div class="doc-trained-card" [formGroupName]="i">
+
+              <div class="doc-trained-fields">
+                <span class="doc-row-index">{{ i + 1 }}</span>
+
+                <mat-form-field appearance="outline" class="field-tp">
+                  <mat-label>Nume</mat-label>
                   <input matInput formControlName="trainedPersonName">
+                  <mat-icon matSuffix>person</mat-icon>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill" class="trained-person-field">
-                  <mat-label>Job Function</mat-label>
+                <mat-form-field appearance="outline" class="field-tp">
+                  <mat-label>Funcție</mat-label>
                   <input matInput formControlName="jobFunction">
                 </mat-form-field>
 
-                <mat-form-field appearance="fill" class="trained-person-field">
-                  <mat-label>Phone</mat-label>
+                <mat-form-field appearance="outline" class="field-tp">
+                  <mat-label>Telefon</mat-label>
                   <input matInput formControlName="phone">
+                  <mat-icon matSuffix>phone</mat-icon>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill" class="trained-person-field">
+                <mat-form-field appearance="outline" class="field-tp">
                   <mat-label>Email</mat-label>
                   <input matInput formControlName="email">
+                  <mat-icon matSuffix>email</mat-icon>
                 </mat-form-field>
 
                 <button mat-icon-button color="warn" (click)="removeTrainedPerson(i)" type="button"
-                        class="remove-equipment-btn">
+                        matTooltip="Șterge">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
 
-              <div class="trained-person-signature">
-                <span class="signature-label">Signature:</span>
+              <div class="doc-trained-signature">
+                <span class="doc-sig-label">Semnătură</span>
                 <app-signature-pad #trainedPersonSignaturePad></app-signature-pad>
-                <button mat-stroked-button type="button" color="warn" (click)="clearTrainedPersonSignature(i)" class="clear-sig-btn">
-                  Clear Signature
+                <button mat-stroked-button type="button" color="warn" (click)="clearTrainedPersonSignature(i)">
+                  <mat-icon>clear</mat-icon> Șterge
                 </button>
               </div>
+
             </div>
           </ng-container>
         </div>
       </div>
 
-      <!-- CONTACT PERSON -->
-      <div class="section" style="margin-top: 20px;">
-        <div class="col">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Contact Person</mat-label>
-            <input matInput formControlName="contactPerson">
-          </mat-form-field>
-        </div>
-      </div>
-
-    </div><!-- /doc-form-body -->
+    </div><!-- /erp-form-body -->
   </div><!-- /form-body-scroll -->
 
 </div>

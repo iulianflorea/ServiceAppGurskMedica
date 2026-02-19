@@ -18,6 +18,7 @@ export class CustomerFormComponent implements OnInit {
   address: any;
   telephone: any;
   email: any;
+  contactPerson: any;
 
   customerForm: FormGroup = new FormGroup({
     name: new FormControl,
@@ -43,6 +44,7 @@ export class CustomerFormComponent implements OnInit {
         this.address = response.address;
         this.telephone = response.telephone;
         this.email = response.email;
+        this.contactPerson = response.contactPerson;
       })
     }
 
@@ -55,7 +57,8 @@ export class CustomerFormComponent implements OnInit {
       cui: this.cui,
       address: this.address,
       telephone: this.telephone,
-      email: this.email
+      email: this.email,
+      contactPerson: this.contactPerson
     }
     this.httpClient.post(`${environment.apiUrl}/customer`, customer).subscribe((response) => {
       console.log(response);

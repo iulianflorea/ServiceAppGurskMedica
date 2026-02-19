@@ -9,11 +9,12 @@
   </div>
 
   <div class="list-page-header">
-    <form (submit)="search()" class="search-bar">
-      <mat-form-field>
+    <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <mat-form-field appearance="outline">
         <mat-label>Search</mat-label>
         <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}" />
       </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">Search</button>
     </form>
   </div>
 
@@ -52,27 +53,23 @@
           <td mat-cell *matCellDef="let element"> {{element.email}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="contactPerson">
+          <th mat-header-cell *matHeaderCellDef>Persoană de Contact</th>
+          <td mat-cell *matCellDef="let element"> {{element.contactPerson}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="delete">
-          <th mat-header-cell *matHeaderCellDef>Delete</th>
-          <td mat-cell *matCellDef="let element">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
             <button mat-icon-button color="warn" aria-label="Delete" (click)="delete(element)">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="update">
-          <th mat-header-cell *matHeaderCellDef>Update</th>
-          <td mat-cell *matCellDef="let element">
-            <a routerLink="/customer-form/{{element.id}}">
-              <button mat-raised-button color="primary">Edit
-              <mat-icon>edit</mat-icon>
-              </button>
-            </a>
-        </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            (click)="navigateToForm(row.id)" style="cursor: pointer;"></tr>
       </table>
 
       <mat-paginator [pageSizeOptions]="[20, 30, 50]"

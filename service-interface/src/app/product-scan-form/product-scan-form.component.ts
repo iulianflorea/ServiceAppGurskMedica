@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
 import {environment} from "../../environments/environment.prod";
 
 @Component({
@@ -14,11 +15,15 @@ export class ProductScanFormComponent {
 
   @ViewChild('quantityInput') quantityInput!: ElementRef;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private location: Location) {
     this.scanForm = this.fb.group({
       quantity: [null, [Validators.required]], // fără valoare implicită
       productCode: ['', Validators.required]
     });
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   onSubmit(): void {

@@ -10,12 +10,12 @@
 
   <div class="list-page-header">
     <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Search</mat-label>
         <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Caută după dată</mat-label>
         <input matInput [matDatepicker]="datePicker" [(ngModel)]="selectedDate" [ngModelOptions]="{standalone: true}" (dateChange)="onDateChange($event)">
         <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>

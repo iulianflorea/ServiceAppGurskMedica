@@ -47,16 +47,7 @@ export class OrderComponent implements OnInit {
       deliveryAddress: [null]   // inițial null
     });
 
-    // Adaugă 6 produse goale
-    for (let i = 0; i < 6; i++) {
-      this.productsFormArray.push(
-        this.fb.group({
-          productId: [null],
-          quantity: [0]
-        })
-      );
-      this.filteredProducts.push([]);
-    }
+    this.addProduct();
 
     this.loadClients();
     this.loadProducts();
@@ -64,6 +55,18 @@ export class OrderComponent implements OnInit {
 
   get productsFormArray(): FormArray {
     return this.orderForm.get('products') as FormArray;
+  }
+
+  addProduct(): void {
+    this.productsFormArray.push(this.fb.group({ productId: [null], quantity: [1] }));
+    this.filteredProducts.push([...this.products]);
+  }
+
+  removeProduct(index: number): void {
+    if (this.productsFormArray.length > 1) {
+      this.productsFormArray.removeAt(index);
+      this.filteredProducts.splice(index, 1);
+    }
   }
 
   // === CLIENT ===

@@ -50,6 +50,7 @@ public class CustomerService {
         customerToBeSaved.setAddress(customerDto.getAddress());
         customerToBeSaved.setTelephone(customerDto.getTelephone());
         customerToBeSaved.setEmail(customerDto.getEmail());
+        customerToBeSaved.setContactPerson(customerDto.getContactPerson());
         Customer customerSaved = customerRepository.save(customerToBeSaved);
         return customerMapper.toDto(customerSaved);
     }

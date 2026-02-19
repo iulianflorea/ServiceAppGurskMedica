@@ -15,4 +15,5 @@ public class CustomerDto {
     private String address;
     private String telephone;
     private String email;
+    private String contactPerson;
 }

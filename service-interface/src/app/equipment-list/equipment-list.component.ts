@@ -8,6 +8,7 @@ import {ProductDto} from "../dtos/productDto";
 import {Observable} from "rxjs";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {environment} from "../../environments/environment.prod";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-equipment-list',
@@ -16,7 +17,7 @@ import {environment} from "../../environments/environment.prod";
 })
 export class EquipmentListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'model', 'productCode', 'producerId', 'update', 'delete'];
+  displayedColumns: string[] = ['id', 'model', 'productCode', 'producerId', 'delete'];
   dataSource: EquipmentDto[] = [];
   dataSource2 = new MatTableDataSource<EquipmentDto>(this.dataSource);
   keyword: string = '';
@@ -27,7 +28,11 @@ export class EquipmentListComponent implements AfterViewInit {
     this.dataSource2.paginator = this.paginator;
   }
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private router: Router) {
+  }
+
+  navigateToForm(id: number): void {
+    this.router.navigate(['/equipment-form', id]);
   }
 
   ngOnInit() {

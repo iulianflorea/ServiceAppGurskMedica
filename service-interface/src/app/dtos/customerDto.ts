@@ -5,4 +5,5 @@ export class CustomerDto {
   address?: string;
   telephone?: string;
   email?: string;
+  contactPerson?: string;
 }

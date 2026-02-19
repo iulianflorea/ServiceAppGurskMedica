@@ -12,10 +12,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 @media screen and (max-width: 768px) {
-  .intervention-container {
-    padding: 10px;
-  }
-
   .search-bar {
     flex-direction: column;
     align-items: stretch;
@@ -136,14 +132,28 @@ $dark-theme: mat.define-dark-theme((
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
-  --card-color: rgba(255, 255, 255, 0.65); /* alb semi-transparent */
+  --card-color: rgba(255, 255, 255, 0.9); /* alb semi-transparent */
   --border-color: rgba(0, 0, 0, 0.1);
+  --container-top: 200px;
+}
+
+@media (max-width: 1400px) {
+  :root { --container-top: 230px; }
+}
+@media (max-width: 1100px) {
+  :root { --container-top: 280px; }
+}
+@media (max-width: 900px) {
+  :root { --container-top: 320px; }
+}
+@media (max-width: 768px) {
+  :root { --container-top: 105px; }
 }
 
 .dark-theme {
   --bg-color: #121212;
   --text-color: #ffffff;
-  --card-color: rgba(0, 0, 0, 0.65); /* negru semi-transparent */
+  --card-color: rgba(0, 0, 0, 0.9); /* negru semi-transparent */
   --border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -201,10 +211,10 @@ $dark-theme: mat.define-dark-theme((
 /* ── ERP Form Page ─────────────────────────────────────────────── */
 .form-page-container {
   position: fixed;
-  top: 150px;
-  left: 20px;
-  right: 20px;
-  bottom: 50px;
+  top: var(--container-top);
+  left: 100px;
+  right: 100px;
+  bottom: 100px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -343,13 +353,10 @@ $dark-theme: mat.define-dark-theme((
 
 @media (max-width: 768px) {
   .form-page-container {
-    position: static;
-    margin: 10px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
     border-radius: 14px;
-    bottom: unset;
-    top: unset;
-    left: unset;
-    right: unset;
   }
 }
 
@@ -364,6 +371,9 @@ $dark-theme: mat.define-dark-theme((
   color: #fff;
   flex-wrap: wrap;
   gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  align-self: stretch;
 }
 
 .list-erp-title {
@@ -375,9 +385,9 @@ $dark-theme: mat.define-dark-theme((
 /* ── Floating List Container ─────────────────────────────────── */
 .list-page-container {
   position: fixed;
-  top: 150px;
-  left: 20px;
-  right: 20px;
+  top: var(--container-top);
+  left: 60px;
+  right: 60px;
   bottom: 50px;
   display: flex;
   flex-direction: column;
@@ -392,6 +402,15 @@ $dark-theme: mat.define-dark-theme((
   padding: 20px 20px 0;
 }
 
+.list-page-header .search-bar {
+  width: 100%;
+}
+
+.list-page-header .search-bar mat-form-field {
+  flex: 1;
+  min-width: 180px;
+}
+
 .list-scroll-body {
   flex: 1;
   min-height: 0;
@@ -399,24 +418,30 @@ $dark-theme: mat.define-dark-theme((
   overflow-x: auto;
   padding: 8px 20px 20px;
 }
+//@media (max-width: 768px) {
+//  .list-scroll-body-mobile {
+//    flex: 1;
+//    min-height: 0;
+//    overflow-y: auto;
+//    overflow-x: auto;
+//    padding: 8px 20px 20px;
+//  }
+//}
 
 @media (max-width: 768px) {
   .list-page-container {
-    position: static;
-    margin: 10px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
     border-radius: 14px;
-    bottom: unset;
-    top: unset;
-    left: unset;
-    right: unset;
   }
 
   .list-page-header {
-    padding: 14px 14px 0;
+    padding: 10px 10px 0;
   }
 
   .list-scroll-body {
-    padding: 8px 14px 14px;
+    padding: 6px 10px 10px;
     overflow-x: auto;
   }
 }
@@ -427,7 +452,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
-  padding-top: 200px;
+  padding-top: var(--container-top);
 }
 
 .mat-card {
@@ -455,6 +480,13 @@ input, textarea, select {
 
 ::ng-deep .mat-input-element {
   background: transparent !important;
+}
+
+/* ── Table row hover ─────────────────────────────────────────── */
+tr.mat-row:hover,
+tr.mat-mdc-row:hover {
+  background: rgba(63, 81, 181, 0.06);
+  transition: background 0.15s ease;
 }
 
 /* Mobile nav menu styling */

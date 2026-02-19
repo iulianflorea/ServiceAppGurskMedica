@@ -7,6 +7,7 @@ import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {environment} from "../../environments/environment.prod";
+import {Router} from "@angular/router";
 
 export interface DocumentData {
   id: number;
@@ -39,8 +40,13 @@ export class DocumentListComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
+
+  navigateToForm(id: number): void {
+    this.router.navigate(['/documents-form', id]);
+  }
 
   ngOnInit(): void {
     this.loadDocuments();
@@ -103,31 +109,6 @@ export class DocumentListComponent implements OnInit {
     this.http.put(`${environment.apiUrl}/documents/update`, documentDataDto).subscribe((response) => {
       console.log(response);
     })
-  }
-
-  downloadDocx(id: number, type: string): void {
-    this.loading = true;
-    this.http.get(`${environment.apiUrl}/documents/export/${id}/${type}`, { responseType: 'blob' })
-      .subscribe({
-        next: (blob) => {
-          const fileName = `${type}_${id}.docx`;
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
-          this.loading = false;
-          this.snackBar.open(`Documentul ${type} a fost generat cu succes.`, 'OK', { duration: 3000 });
-        },
-        error: (err) => {
-          console.error('Eroare la generarea documentului DOCX:', err);
-          this.loading = false;
-          this.snackBar.open('Eroare la generarea fișierului DOCX.', 'Închide', { duration: 3000 });
-        }
-      });
   }
 
   searchCocuments(keyword: string): Observable<DocumentDataDto[]> {

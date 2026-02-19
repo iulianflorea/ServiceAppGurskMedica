@@ -59,6 +59,12 @@
             <mat-icon matSuffix>email</mat-icon>
           </mat-form-field>
 
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Persoană de Contact</mat-label>
+            <input matInput [(ngModel)]="contactPerson" [ngModelOptions]="{standalone: true}"/>
+            <mat-icon matSuffix>contact_phone</mat-icon>
+          </mat-form-field>
+
         </div>
       </div>
 
