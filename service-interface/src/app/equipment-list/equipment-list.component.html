@@ -1,69 +1,75 @@
 
-<div class="equipment-container">
-  <h2>Equipments</h2>
+<div class="equipment-container list-page-container">
+  <div class="list-erp-header">
+    <span class="list-erp-title">Equipments</span>
+    <button mat-mini-fab color="accent" routerLink="/equipment-form"
+            aria-label="Add new equipment">
+      <mat-icon>plus_one</mat-icon>
+    </button>
+  </div>
 
-  <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
-    <mat-form-field>
-      <mat-label>Search</mat-label>
-      <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
-    </mat-form-field>
-<!--    <button mat-button type="submit">Search</button>-->
-  </form>
-
-  <button mat-mini-fab color="accent" routerLink="/equipment-form"
-          aria-label="Add new intervention sheet" class="add-button">
-    <mat-icon>plus_one</mat-icon>
-  </button>
+  <div class="list-page-header">
+    <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
+      </mat-form-field>
+    </form>
+  </div>
 
   <!-- Table -->
-  <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource2">
+  <div class="list-scroll-body">
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource2">
 
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> No.</th>
-        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-      </ng-container>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> No.</th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="model">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element"> {{element.model}} </td>
-      </ng-container>
+        <ng-container matColumnDef="model">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element"> {{element.model}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="productCode">
-        <th mat-header-cell *matHeaderCellDef>Product Code</th>
-        <td mat-cell *matCellDef="let element"> {{element.productCode}} </td>
-      </ng-container>
+        <ng-container matColumnDef="productCode">
+          <th mat-header-cell *matHeaderCellDef>Product Code</th>
+          <td mat-cell *matCellDef="let element"> {{element.productCode}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="producerId">
-        <th mat-header-cell *matHeaderCellDef>Producer</th>
-        <td mat-cell *matCellDef="let element"> {{element.producerName}} </td>
-      </ng-container>
+        <ng-container matColumnDef="producerId">
+          <th mat-header-cell *matHeaderCellDef>Producer</th>
+          <td mat-cell *matCellDef="let element"> {{element.producerName}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef>Delete</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="warn" aria-label="Example icon button with a delete icon" (click)="delete(element)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="update">
-        <th mat-header-cell *matHeaderCellDef>Update</th>
-        <td mat-cell *matCellDef="let element">
-          <a routerLink="/equipment-form/{{element.id}}">
-            <button mat-raised-button mat-raised-button color="primary">Edit
-            <mat-icon>edit</mat-icon>
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef>Delete</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="warn" aria-label="Delete" (click)="delete(element)">
+              <mat-icon>delete</mat-icon>
             </button>
-          </a>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+          </td>
+        </ng-container>
 
-    <mat-paginator [pageSizeOptions]="[20, 30, 50]"
-                   showFirstLastButtons
-                   aria-label="Select page of periodic elements">
-    </mat-paginator>
+        <ng-container matColumnDef="update">
+          <th mat-header-cell *matHeaderCellDef>Update</th>
+          <td mat-cell *matCellDef="let element">
+            <a routerLink="/equipment-form/{{element.id}}">
+              <button mat-raised-button color="primary">Edit
+              <mat-icon>edit</mat-icon>
+              </button>
+            </a>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[20, 30, 50]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
   </div>
 </div>
 

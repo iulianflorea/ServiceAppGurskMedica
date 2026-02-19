@@ -1,45 +1,68 @@
-<div class="form-wrapper">
-  <div class="container">
-    <div class="title-form">
-      <h1 *ngIf="!id">Create customer</h1>
-      <h1 *ngIf="id">Update customer</h1>
+<div class="form-page-container">
+
+  <!-- ERP Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <button mat-icon-button routerLink="/customer-list" class="back-btn" type="button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Clienți</span>
+        <span class="erp-name">{{ id ? (name || 'Client') : 'Client Nou' }}</span>
+        <span *ngIf="id" class="erp-id-badge">#{{ id }}</span>
+      </div>
     </div>
+    <div class="erp-header-actions">
+      <button mat-raised-button color="primary" type="button" (click)="saveCustomer()">
+        <mat-icon>save</mat-icon> Salvează
+      </button>
+      <button mat-stroked-button color="warn" routerLink="/customer-list" type="button">
+        <mat-icon>cancel</mat-icon> Anulează
+      </button>
+    </div>
+  </div>
 
-    <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="form-layout">
-      <div class="form">
-        <mat-form-field class="w-full">
-          <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
+  <!-- Scrollable body -->
+  <div class="form-body-scroll">
+    <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="erp-form-body">
 
-        <mat-form-field class="w-full">
-          <mat-label>CUI</mat-label>
-          <input matInput [(ngModel)]="cui" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
+      <div class="erp-section">
+        <div class="erp-section-title">Informații Client</div>
+        <div class="erp-fields-grid">
 
-        <mat-form-field class="w-full">
-          <mat-label>Address</mat-label>
-          <input matInput [(ngModel)]="address" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
 
-        <mat-form-field class="w-full">
-          <mat-label>Telephone</mat-label>
-          <input matInput [(ngModel)]="telephone" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>CUI</mat-label>
+            <input matInput [(ngModel)]="cui" [ngModelOptions]="{standalone: true}"/>
+          </mat-form-field>
 
-        <mat-form-field class="w-full">
-          <mat-label>E-mail Address</mat-label>
-          <input matInput [(ngModel)]="email" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-        <div class="form-button">
-          <button mat-raised-button color="primary" type="submit">Save
-            <mat-icon>save</mat-icon>
-          </button>
-          <button mat-raised-button color="warn" type="submit" routerLink="/customer-list">cancel
-            <mat-icon>cancel</mat-icon>
-          </button>
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Telephone</mat-label>
+            <input matInput [(ngModel)]="telephone" [ngModelOptions]="{standalone: true}"/>
+            <mat-icon matSuffix>phone</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Address</mat-label>
+            <input matInput [(ngModel)]="address" [ngModelOptions]="{standalone: true}"/>
+            <mat-icon matSuffix>location_on</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>E-mail Address</mat-label>
+            <input matInput [(ngModel)]="email" [ngModelOptions]="{standalone: true}"/>
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+
         </div>
       </div>
+
     </form>
   </div>
+
 </div>

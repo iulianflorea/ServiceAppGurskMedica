@@ -1,37 +1,27 @@
-.sql-container {
-  margin-top: 100px;
+.section-actions {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 20px;
-}
-
-.sql {
-  border: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  font-family: Arial, sans-serif;
-  width: auto;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 20px;
-}
-
-.sql-form {
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form-button{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  margin-top: 2rem;
   gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
 }
 
+.import-form {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #f44336;
+  font-weight: 500;
+}
+
+.admin-warning mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

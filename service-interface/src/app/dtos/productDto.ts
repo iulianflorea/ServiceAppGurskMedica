@@ -8,6 +8,7 @@ export class ProductDto {
   producerName?: string;
   price?: number;
   priceWithVAT?: number;
+  imageName?: string;
 
   constructor(id: number, name: string, cod: string, quantity: number, producer: number, priceWithVAT:number, producerName: string) {
     this.id = id;

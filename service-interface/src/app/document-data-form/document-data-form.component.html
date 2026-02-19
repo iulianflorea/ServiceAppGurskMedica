@@ -1,189 +1,202 @@
-<div class="document-container" [formGroup]="documentForm">
-  <h2 *ngIf="!id" class="title">Document Data Form</h2>
-  <h2 *ngIf="id" class="title">Update Document</h2>
+<div class="form-page-container" [formGroup]="documentForm">
 
-  <!-- ========================= -->
-  <!-- SECTION 1: CLIENT + CONTRACT -->
-  <!-- ========================= -->
-  <div class="section">
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Customer</mat-label>
-        <input matInput [matAutocomplete]="autoCustomer" formControlName="customerControl">
-        <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer">
-          <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
-            {{ customer.name }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+  <!-- ERP Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <button mat-icon-button routerLink="/documents" class="back-btn" type="button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Documente</span>
+        <span class="erp-name">{{ id ? 'Actualizare Document' : 'Document Nou' }}</span>
+        <span *ngIf="id" class="erp-id-badge">#{{ id }}</span>
+      </div>
     </div>
-
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>CUI</mat-label>
-        <input matInput formControlName="cui">
-      </mat-form-field>
-    </div>
-
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Contract Date</mat-label>
-        <input matInput [matDatepicker]="contractPicker" [(ngModel)]="contractDate" [ngModelOptions]="{standalone: true}" (dateChange)="onContractDateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="contractPicker"></mat-datepicker-toggle>
-        <mat-datepicker #contractPicker [touchUi]="isMobile"></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Signature Date</mat-label>
-        <input matInput [matDatepicker]="signPicker" [(ngModel)]="signatureDate" [ngModelOptions]="{standalone: true}" (dateChange)="onSignatureDateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="signPicker"></mat-datepicker-toggle>
-        <mat-datepicker #signPicker [touchUi]="isMobile"></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Contract Number</mat-label>
-        <input matInput formControlName="numberOfContract">
-      </mat-form-field>
-    </div>
-
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Months of Warranty</mat-label>
-        <input matInput type="number" formControlName="monthOfWarranty">
-      </mat-form-field>
-    </div>
-
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Months of Warranty Hand Pieces</mat-label>
-        <input matInput type="number" formControlName="monthOfWarrantyHandPieces">
-      </mat-form-field>
+    <div class="erp-header-actions">
+      <button mat-raised-button color="primary" type="button" (click)="saveDocument()" [disabled]="loading">
+        <mat-icon>save</mat-icon> {{ loading ? 'Salvând...' : 'Salvează' }}
+      </button>
+      <button mat-stroked-button color="warn" type="button" (click)="cancel()">
+        <mat-icon>cancel</mat-icon> Anulează
+      </button>
     </div>
   </div>
 
-  <!-- ========================= -->
-  <!-- SECTION 2: EQUIPMENTS (DYNAMIC) -->
-  <!-- ========================= -->
-  <div class="equipment-section">
-    <div class="equipment-header">
-      <h3 class="subtitle">Equipments</h3>
-      <button mat-mini-fab color="primary" (click)="addEquipment()" type="button" class="add-equipment-btn">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
+  <!-- Scrollable body -->
+  <div class="form-body-scroll">
+    <div class="doc-form-body">
 
-    <div formArrayName="equipments">
-      <ng-container *ngFor="let equipment of equipmentsArray.controls; let i = index">
-        <div class="equipment-row" [formGroupName]="i">
-          <mat-form-field appearance="fill" class="equipment-field">
-            <mat-label>Equipment {{ i + 1 }}</mat-label>
-            <input matInput [matAutocomplete]="autoEq" formControlName="equipmentControl">
+      <!-- ========================= -->
+      <!-- SECTION 1: CLIENT + CONTRACT -->
+      <!-- ========================= -->
+      <div class="section">
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Customer</mat-label>
+            <input matInput [matAutocomplete]="autoCustomer" formControlName="customerControl">
+            <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayCustomer">
+              <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
+                {{ customer.name }}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
+        </div>
 
-          <mat-autocomplete #autoEq="matAutocomplete" [displayWith]="displayEquipment">
-            <mat-option *ngFor="let e of filteredEquipmentOptions[i] | async" [value]="e">
-              {{ e.model }}
-            </mat-option>
-          </mat-autocomplete>
-
-          <mat-form-field appearance="fill" class="equipment-field">
-            <mat-label>Product Code</mat-label>
-            <input matInput formControlName="productCode">
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>CUI</mat-label>
+            <input matInput formControlName="cui">
           </mat-form-field>
+        </div>
 
-          <mat-form-field appearance="fill" class="equipment-field">
-            <mat-label>Serial Number</mat-label>
-            <input matInput formControlName="serialNumber">
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Contract Date</mat-label>
+            <input matInput [matDatepicker]="contractPicker" [(ngModel)]="contractDate" [ngModelOptions]="{standalone: true}" (dateChange)="onContractDateChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="contractPicker"></mat-datepicker-toggle>
+            <mat-datepicker #contractPicker [touchUi]="isMobile"></mat-datepicker>
           </mat-form-field>
+        </div>
 
-          <button mat-icon-button color="warn" (click)="removeEquipment(i)" type="button"
-                  [disabled]="equipmentsArray.length <= 1" class="remove-equipment-btn">
-            <mat-icon>delete</mat-icon>
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Signature Date</mat-label>
+            <input matInput [matDatepicker]="signPicker" [(ngModel)]="signatureDate" [ngModelOptions]="{standalone: true}" (dateChange)="onSignatureDateChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="signPicker"></mat-datepicker-toggle>
+            <mat-datepicker #signPicker [touchUi]="isMobile"></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Contract Number</mat-label>
+            <input matInput formControlName="numberOfContract">
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Months of Warranty</mat-label>
+            <input matInput type="number" formControlName="monthOfWarranty">
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Months of Warranty Hand Pieces</mat-label>
+            <input matInput type="number" formControlName="monthOfWarrantyHandPieces">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- ========================= -->
+      <!-- SECTION 2: EQUIPMENTS (DYNAMIC) -->
+      <!-- ========================= -->
+      <div class="equipment-section">
+        <div class="equipment-header">
+          <h3 class="subtitle">Equipments</h3>
+          <button mat-mini-fab color="primary" (click)="addEquipment()" type="button" class="add-equipment-btn">
+            <mat-icon>add</mat-icon>
           </button>
         </div>
-      </ng-container>
-    </div>
-  </div>
 
-  <!-- ========================= -->
-  <!-- SECTION 3: TRAINED PERSONS (DYNAMIC) -->
-  <!-- ========================= -->
-  <div class="trained-person-section">
-    <div class="trained-person-header">
-      <h3 class="subtitle">Training Information</h3>
-      <button mat-mini-fab color="primary" (click)="addTrainedPerson()" type="button" class="add-equipment-btn">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
+        <div formArrayName="equipments">
+          <ng-container *ngFor="let equipment of equipmentsArray.controls; let i = index">
+            <div class="equipment-row" [formGroupName]="i">
+              <mat-form-field appearance="fill" class="equipment-field">
+                <mat-label>Equipment {{ i + 1 }}</mat-label>
+                <input matInput [matAutocomplete]="autoEq" formControlName="equipmentControl">
+              </mat-form-field>
 
-    <div formArrayName="trainedPersons">
-      <ng-container *ngFor="let tp of trainedPersonsArray.controls; let i = index">
-        <div class="trained-person-row" [formGroupName]="i">
-          <div class="trained-person-fields">
-            <mat-form-field appearance="fill" class="trained-person-field">
-              <mat-label>Trained Person {{ i + 1 }}</mat-label>
-              <input matInput formControlName="trainedPersonName">
-            </mat-form-field>
+              <mat-autocomplete #autoEq="matAutocomplete" [displayWith]="displayEquipment">
+                <mat-option *ngFor="let e of filteredEquipmentOptions[i] | async" [value]="e">
+                  {{ e.model }}
+                </mat-option>
+              </mat-autocomplete>
 
-            <mat-form-field appearance="fill" class="trained-person-field">
-              <mat-label>Job Function</mat-label>
-              <input matInput formControlName="jobFunction">
-            </mat-form-field>
+              <mat-form-field appearance="fill" class="equipment-field">
+                <mat-label>Product Code</mat-label>
+                <input matInput formControlName="productCode">
+              </mat-form-field>
 
-            <mat-form-field appearance="fill" class="trained-person-field">
-              <mat-label>Phone</mat-label>
-              <input matInput formControlName="phone">
-            </mat-form-field>
+              <mat-form-field appearance="fill" class="equipment-field">
+                <mat-label>Serial Number</mat-label>
+                <input matInput formControlName="serialNumber">
+              </mat-form-field>
 
-            <mat-form-field appearance="fill" class="trained-person-field">
-              <mat-label>Email</mat-label>
-              <input matInput formControlName="email">
-            </mat-form-field>
-
-            <button mat-icon-button color="warn" (click)="removeTrainedPerson(i)" type="button"
-                    class="remove-equipment-btn">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-
-          <div class="trained-person-signature">
-            <span class="signature-label">Signature:</span>
-            <app-signature-pad #trainedPersonSignaturePad></app-signature-pad>
-            <button mat-stroked-button type="button" color="warn" (click)="clearTrainedPersonSignature(i)" class="clear-sig-btn">
-              Clear Signature
-            </button>
-          </div>
+              <button mat-icon-button color="warn" (click)="removeEquipment(i)" type="button"
+                      [disabled]="equipmentsArray.length <= 1" class="remove-equipment-btn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-container>
         </div>
-      </ng-container>
-    </div>
-  </div>
+      </div>
 
-  <!-- CONTACT PERSON (separate) -->
-  <div class="section" style="margin-top: 20px;">
-    <div class="col">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Contact Person</mat-label>
-        <input matInput formControlName="contactPerson">
-      </mat-form-field>
-    </div>
-  </div>
+      <!-- ========================= -->
+      <!-- SECTION 3: TRAINED PERSONS (DYNAMIC) -->
+      <!-- ========================= -->
+      <div class="trained-person-section">
+        <div class="trained-person-header">
+          <h3 class="subtitle">Training Information</h3>
+          <button mat-mini-fab color="primary" (click)="addTrainedPerson()" type="button" class="add-equipment-btn">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
 
-  <!-- SIGNATURE PAD -->
-<!--  <h3 class="subtitle">Signature</h3>-->
-<!--  <app-signature-pad></app-signature-pad>-->
+        <div formArrayName="trainedPersons">
+          <ng-container *ngFor="let tp of trainedPersonsArray.controls; let i = index">
+            <div class="trained-person-row" [formGroupName]="i">
+              <div class="trained-person-fields">
+                <mat-form-field appearance="fill" class="trained-person-field">
+                  <mat-label>Trained Person {{ i + 1 }}</mat-label>
+                  <input matInput formControlName="trainedPersonName">
+                </mat-form-field>
 
-  <!-- ACTION BUTTONS -->
-  <div class="actions">
-    <button mat-raised-button color="primary" (click)="saveDocument()" [disabled]="loading">
-      {{ loading ? 'Saving...' : 'Save Document' }}
-      <mat-icon>save</mat-icon>
-    </button>
-    <button mat-raised-button color="warn" (click)="cancel()">Cancel
-      <mat-icon>cancel</mat-icon>
-    </button>
-  </div>
+                <mat-form-field appearance="fill" class="trained-person-field">
+                  <mat-label>Job Function</mat-label>
+                  <input matInput formControlName="jobFunction">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="trained-person-field">
+                  <mat-label>Phone</mat-label>
+                  <input matInput formControlName="phone">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="trained-person-field">
+                  <mat-label>Email</mat-label>
+                  <input matInput formControlName="email">
+                </mat-form-field>
+
+                <button mat-icon-button color="warn" (click)="removeTrainedPerson(i)" type="button"
+                        class="remove-equipment-btn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <div class="trained-person-signature">
+                <span class="signature-label">Signature:</span>
+                <app-signature-pad #trainedPersonSignaturePad></app-signature-pad>
+                <button mat-stroked-button type="button" color="warn" (click)="clearTrainedPersonSignature(i)" class="clear-sig-btn">
+                  Clear Signature
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- CONTACT PERSON -->
+      <div class="section" style="margin-top: 20px;">
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Contact Person</mat-label>
+            <input matInput formControlName="contactPerson">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div><!-- /doc-form-body -->
+  </div><!-- /form-body-scroll -->
+
 </div>

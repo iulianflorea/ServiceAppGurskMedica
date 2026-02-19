@@ -1,66 +1,104 @@
-<div class="order-container">
-  <div class="order">
-    <div class="title-form">
-      <h1>Facturare</h1>
+<div class="form-page-container">
+
+  <!-- ERP Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Comenzi</span>
+        <span class="erp-name">Facturare</span>
+      </div>
     </div>
+    <div class="erp-header-actions">
+      <button mat-raised-button color="primary" type="button" (click)="submitOrder()">
+        <mat-icon>send</mat-icon> Trimite comanda
+      </button>
+      <button mat-stroked-button color="warn" routerLink="/intervention-sheet-list" type="button">
+        <mat-icon>cancel</mat-icon> Anulează
+      </button>
+    </div>
+  </div>
 
-    <form [formGroup]="orderForm" (ngSubmit)="submitOrder()" class="order-form">
-      <mat-form-field appearance="fill" class="client-form">
-        <mat-label>Selecteaza Clientul</mat-label>
-        <input type="text" matInput [matAutocomplete]="clientAuto" [value]="getClientName(orderForm.get('clientId')?.value)" (input)="onClientInput($event)">
-        <mat-autocomplete #clientAuto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)">
-          <mat-option *ngFor="let client of filteredClients" [value]="client.id">
-            {{ client.name }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+  <!-- Scrollable body -->
+  <div class="form-body-scroll">
+    <form [formGroup]="orderForm" (ngSubmit)="submitOrder()" class="erp-form-body">
 
-      <hr/>
+      <!-- Section: Client -->
+      <div class="erp-section">
+        <div class="erp-section-title">Client</div>
+        <div class="erp-fields-grid">
 
-      <div formArrayName="products">
-        <div *ngFor="let group of productsFormArray.controls; let i = index" [formGroupName]="i">
-          <mat-form-field appearance="fill">
-            <mat-label>Produs</mat-label>
-            <input type="text" matInput [matAutocomplete]="productAuto" [value]="getProductName(group.get('productId')?.value)" (input)="onProductInput(i, $event)">
-            <mat-autocomplete #productAuto="matAutocomplete"
-                              (optionSelected)="onProductSelected(i, $event.option.value)">
-              <mat-option *ngFor="let product of filteredProducts[i]" [value]="product.id">
-                {{ product.name }} (stoc: {{ product.quantity }})
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Selectează Clientul</mat-label>
+            <input type="text" matInput [matAutocomplete]="clientAuto"
+                   [value]="getClientName(orderForm.get('clientId')?.value)"
+                   (input)="onClientInput($event)">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-autocomplete #clientAuto="matAutocomplete" (optionSelected)="onClientSelected($event.option.value)">
+              <mat-option *ngFor="let client of filteredClients" [value]="client.id">
+                {{ client.name }}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
 
-          <mat-form-field appearance="fill">
-            <mat-label>Cantitate</mat-label>
-            <input type="number" matInput formControlName="quantity" min="0" placeholder="Cantitate">
-          </mat-form-field>
         </div>
       </div>
-      <mat-checkbox [(ngModel)]="sameAddress" [ngModelOptions]="{standalone: true}">
-        Aceeași adresă cu adresa de facturare
-      </mat-checkbox>
-      <br>
 
-      <div>
-        <label for="pdfFile">Încarcă deviz PDF:</label>
-        <input type="file" id="pdfFile" (change)="onFileSelected($event)" accept="application/pdf" />
-      </div>
-      <br>
+      <!-- Section: Produse -->
+      <div class="erp-section">
+        <div class="erp-section-title">Produse</div>
 
-      <div *ngIf="!sameAddress">
-        <mat-form-field>
-          <mat-label>Adresa de livrare</mat-label>
-          <input matInput formControlName="deliveryAddress"/>
-        </mat-form-field>
+        <div formArrayName="products">
+          <div *ngFor="let group of productsFormArray.controls; let i = index"
+               [formGroupName]="i" class="product-row">
+
+            <mat-form-field appearance="outline" class="product-field">
+              <mat-label>Produs {{ i + 1 }}</mat-label>
+              <input type="text" matInput [matAutocomplete]="productAuto"
+                     [value]="getProductName(group.get('productId')?.value)"
+                     (input)="onProductInput(i, $event)">
+              <mat-autocomplete #productAuto="matAutocomplete"
+                                (optionSelected)="onProductSelected(i, $event.option.value)">
+                <mat-option *ngFor="let product of filteredProducts[i]" [value]="product.id">
+                  {{ product.name }} (stoc: {{ product.quantity }})
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quantity-field">
+              <mat-label>Cantitate</mat-label>
+              <input type="number" matInput formControlName="quantity" min="0">
+            </mat-form-field>
+
+          </div>
+        </div>
       </div>
-      <div class="form-button">
-        <button mat-raised-button color="primary" type="submit">Trimite comanda
-        <mat-icon>send</mat-icon>
-        </button>
-        <button mat-raised-button color="warn" routerLink="/intervention-sheet-list" type="submit">Cancel
-        <mat-icon>cancel</mat-icon>
-        </button>
+
+      <!-- Section: Livrare -->
+      <div class="erp-section">
+        <div class="erp-section-title">Livrare &amp; Deviz</div>
+        <div class="erp-fields-grid">
+
+          <div class="field-full">
+            <mat-checkbox [(ngModel)]="sameAddress" [ngModelOptions]="{standalone: true}">
+              Aceeași adresă cu adresa de facturare
+            </mat-checkbox>
+          </div>
+
+          <mat-form-field appearance="outline" class="field-full" *ngIf="!sameAddress">
+            <mat-label>Adresa de livrare</mat-label>
+            <input matInput formControlName="deliveryAddress"/>
+            <mat-icon matSuffix>location_on</mat-icon>
+          </mat-form-field>
+
+          <div class="field-full pdf-upload">
+            <label class="pdf-label">Încarcă deviz PDF:</label>
+            <input type="file" (change)="onFileSelected($event)" accept="application/pdf"/>
+          </div>
+
+        </div>
       </div>
+
     </form>
   </div>
+
 </div>

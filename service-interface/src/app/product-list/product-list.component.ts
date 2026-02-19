@@ -5,6 +5,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment.prod";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -14,7 +15,7 @@ import {environment} from "../../environments/environment.prod";
 })
 export class ProductListComponent implements AfterViewInit{
 
-  displayedColumns: string[] = ['id', 'image', 'name', 'cod', 'producer', 'priceWithVAT', 'quantity', 'update', 'delete'];
+  displayedColumns: string[] = ['id', 'image', 'name', 'cod', 'producer', 'priceWithVAT', 'quantity', 'delete'];
   dataSource: ProductDto[] = [];
   dataSource2 = new MatTableDataSource<ProductDto>(this.dataSource);
   keyword: string = '';
@@ -26,7 +27,7 @@ export class ProductListComponent implements AfterViewInit{
     this.dataSource2.paginator = this.paginator;
   }
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private router: Router) {
 
   }
 
@@ -38,11 +39,8 @@ export class ProductListComponent implements AfterViewInit{
     })
   }
 
-  update(product: ProductDto) {
-
-    this.httpClient.put(`${environment.apiUrl}/product/update`, product).subscribe((response) => {
-      console.log(response);
-    })
+  navigateToEdit(product: ProductDto) {
+    this.router.navigate(['/product-form', product.id]);
   }
 
   delete(product: ProductDto) {

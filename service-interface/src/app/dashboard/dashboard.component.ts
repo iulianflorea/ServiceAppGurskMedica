@@ -12,15 +12,8 @@ import {CommonModule, NgForOf, NgIf} from "@angular/common";
 import {MatInputModule} from "@angular/material/input";
 import {MatSort} from "@angular/material/sort";
 import {MatDatepickerModule} from "@angular/material/datepicker";
-import {PopUpTaskComponent} from "../pop-up-task/pop-up-task.component";
-import {MatCardModule} from "@angular/material/card";
-import {MatDialog} from "@angular/material/dialog";
-import {DocumentDialogComponent} from "../document-dialog/document-dialog.component";
-import {BreakpointObserver} from "@angular/cdk/layout";
 import {MatNativeDateModule} from "@angular/material/core";
 import {environment} from "../../environments/environment.prod";
-
-
 
 
 @Component({
@@ -39,9 +32,7 @@ import {environment} from "../../environments/environment.prod";
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    PopUpTaskComponent,
     ReactiveFormsModule,
-    MatCardModule,
     CommonModule,
     RouterModule,
   ],
@@ -52,18 +43,17 @@ import {environment} from "../../environments/environment.prod";
 })
 export class DashboardComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'dataOfExpireWarranty', 'yearsOfWarranty', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'view', 'documents'];
+  displayedColumns: string[] = ['id', 'typeOfIntervention', 'equipmentName', 'serialNumber', 'dateOfIntervention', 'dataOfExpireWarranty', 'yearsOfWarranty', 'customerName', 'employeeName', 'noticed', 'fixed', 'engineerNote', 'delete'];
   dataSource: InterventionSheetDto[] = [];
   dataSource2 = new MatTableDataSource<InterventionSheetDto>(this.dataSource);
   keyword: string = '';
-  searchResult: InterventionSheetDto[] = [];
-
-
-
+  selectedDate: Date | null = null;
+  isMobile: boolean = false;
 
   @Input() item: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
   ngAfterViewInit() {
     this.dataSource2.paginator = this.paginator;
     this.dataSource2.sort = this.sort;
@@ -75,116 +65,50 @@ export class DashboardComponent implements AfterViewInit {
     }
   }
 
-  constructor(private httpClient: HttpClient,
-              private router: Router,
-              private dialog: MatDialog,
-              private breakpointObserver: BreakpointObserver) {
-  }
-
-  selectedItem: any = null;
-  isModalOpen = false;
-  isMobile: boolean = false;
-
-  openModal(item: any) {
-    this.selectedItem = item;
-    this.isModalOpen = true;
-  }
-
-  closeModal() {
-    this.isModalOpen = false;
-  }
-
-
-  selectedDate: Date | null = null;
-
-  saveDate() {
-    if (!this.selectedDate) return;
-    this.selectedDate.setMinutes(this.selectedDate.getMinutes() - this.selectedDate.getTimezoneOffset());
-    const savedDate = this.selectedDate.toISOString().substring(0, 10);
-    console.log('Data selectată:', savedDate);
-  }
-
-
+  constructor(private httpClient: HttpClient, private router: Router) {}
 
   ngOnInit() {
     this.isMobile = window.innerWidth < 768;
     window.addEventListener('resize', () => {
       this.isMobile = window.innerWidth < 768;
     });
-    this.httpClient.get(`${environment.apiUrl}/intervention-sheet/employeeIntervention/` + localStorage.getItem("token")).subscribe((response) => {
-      console.log(response);
+    this.httpClient.get(`${environment.apiUrl}/intervention-sheet/employeeIntervention/` + localStorage.getItem('token')).subscribe((response) => {
       this.dataSource = response as InterventionSheetDto[];
       this.dataSource2.data = this.dataSource;
-    })
+    });
   }
-
 
   delete(interventionSheet: InterventionSheetDto) {
     const id = interventionSheet.id;
-    if (confirm("Sure you want to delete it?")) {
-      this.httpClient.delete("/api/intervention-sheet/" + id).subscribe((response) => {
-        console.log(response);
-        alert(" The intervention was deleted");
+    if (confirm('Sure you want to delete it?')) {
+      this.httpClient.delete(`${environment.apiUrl}/intervention-sheet/` + id).subscribe(() => {
+        alert('The intervention was deleted');
         this.ngOnInit();
-      })
+      });
     }
   }
 
-  getById(interventionSheet: InterventionSheetDto) {
-    const id = interventionSheet.id;
-    this.httpClient.get("/api/intervention-sheet/" + id).subscribe((response) => {
-      console.log(response);
-    })
+  navigateToEdit(intervention: InterventionSheetDto) {
+    this.router.navigate(['/intervention-sheet', intervention.id]);
   }
 
-  update(interventionSheet: InterventionSheetDto) {
-    this.httpClient.put("/api/intervention-sheet/update", interventionSheet).subscribe((response) => {
-      console.log(response);
-    })
-  }
-
-
-  // @ts-ignore
   searchInterventionSheet(keyword: string): Observable<InterventionSheetDto[]> {
     return this.httpClient.get<InterventionSheetDto[]>(`/api/intervention-sheet/search?keyword=${keyword}`);
   }
 
   search() {
-    this.searchResult = [];
-
     let finalKeyword = this.keyword;
 
-    // Dacă nu s-a scris nimic manual, dar s-a ales o dată, folosim data
     if (!finalKeyword && this.selectedDate) {
       const dateKeyword = new Date(this.selectedDate);
       dateKeyword.setMinutes(dateKeyword.getMinutes() - dateKeyword.getTimezoneOffset());
-      finalKeyword = dateKeyword.toISOString().substring(0, 10); // YYYY-MM-DD
+      finalKeyword = dateKeyword.toISOString().substring(0, 10);
     }
 
     if (finalKeyword) {
       this.searchInterventionSheet(finalKeyword).subscribe(data => {
-        console.log(data);
         this.dataSource2.data = data;
-        this.searchResult = data;
       });
     }
   }
-
-  openDocumentDialog(intervention: any): void {
-    const isMobile = this.breakpointObserver.isMatched('(max-width: 600px)');
-
-    this.dialog.open(DocumentDialogComponent, {
-      width: isMobile ? '95vw' : '60vw',   // pe mobil aproape full screen, pe desktop 80%
-      height: isMobile ? '90vh' : '80vh',
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      data: { intervention },
-      autoFocus: false,
-      restoreFocus: false,
-    });
-  }
-
-
 }
-
-

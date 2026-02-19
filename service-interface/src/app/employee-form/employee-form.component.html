@@ -1,26 +1,50 @@
-<div class="form-wrapper">
-  <div class="container">
-    <div class="title-form">
-      <h1 *ngIf="!id">Create employee</h1>
-      <h1 *ngIf="id">Update employee</h1>
+<div class="form-page-container">
+
+  <!-- ERP Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <button mat-icon-button routerLink="/employee-list" class="back-btn" type="button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Angajați</span>
+        <span class="erp-name">{{ id ? (name || 'Angajat') : 'Angajat Nou' }}</span>
+        <span *ngIf="id" class="erp-id-badge">#{{ id }}</span>
+      </div>
     </div>
+    <div class="erp-header-actions">
+      <button mat-raised-button color="primary" type="button" (click)="saveEmployee()">
+        <mat-icon>save</mat-icon> Salvează
+      </button>
+      <button mat-stroked-button color="warn" routerLink="/employee-list" type="button">
+        <mat-icon>cancel</mat-icon> Anulează
+      </button>
+    </div>
+  </div>
 
-    <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()" class="form-layout">
-      <div class="form">
-        <mat-form-field>
-          <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
+  <!-- Scrollable body -->
+  <div class="form-body-scroll">
+    <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()" class="erp-form-body">
 
-        <mat-form-field>
-          <mat-label>CNP</mat-label>
-          <input matInput [(ngModel)]="cnp" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-        <div class="form-button">
-          <button mat-raised-button mat-raised-button color="primary" type="submit">Save</button>
-          <button mat-raised-button mat-raised-button color="warn" type="submit" routerLink="/employee-list">cancel</button>
+      <div class="erp-section">
+        <div class="erp-section-title">Informații Angajat</div>
+        <div class="erp-fields-grid">
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
+            <mat-icon matSuffix>badge</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>CNP</mat-label>
+            <input matInput [(ngModel)]="cnp" [ngModelOptions]="{standalone: true}"/>
+          </mat-form-field>
+
         </div>
       </div>
+
     </form>
   </div>
+
 </div>

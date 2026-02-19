@@ -1,105 +1,232 @@
-<div class="form-wrapper">
-  <div class="container">
-    <div class="title-form">
-      <h1 *ngIf="id">Update intervention</h1>
-      <h1 *ngIf="!id">Create intervention</h1>
-    </div>
-
-    <form [formGroup]="interventionSheetForm" (ngSubmit)="saveInterventionSheet()" class="form-layout">
-
-      <!-- Stânga -->
-      <div class="form-left">
-
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Client</mat-label>
-          <input type="text" matInput [matAutocomplete]="customerAuto" [formControl]="customerControl">
-          <mat-autocomplete #customerAuto="matAutocomplete">
-            <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer.name">
-              {{ customer.name }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-
-        <!-- EMPLOYEE -->
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Angajat</mat-label>
-          <mat-select [formControl]="employeeControl">
-            <mat-option *ngFor="let employee of employeeList" [value]="employee.id">
-              {{ employee.firstname }} {{ employee.lastname }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- EQUIPMENT -->
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Echipament</mat-label>
-          <input type="text" matInput [matAutocomplete]="equipmentAuto" [formControl]="equipmentControl">
-          <mat-autocomplete #equipmentAuto="matAutocomplete">
-            <mat-option *ngFor="let equipment of filteredEquipment | async" [value]="equipment.model">
-              {{ equipment.model }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-
-        <!-- TYPE OF INTERVENTION -->
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Tip intervenție</mat-label>
-          <mat-select [formControl]="typeControl">
-            <mat-option *ngFor="let type of typeOfInterventionList" [value]="type">
-              {{ type }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Months of Warranty</mat-label>
-          <input matInput [(ngModel)]="yearsOfWarranty" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Serial Number</mat-label>
-          <input matInput [(ngModel)]="serialNumber" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-      </div>
-
-      <!-- Dreapta -->
-      <div class="form-right">
-        <mat-form-field>
-          <mat-label>Noticed</mat-label>
-          <input matInput [(ngModel)]="noticed" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Fixed</mat-label>
-          <input matInput [(ngModel)]="fixed" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Engineer Note</mat-label>
-          <input matInput [(ngModel)]="engineerNote" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-
-        <!-- Semnătura -->
-        <div class="signature-container">
-          <app-signature-pad></app-signature-pad>
-        </div>
-      </div>
-
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Data intervenției</mat-label>
-        <input matInput [matDatepicker]="interventionDatePicker" [(ngModel)]="selectedDateOfIntervention" [ngModelOptions]="{standalone: true}" (dateChange)="onDateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="interventionDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #interventionDatePicker [touchUi]="isMobile"></mat-datepicker>
-      </mat-form-field>
-      <div class="form-button">
-        <button mat-raised-button color="primary" type="submit">Save
-          <mat-icon>save</mat-icon>
-        </button>
-        <button mat-raised-button color="warn" type="submit" routerLink="/intervention-sheet-list">Cancel
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </div>
-    </form>
+<!-- ════ Photo Lightbox ════════════════════════════════════════════ -->
+<div class="lightbox-overlay" *ngIf="lightboxOpen" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="closeLightbox()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <img [src]="lightboxImageUrl" alt="fotografie" class="lightbox-image"/>
   </div>
 </div>
 
+
+<!-- ════ Main Page ════════════════════════════════════════════════ -->
+<div class="form-wrapper">
+
+  <!-- ERP Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <button mat-icon-button routerLink="/intervention-sheet-list" type="button" class="back-btn">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Intervenții</span>
+        <span class="erp-name">{{ id ? (customerControl.value || 'Intervenție') : 'Intervenție Nouă' }}</span>
+        <span *ngIf="id" class="erp-id-badge">#{{ id }}</span>
+      </div>
+    </div>
+    <div class="erp-header-actions">
+      <button *ngIf="id" mat-stroked-button type="button" (click)="generatePdf()" class="pdf-btn">
+        <mat-icon>picture_as_pdf</mat-icon> Generează PDF
+      </button>
+      <button mat-raised-button color="primary" type="button" (click)="saveInterventionSheet()">
+        <mat-icon>save</mat-icon> Salvează
+      </button>
+      <button mat-stroked-button color="warn" routerLink="/intervention-sheet-list" type="button">
+        <mat-icon>cancel</mat-icon> Anulează
+      </button>
+    </div>
+  </div>
+
+  <!-- ERP Body + Documents (scrollable) -->
+  <div class="form-body-scroll">
+  <form [formGroup]="interventionSheetForm" class="erp-body">
+
+    <!-- Left: Signature Panel -->
+    <div class="erp-signature-panel">
+      <div class="erp-section-title">Semnătură Client</div>
+
+      <!-- Existing signature: show image + resign button -->
+      <ng-container *ngIf="existingSignatureBase64 && !reSign">
+        <div class="existing-sig-container">
+          <img [src]="existingSignatureBase64" alt="Semnătură" class="existing-sig-img"/>
+        </div>
+        <button mat-stroked-button type="button" (click)="reSign = true" class="resign-btn">
+          <mat-icon>edit</mat-icon> Resemnează
+        </button>
+      </ng-container>
+
+      <!-- Signature pad: when new or re-signing -->
+      <ng-container *ngIf="!existingSignatureBase64 || reSign">
+        <div class="sig-pad-wrapper">
+          <app-signature-pad></app-signature-pad>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Right: Fields Panel -->
+    <div class="erp-fields-panel">
+
+      <!-- Section: Informații Generale -->
+      <div class="erp-section">
+        <div class="erp-section-title">Informații Generale</div>
+        <div class="erp-fields-grid">
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Tip intervenție</mat-label>
+            <mat-select [formControl]="typeControl">
+              <mat-option *ngFor="let type of typeOfInterventionList" [value]="type">{{ type }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Data intervenției</mat-label>
+            <input matInput [matDatepicker]="interventionDatePicker"
+                   [(ngModel)]="selectedDateOfIntervention"
+                   [ngModelOptions]="{standalone: true}"
+                   (dateChange)="onDateChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="interventionDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #interventionDatePicker [touchUi]="isMobile"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Client</mat-label>
+            <input type="text" matInput [matAutocomplete]="customerAuto" [formControl]="customerControl"
+                   placeholder="Caută client...">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-autocomplete #customerAuto="matAutocomplete">
+              <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer.name">
+                {{ customer.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Angajat</mat-label>
+            <mat-select [formControl]="employeeControl">
+              <mat-option *ngFor="let employee of employeeList" [value]="employee.id">
+                {{ employee.firstname }} {{ employee.lastname }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Echipament</mat-label>
+            <input type="text" matInput [matAutocomplete]="equipmentAuto" [formControl]="equipmentControl"
+                   placeholder="Caută echipament...">
+            <mat-autocomplete #equipmentAuto="matAutocomplete">
+              <mat-option *ngFor="let equipment of filteredEquipment | async" [value]="equipment.model">
+                {{ equipment.model }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Număr serie</mat-label>
+            <input matInput [(ngModel)]="serialNumber" [ngModelOptions]="{standalone: true}"/>
+            <mat-icon matSuffix>qr_code</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Garanție (luni)</mat-label>
+            <input matInput [(ngModel)]="yearsOfWarranty" [ngModelOptions]="{standalone: true}" type="number"/>
+            <mat-icon matSuffix>verified</mat-icon>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <!-- Section: Detalii Tehnice -->
+      <div class="erp-section">
+        <div class="erp-section-title">Detalii Tehnice</div>
+        <div class="erp-fields-grid">
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Problemă semnalată</mat-label>
+            <textarea matInput [(ngModel)]="noticed" [ngModelOptions]="{standalone: true}" rows="3"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Rezolvare</mat-label>
+            <textarea matInput [(ngModel)]="fixed" [ngModelOptions]="{standalone: true}" rows="3"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Notă tehnician</mat-label>
+            <textarea matInput [(ngModel)]="engineerNote" [ngModelOptions]="{standalone: true}" rows="2"></textarea>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+  <!-- ════ Documents Section (only when editing) ══════════════════ -->
+
+  <div *ngIf="id" class="documents-section">
+    <div class="documents-header">
+      <div class="doc-section-title">
+        <mat-icon>attach_file</mat-icon>
+        Atașamente
+      </div>
+      <label class="upload-btn" for="docUpload">
+        <mat-icon>upload</mat-icon> Adaugă fișier
+      </label>
+      <input id="docUpload" type="file" (change)="onDocumentSelected($event)" style="display:none"/>
+    </div>
+
+    <div class="documents-body">
+
+      <!-- Photos gallery -->
+      <div class="photos-panel">
+        <div class="panel-label">Fotografii</div>
+        <div class="photos-grid">
+          <div *ngFor="let doc of imageDocuments" class="photo-item" (click)="openPhotoLightbox(doc)">
+            <img *ngIf="doc.displayUrl" [src]="doc.displayUrl" [alt]="doc.name" class="photo-thumb"/>
+            <div *ngIf="!doc.displayUrl" class="photo-loading">
+              <mat-icon>hourglass_empty</mat-icon>
+            </div>
+            <button class="photo-delete-btn" mat-icon-button color="warn"
+                    (click)="deleteDocument(doc.name, $event)" title="Șterge">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <div class="photo-zoom-hint"><mat-icon>zoom_in</mat-icon></div>
+          </div>
+          <div *ngIf="imageDocuments.length === 0" class="empty-panel">
+            <mat-icon>photo_library</mat-icon>
+            <span>Nicio fotografie</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other documents list -->
+      <div class="docs-panel">
+        <div class="panel-label">Documente</div>
+        <div class="docs-list">
+          <div *ngFor="let doc of otherDocuments" class="doc-item">
+            <mat-icon class="doc-type-icon">description</mat-icon>
+            <span class="doc-name">{{ doc.name }}</span>
+            <div class="doc-actions">
+              <button mat-icon-button color="accent" (click)="previewDocument(doc)" title="Vizualizează">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="downloadDocument(doc)" title="Descarcă">
+                <mat-icon>download</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteDocument(doc.name, $event)" title="Șterge">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div *ngIf="otherDocuments.length === 0" class="empty-panel">
+            <mat-icon>folder_open</mat-icon>
+            <span>Niciun document</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  </div><!-- /form-body-scroll -->
+</div>

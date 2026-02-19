@@ -1,9 +1,5 @@
 .container-doc-list {
   border-radius: 20px;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 1700px;
-  /*overflow: auto;*/
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 

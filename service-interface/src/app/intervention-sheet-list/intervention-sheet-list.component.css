@@ -1,10 +1,5 @@
 .intervention-container {
-  /*background: rgba(255, 255, 255, 0.5); !* transparent-opac *!*/
   border-radius: 20px;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 1700px;
-  /*overflow: auto;*/
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
@@ -30,5 +25,14 @@ table {
 
 .mb-3{
   color: black;
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.clickable-row:hover {
+  background-color: rgba(63, 81, 181, 0.05);
 }
 

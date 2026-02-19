@@ -1,55 +1,107 @@
-<div class="form-wrapper">
-  <div class="container">
-    <div class="title-form">
-      <h1 *ngIf="!id">Create product</h1>
-      <h1 *ngIf="id">Update product</h1>
-    </div>
-    <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="form-layout">
-      <div class="form">
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Code</mat-label>
-          <input matInput [(ngModel)]="cod" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Producer</mat-label>
-          <mat-select [(ngModel)]="producerSelected" [ngModelOptions]="{standalone: true}">
-            <mat-option *ngFor="let producer of producerList" [value]="producer.id">
-              {{producer.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Quantity</mat-label>
-          <input matInput [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}"/>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Price</mat-label>
-          <input matInput [(ngModel)]="price" type="number" formControlName="price">
-        </mat-form-field>
-
-        <h3>Alege imaginea</h3>
-        <input type="file" (change)="onFileSelected($event)" accept="image/*"/>
-        <img *ngIf="previewUrl" [src]="previewUrl" width="150" style="margin-top: 10px;"/>
-        <div class="form-button">
-          <button mat-raised-button color="primary" type="submit">Save
-            <mat-icon>save</mat-icon>
-          </button>
-          <button mat-raised-button color="warn" type="submit" routerLink="/product-list">cancel
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </div>
-      </div>
-    </form>
+<!-- Lightbox overlay -->
+<div class="lightbox-overlay" *ngIf="lightboxOpen" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="closeLightbox()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <img [src]="previewUrl || getImage(imageName)" alt="product image" class="lightbox-image"/>
   </div>
 </div>
 
+<div class="form-wrapper">
 
+  <!-- ERP Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <button mat-icon-button routerLink="/product-list" class="back-btn" type="button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Produse</span>
+        <span class="erp-name">{{ id ? (name || 'Produs') : 'Produs Nou' }}</span>
+        <span *ngIf="id" class="erp-id-badge">#{{ id }}</span>
+      </div>
+    </div>
+    <div class="erp-header-actions">
+      <button mat-raised-button color="primary" type="button" (click)="saveProduct()">
+        <mat-icon>save</mat-icon> Salvează
+      </button>
+      <button mat-stroked-button color="warn" routerLink="/product-list" type="button">
+        <mat-icon>cancel</mat-icon> Anulează
+      </button>
+    </div>
+  </div>
 
+  <!-- ERP Body (scrollable) -->
+  <div class="form-body-scroll">
+  <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="erp-body">
+
+    <!-- Left: Image Panel -->
+    <div class="erp-image-panel">
+      <div class="erp-section-title">Imagine Produs</div>
+      <div class="erp-image-container" (click)="openLightbox()" title="Click pentru a mări">
+        <img [src]="previewUrl || getImage(imageName)" alt="product image" class="erp-product-image"/>
+        <div class="image-zoom-hint">
+          <mat-icon>zoom_in</mat-icon>
+        </div>
+      </div>
+      <label class="image-upload-btn" for="imageUpload">
+        <mat-icon>upload</mat-icon>
+        Schimbă imaginea
+      </label>
+      <input id="imageUpload" type="file" (change)="onFileSelected($event)" accept="image/*"/>
+    </div>
+
+    <!-- Right: Fields Panel -->
+    <div class="erp-fields-panel">
+      <div class="erp-section">
+        <div class="erp-section-title">Informații Generale</div>
+        <div class="erp-fields-grid">
+
+          <mat-form-field appearance="outline" class="field-full">
+            <mat-label>Denumire produs</mat-label>
+            <input matInput [(ngModel)]="name" [ngModelOptions]="{standalone: true}" placeholder="ex: Mănuși chirurgicale"/>
+            <mat-icon matSuffix>label</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Cod produs</mat-label>
+            <input matInput [(ngModel)]="cod" [ngModelOptions]="{standalone: true}" placeholder="ex: PRD-001"/>
+            <mat-icon matSuffix>qr_code</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Producător</mat-label>
+            <mat-select [(ngModel)]="producerSelected" [ngModelOptions]="{standalone: true}">
+              <mat-option *ngFor="let producer of producerList" [value]="producer.id">
+                {{ producer.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <div class="erp-section">
+        <div class="erp-section-title">Stoc &amp; Preț</div>
+        <div class="erp-fields-grid">
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Cantitate</mat-label>
+            <input matInput [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}" type="number" placeholder="0"/>
+            <mat-icon matSuffix>inventory_2</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Preț (fără TVA)</mat-label>
+            <input matInput [(ngModel)]="price" type="number" formControlName="price" placeholder="0.00"/>
+            <span matSuffix>€</span>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </div>
+
+  </form>
+  </div><!-- /form-body-scroll -->
+</div>

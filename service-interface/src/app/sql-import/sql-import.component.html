@@ -1,42 +1,65 @@
-<div class="sql-container">
-  <div class="sql">
-    <div class="title-form">
-      <h1>Chose Path</h1>
-    </div>
-    <form [formGroup]="pathsForm" (ngSubmit)="savePaths()" class="form-layout">
-      <div class="sql-form">
-        <mat-form-field class="w-full">
-          <mat-label>SQL Path</mat-label>
-          <input matInput formControlName="sqlPath"/>
-        </mat-form-field>
+<div class="form-page-container">
 
-        <mat-form-field class="w-full">
-          <mat-label>Doc Path</mat-label>
-          <input matInput formControlName="documentPath"/>
-        </mat-form-field>
-
-        <div class="form-button">
-          <button mat-raised-button color="primary" type="submit">Save
-            <mat-icon>save</mat-icon>
-          </button>
-        </div>
-
+  <!-- ERP Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Sistem</span>
+        <span class="erp-name">Backup &amp; Import</span>
       </div>
-    </form>
-    <button mat-raised-button color="accent" (click)="backupManualDbDoc()">Backup DB
-      <mat-icon>restore</mat-icon>
-    </button>
-<!--  </div>-->
-
-<!--  <div class="sql">-->
-    <h1>Import Database</h1>
-    <form *ngIf="userIsAdmin" (submit)="onSubmit()" class="sql-form">
-      <input type="file" (change)="onFileSelected($event)" accept=".sql" required/>
-      <button mat-raised-button color="primary" type="submit">Import
-        <mat-icon>upload</mat-icon>
-      </button>
-    </form>
-
-    <p *ngIf="!userIsAdmin" style="color: red;">⚠️ Doar administratorii pot face import SQL.</p>
+    </div>
   </div>
+
+  <!-- Scrollable body -->
+  <div class="form-body-scroll">
+    <div class="erp-form-body">
+
+      <!-- Section 1: Configurare căi + Backup -->
+      <div class="erp-section">
+        <div class="erp-section-title">Configurare Căi</div>
+        <form [formGroup]="pathsForm" (ngSubmit)="savePaths()">
+          <div class="erp-fields-grid">
+
+            <mat-form-field appearance="outline" class="field-full">
+              <mat-label>SQL Path</mat-label>
+              <input matInput formControlName="sqlPath"/>
+              <mat-icon matSuffix>folder</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-full">
+              <mat-label>Doc Path</mat-label>
+              <input matInput formControlName="documentPath"/>
+              <mat-icon matSuffix>folder_open</mat-icon>
+            </mat-form-field>
+
+          </div>
+          <div class="section-actions">
+            <button mat-raised-button color="primary" type="submit">
+              <mat-icon>save</mat-icon> Salvează căile
+            </button>
+            <button mat-raised-button color="accent" type="button" (click)="backupManualDbDoc()">
+              <mat-icon>restore</mat-icon> Backup DB
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Section 2: Import baza de date -->
+      <div class="erp-section">
+        <div class="erp-section-title">Import Baza de Date</div>
+        <form *ngIf="userIsAdmin" (submit)="onSubmit()" class="import-form">
+          <input type="file" (change)="onFileSelected($event)" accept=".sql" required/>
+          <button mat-raised-button color="primary" type="submit">
+            <mat-icon>upload</mat-icon> Import
+          </button>
+        </form>
+        <p *ngIf="!userIsAdmin" class="admin-warning">
+          <mat-icon>warning</mat-icon>
+          Doar administratorii pot face import SQL.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
 </div>

@@ -136,14 +136,14 @@ $dark-theme: mat.define-dark-theme((
 :root {
   --bg-color: #ffffff;
   --text-color: #000000;
-  --card-color: rgba(255, 255, 255, 0.4); /* alb semi-transparent */
+  --card-color: rgba(255, 255, 255, 0.65); /* alb semi-transparent */
   --border-color: rgba(0, 0, 0, 0.1);
 }
 
 .dark-theme {
   --bg-color: #121212;
   --text-color: #ffffff;
-  --card-color: rgba(0, 0, 0, 0.4); /* negru semi-transparent */
+  --card-color: rgba(0, 0, 0, 0.65); /* negru semi-transparent */
   --border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -180,6 +180,7 @@ $dark-theme: mat.define-dark-theme((
 .customer-container,
 .employee-container,
 .equipment-container,
+.attendance-container,
 .login,
 .product-container,
 .register,
@@ -195,6 +196,229 @@ $dark-theme: mat.define-dark-theme((
   border: 1px solid transparent;
   background-clip: padding-box;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── ERP Form Page ─────────────────────────────────────────────── */
+.form-page-container {
+  position: fixed;
+  top: 150px;
+  left: 20px;
+  right: 20px;
+  bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  background-color: var(--card-color);
+  backdrop-filter: blur(6px);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  z-index: 10;
+}
+
+.form-body-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Global ERP component styles — used by forms that don't define their own */
+.erp-form-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Global ERP header & field classes ─────────────────────────── */
+.erp-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+  color: #fff;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.erp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.erp-header-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.erp-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.erp-breadcrumb {
+  font-size: 0.72rem;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.erp-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.erp-id-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1px 7px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.back-btn {
+  color: #fff !important;
+}
+
+.erp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.erp-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #3f51b5;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #e8eaf6;
+  margin-bottom: 0.5rem;
+}
+
+.erp-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+}
+
+.erp-fields-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.field-half {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .erp-fields-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field-full,
+  .field-half {
+    grid-column: unset;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-page-container {
+    position: static;
+    margin: 10px;
+    border-radius: 14px;
+    bottom: unset;
+    top: unset;
+    left: unset;
+    right: unset;
+  }
+}
+
+/* ── List ERP Header ────────────────────────────────────────── */
+.list-erp-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+  color: #fff;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.list-erp-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ── Floating List Container ─────────────────────────────────── */
+.list-page-container {
+  position: fixed;
+  top: 150px;
+  left: 20px;
+  right: 20px;
+  bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  z-index: 10;
+}
+
+.list-page-header {
+  flex-shrink: 0;
+  padding: 20px 20px 0;
+}
+
+.list-scroll-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 8px 20px 20px;
+}
+
+@media (max-width: 768px) {
+  .list-page-container {
+    position: static;
+    margin: 10px;
+    border-radius: 14px;
+    bottom: unset;
+    top: unset;
+    left: unset;
+    right: unset;
+  }
+
+  .list-page-header {
+    padding: 14px 14px 0;
+  }
+
+  .list-scroll-body {
+    padding: 8px 14px 14px;
+    overflow-x: auto;
+  }
 }
 
 
