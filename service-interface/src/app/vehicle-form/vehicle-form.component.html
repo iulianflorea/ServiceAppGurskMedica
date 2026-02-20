@@ -1,0 +1,430 @@
+<!-- ════ Photo Lightbox ════════════════════════════════════════════ -->
+<div class="lightbox-overlay" *ngIf="lightboxOpen" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="closeLightbox()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <img [src]="lightboxImageUrl" alt="fotografie" class="lightbox-image"/>
+  </div>
+</div>
+
+<!-- ════ Main Page ════════════════════════════════════════════════ -->
+<div class="form-page-container">
+
+  <!-- ERP Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <button mat-icon-button routerLink="/vehicle-list" type="button" class="back-btn">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Flotă</span>
+        <span class="erp-name">{{ id ? (vehicleForm.get('licensePlate')?.value || 'Mașină') : 'Mașină Nouă' }}</span>
+        <span *ngIf="id" class="erp-id-badge">#{{ id }}</span>
+      </div>
+    </div>
+    <div class="erp-header-actions">
+      <button mat-raised-button color="primary" type="button" (click)="save()">
+        <mat-icon>save</mat-icon> Salvează
+      </button>
+      <button mat-stroked-button color="warn" routerLink="/vehicle-list" type="button">
+        <mat-icon>cancel</mat-icon> Anulează
+      </button>
+    </div>
+  </div>
+
+  <!-- ERP Body scrollable -->
+  <div class="form-body-scroll">
+    <form [formGroup]="vehicleForm" class="erp-body">
+
+      <!-- ══ 1. Informații Generale — foto stânga + câmpuri dreapta ══ -->
+      <div class="erp-section">
+        <div class="erp-section-title">Informații Generale</div>
+
+        <div class="top-layout">
+
+          <!-- Foto mașină (stânga) -->
+          <div class="photo-col">
+            <div class="vehicle-photo-preview">
+              <img *ngIf="photoPreviewUrl" [src]="photoPreviewUrl" alt="Foto mașină" class="vehicle-photo-img" />
+              <div *ngIf="!photoPreviewUrl" class="vehicle-photo-placeholder">
+                <mat-icon>directions_car</mat-icon>
+                <span>Fără fotografie</span>
+              </div>
+            </div>
+            <div class="photo-actions">
+              <label class="upload-btn" for="vehiclePhotoInput">
+                <mat-icon>upload</mat-icon> Încarcă foto
+              </label>
+              <input id="vehiclePhotoInput" type="file" accept="image/*" (change)="onPhotoSelected($event)" style="display:none"/>
+              <button mat-stroked-button color="warn" type="button" *ngIf="photoPreviewUrl" (click)="deletePhoto()">
+                <mat-icon>delete</mat-icon> Șterge foto
+              </button>
+            </div>
+          </div>
+
+          <!-- Câmpuri (dreapta) -->
+          <div class="fields-col">
+            <div class="erp-fields-grid">
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>Număr înmatriculare *</mat-label>
+                <input matInput formControlName="licensePlate" />
+                <mat-icon matSuffix>pin</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>VIN</mat-label>
+                <input matInput formControlName="vin" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>Marcă *</mat-label>
+                <input matInput formControlName="make" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>Model *</mat-label>
+                <input matInput formControlName="model" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>An fabricație</mat-label>
+                <input matInput type="number" formControlName="year" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>Culoare</mat-label>
+                <input matInput formControlName="color" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>Combustibil</mat-label>
+                <mat-select formControlName="fuelType">
+                  <mat-option *ngFor="let f of fuelTypes" [value]="f">{{ f }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>Capacitate motor (cc)</mat-label>
+                <input matInput type="number" formControlName="engineCapacity" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>Putere (CP)</mat-label>
+                <input matInput type="number" formControlName="power" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-half">
+                <mat-label>KM actuali</mat-label>
+                <input matInput type="number" formControlName="currentKm" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-full">
+                <mat-label>Utilizator atribuit</mat-label>
+                <mat-select formControlName="userId">
+                  <mat-option [value]="null">— Niciunul —</mat-option>
+                  <mat-option *ngFor="let u of userList" [value]="u.id">
+                    {{ u.firstname }} {{ u.lastname }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-full">
+                <mat-label>Note</mat-label>
+                <textarea matInput formControlName="notes" rows="2"></textarea>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ 2. ITP ═════════════════════════════════════════════════ -->
+      <div class="erp-section section-divider" *ngIf="id">
+        <div class="erp-section-title">ITP</div>
+
+        <table class="mini-table" *ngIf="itpList.length > 0">
+          <thead>
+            <tr><th>Dată</th><th>Valabilitate</th><th>Expiră</th><th>Cost</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let itp of itpList" [class.expiring-soon]="isExpiringSoon(itp.expiryDate)">
+              <td>{{ itp.date }}</td>
+              <td>{{ itp.validityMonths }} luni</td>
+              <td>{{ itp.expiryDate }}</td>
+              <td>{{ itp.cost | number:'1.0-2' }} RON</td>
+              <td>
+                <button mat-icon-button color="warn" type="button" (click)="deleteItp(itp.id!)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="empty-mini" *ngIf="itpList.length === 0">Nicio înregistrare ITP.</div>
+
+        <div class="inline-add-divider"><span>Adaugă ITP</span></div>
+        <div class="mini-form-fields">
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Dată ITP</mat-label>
+            <input matInput [matDatepicker]="itpDatePicker" [(ngModel)]="newItpDate" [ngModelOptions]="{standalone: true}" />
+            <mat-datepicker-toggle matSuffix [for]="itpDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #itpDatePicker [touchUi]="isMobile"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Valabilitate (luni)</mat-label>
+            <input matInput type="number" [(ngModel)]="newItp.validityMonths" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Cost (RON)</mat-label>
+            <input matInput type="number" [(ngModel)]="newItp.cost" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <div class="expiry-preview" *ngIf="calcItpExpiry()">
+            Expiră: <strong>{{ calcItpExpiry() }}</strong>
+          </div>
+        </div>
+        <button mat-stroked-button color="primary" type="button" (click)="addItp()" [disabled]="!newItpDate">
+          <mat-icon>add</mat-icon> Adaugă
+        </button>
+      </div>
+
+      <!-- ══ 3. Asigurare Auto ══════════════════════════════════════ -->
+      <div class="erp-section section-divider" *ngIf="id">
+        <div class="erp-section-title">Asigurare Auto</div>
+
+        <table class="mini-table" *ngIf="insuranceList.length > 0">
+          <thead>
+            <tr><th>Dată</th><th>Valabilitate</th><th>Expiră</th><th>Asigurator</th><th>Poliță</th><th>Cost</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ins of insuranceList" [class.expiring-soon]="isExpiringSoon(ins.expiryDate)">
+              <td>{{ ins.date }}</td>
+              <td>{{ ins.validityMonths }} luni</td>
+              <td>{{ ins.expiryDate }}</td>
+              <td>{{ ins.insurer }}</td>
+              <td>{{ ins.policyNumber }}</td>
+              <td>{{ ins.cost | number:'1.0-2' }} RON</td>
+              <td>
+                <button mat-icon-button color="warn" type="button" (click)="deleteInsurance(ins.id!)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="empty-mini" *ngIf="insuranceList.length === 0">Nicio asigurare.</div>
+
+        <div class="inline-add-divider"><span>Adaugă Asigurare</span></div>
+        <div class="mini-form-fields">
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Dată</mat-label>
+            <input matInput [matDatepicker]="insDp" [(ngModel)]="newInsuranceDate" [ngModelOptions]="{standalone: true}" />
+            <mat-datepicker-toggle matSuffix [for]="insDp"></mat-datepicker-toggle>
+            <mat-datepicker #insDp [touchUi]="isMobile"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Valabilitate (luni)</mat-label>
+            <input matInput type="number" [(ngModel)]="newInsurance.validityMonths" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Asigurator</mat-label>
+            <input matInput [(ngModel)]="newInsurance.insurer" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Nr. poliță</mat-label>
+            <input matInput [(ngModel)]="newInsurance.policyNumber" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Cost (RON)</mat-label>
+            <input matInput type="number" [(ngModel)]="newInsurance.cost" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <div class="expiry-preview" *ngIf="calcInsuranceExpiry()">
+            Expiră: <strong>{{ calcInsuranceExpiry() }}</strong>
+          </div>
+        </div>
+        <button mat-stroked-button color="primary" type="button" (click)="addInsurance()" [disabled]="!newInsuranceDate">
+          <mat-icon>add</mat-icon> Adaugă
+        </button>
+      </div>
+
+      <!-- ══ 4. Revizie Tehnică ══════════════════════════════════════ -->
+      <div class="erp-section section-divider" *ngIf="id">
+        <div class="erp-section-title">Revizie Tehnică</div>
+
+        <table class="mini-table" *ngIf="revisions.length > 0">
+          <thead>
+            <tr><th>Dată</th><th>KM</th><th>Cost</th><th>Descriere</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of revisions">
+              <td>{{ r.date }}</td>
+              <td>{{ r.km }}</td>
+              <td>{{ r.cost | number:'1.0-2' }} RON</td>
+              <td>{{ r.description }}</td>
+              <td>
+                <button mat-icon-button color="warn" type="button" (click)="deleteRevision(r.id!)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="empty-mini" *ngIf="revisions.length === 0">Nicio revizie.</div>
+
+        <div class="inline-add-divider"><span>Adaugă Revizie</span></div>
+        <div class="mini-form-fields">
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Dată</mat-label>
+            <input matInput [matDatepicker]="revDp" [(ngModel)]="newRevisionDate" [ngModelOptions]="{standalone: true}" />
+            <mat-datepicker-toggle matSuffix [for]="revDp"></mat-datepicker-toggle>
+            <mat-datepicker #revDp [touchUi]="isMobile"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>KM</mat-label>
+            <input matInput type="number" [(ngModel)]="newRevision.km" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Cost (RON)</mat-label>
+            <input matInput type="number" [(ngModel)]="newRevision.cost" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field-full">
+            <mat-label>Descriere</mat-label>
+            <input matInput [(ngModel)]="newRevision.description" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+        </div>
+        <button mat-stroked-button color="primary" type="button" (click)="addRevision()" [disabled]="!newRevisionDate">
+          <mat-icon>add</mat-icon> Adaugă
+        </button>
+      </div>
+
+      <!-- ══ 5. Alte Info / Evenimente ══════════════════════════════ -->
+      <div class="erp-section section-divider" *ngIf="id">
+        <div class="erp-section-title">Alte Info / Evenimente</div>
+
+        <table class="mini-table" *ngIf="events.length > 0">
+          <thead>
+            <tr><th>Dată</th><th>Tip</th><th>Descriere</th><th>Cost</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let e of events">
+              <td>{{ e.date }}</td>
+              <td>{{ e.type }}</td>
+              <td>{{ e.description }}</td>
+              <td>{{ e.cost | number:'1.0-2' }} RON</td>
+              <td>
+                <button mat-icon-button color="warn" type="button" (click)="deleteEvent(e.id!)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="empty-mini" *ngIf="events.length === 0">Niciun eveniment.</div>
+
+        <div class="inline-add-divider"><span>Adaugă Eveniment</span></div>
+        <div class="mini-form-fields">
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Dată</mat-label>
+            <input matInput [matDatepicker]="evDp" [(ngModel)]="newEventDate" [ngModelOptions]="{standalone: true}" />
+            <mat-datepicker-toggle matSuffix [for]="evDp"></mat-datepicker-toggle>
+            <mat-datepicker #evDp [touchUi]="isMobile"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Tip</mat-label>
+            <mat-select [(ngModel)]="newEvent.type" [ngModelOptions]="{standalone: true}">
+              <mat-option *ngFor="let t of eventTypes" [value]="t">{{ t }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field">
+            <mat-label>Cost (RON)</mat-label>
+            <input matInput type="number" [(ngModel)]="newEvent.cost" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mini-field-full">
+            <mat-label>Descriere</mat-label>
+            <input matInput [(ngModel)]="newEvent.description" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+        </div>
+        <button mat-stroked-button color="primary" type="button" (click)="addEvent()" [disabled]="!newEventDate">
+          <mat-icon>add</mat-icon> Adaugă
+        </button>
+      </div>
+
+    </form>
+
+    <!-- ══ 6. Documents (only when editing) ══════════════════════════ -->
+    <div *ngIf="id" class="documents-section">
+      <div class="documents-header">
+        <div class="doc-section-title">
+          <mat-icon>attach_file</mat-icon>
+          Atașamente
+        </div>
+        <label class="upload-btn" for="docUpload">
+          <mat-icon>upload</mat-icon> Adaugă fișier
+        </label>
+        <input id="docUpload" type="file" (change)="onDocumentSelected($event)" style="display:none"/>
+      </div>
+
+      <div class="documents-body">
+        <!-- Photos gallery -->
+        <div class="photos-panel">
+          <div class="panel-label">Fotografii</div>
+          <div class="photos-grid">
+            <div *ngFor="let doc of imageDocuments" class="photo-item" (click)="openPhotoLightbox(doc)">
+              <img *ngIf="doc.displayUrl" [src]="doc.displayUrl" [alt]="doc.name" class="photo-thumb"/>
+              <div *ngIf="!doc.displayUrl" class="photo-loading"><mat-icon>hourglass_empty</mat-icon></div>
+              <button class="photo-delete-btn" mat-icon-button color="warn" (click)="deleteDocument(doc.name, $event)">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <div class="photo-zoom-hint"><mat-icon>zoom_in</mat-icon></div>
+            </div>
+            <div *ngIf="imageDocuments.length === 0" class="empty-panel">
+              <mat-icon>photo_library</mat-icon><span>Nicio fotografie</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other documents list -->
+        <div class="docs-panel">
+          <div class="panel-label">Documente</div>
+          <div class="docs-list">
+            <div *ngFor="let doc of otherDocuments" class="doc-item">
+              <mat-icon class="doc-type-icon">description</mat-icon>
+              <span class="doc-name">{{ doc.name }}</span>
+              <div class="doc-actions">
+                <button mat-icon-button color="accent" (click)="previewDocument(doc)" title="Vizualizează">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" (click)="downloadDocument(doc)" title="Descarcă">
+                  <mat-icon>download</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteDocument(doc.name, $event)" title="Șterge">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div *ngIf="otherDocuments.length === 0" class="empty-panel">
+              <mat-icon>folder_open</mat-icon><span>Niciun document</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /form-body-scroll -->
+</div>

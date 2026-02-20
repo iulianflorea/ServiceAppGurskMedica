@@ -17,8 +17,8 @@
       </div>
 
       <div class="example-button-container">
-        <button mat-fab color="warn" routerLink="/dashboard">
-          <mat-icon>home</mat-icon>
+        <button mat-fab color="primary" routerLink="/dashboard">
+          <mat-icon>person</mat-icon>
         </button>
       </div>
 
@@ -31,6 +31,7 @@
       <button routerLink="/product-list" mat-button>Products</button>
       <button routerLink="/equipment-list" mat-button>Equipments</button>
       <button routerLink="/intervention-sheet-list" mat-button>Interventions</button>
+      <button routerLink="/vehicle-list" mat-button>Flotă</button>
       <button routerLink="/attendance-list" mat-button>Pontaj</button>
       <button mat-button (click)="logout()" routerLink="/login" *ngIf="isLoggedIn()">Logout</button>
       <mat-slide-toggle
@@ -72,13 +73,16 @@
 
     <mat-menu #menu="matMenu" class="mobile-nav-menu">
       <button mat-menu-item routerLink="/dashboard">
-        <mat-icon>home</mat-icon><span>Dashboard</span>
+        <mat-icon>person</mat-icon><span>You're interventions</span>
       </button>
       <button mat-menu-item routerLink="/documents">
         <mat-icon>description</mat-icon><span>Documents</span>
       </button>
       <button mat-menu-item routerLink="/intervention-sheet-list">
         <mat-icon>assignment</mat-icon><span>Interventions</span>
+      </button>
+      <button mat-menu-item routerLink="/vehicle-list">
+        <mat-icon>directions_car</mat-icon><span>Flotă</span>
       </button>
       <button mat-menu-item routerLink="/order">
         <mat-icon>shopping_cart</mat-icon><span>Order</span>

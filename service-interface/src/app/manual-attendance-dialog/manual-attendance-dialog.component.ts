@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { AttendanceService } from '../services/attendance.service';
 import { ManualAttendanceDto } from '../dtos/attendanceDto';
@@ -30,7 +31,8 @@ import { UserDto } from '../dtos/userDto';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
+    MatCheckboxModule
   ]
 })
 export class ManualAttendanceDialogComponent implements OnInit {
@@ -40,6 +42,7 @@ export class ManualAttendanceDialogComponent implements OnInit {
   isAdmin = false;
   isLoading = false;
   isMobile = window.innerWidth <= 768;
+  includeCheckOut = false;
 
   constructor(
     private fb: FormBuilder,
@@ -53,8 +56,8 @@ export class ManualAttendanceDialogComponent implements OnInit {
       date: [null, Validators.required],
       checkInHour: ['09', Validators.required],
       checkInMinute: ['30', Validators.required],
-      checkOutHour: ['18', Validators.required],
-      checkOutMinute: ['00', Validators.required],
+      checkOutHour: ['18'],
+      checkOutMinute: ['00'],
       notes: ['']
     });
   }
@@ -80,7 +83,9 @@ export class ManualAttendanceDialogComponent implements OnInit {
     const dateStr = this.formatDate(date);
 
     const checkInTime = `${dateStr}T${formValue.checkInHour}:${formValue.checkInMinute}:00`;
-    const checkOutTime = `${dateStr}T${formValue.checkOutHour}:${formValue.checkOutMinute}:00`;
+    const checkOutTime = this.includeCheckOut
+      ? `${dateStr}T${formValue.checkOutHour}:${formValue.checkOutMinute}:00`
+      : undefined;
 
     const dto: ManualAttendanceDto = {
       userId: formValue.userId,

@@ -46,6 +46,7 @@ public class SecurityConfiguration{
                         .requestMatchers("/api/work-schedule").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/work-schedule").hasRole("ADMIN")
                         .requestMatchers("/user/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/vehicles/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess

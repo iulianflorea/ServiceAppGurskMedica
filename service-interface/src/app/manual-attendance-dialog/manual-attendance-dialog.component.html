@@ -33,7 +33,13 @@
       </mat-form-field>
     </div>
 
-    <div class="time-row">
+    <div class="checkout-toggle">
+      <mat-checkbox [(ngModel)]="includeCheckOut" [ngModelOptions]="{standalone: true}">
+        Adaugă ora de ieșire
+      </mat-checkbox>
+    </div>
+
+    <div class="time-row" *ngIf="includeCheckOut">
       <span class="time-label">Ora ieșire:</span>
       <mat-form-field appearance="outline" class="time-field">
         <mat-select formControlName="checkOutHour">

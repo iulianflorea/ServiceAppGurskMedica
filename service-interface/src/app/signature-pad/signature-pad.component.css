@@ -1,0 +1,8 @@
+.sig-canvas {
+  display: block;
+  background: #ffffff;
+  border: 1.5px solid #9e9e9e;
+  border-radius: 8px;
+  cursor: crosshair;
+  touch-action: none;
+}

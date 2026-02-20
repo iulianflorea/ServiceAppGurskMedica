@@ -1,0 +1,44 @@
+.vehicle-thumb {
+  width: 60px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+.no-photo-icon {
+  color: #bbb;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.vin-cell {
+  font-size: 0.78rem;
+  color: #666;
+  font-family: monospace;
+}
+
+.expiring-soon {
+  color: #c62828 !important;
+  font-weight: 700;
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.clickable-row:hover {
+  background-color: rgba(63, 81, 181, 0.05);
+}
+
+table {
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+}

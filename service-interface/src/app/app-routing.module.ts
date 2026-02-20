@@ -21,6 +21,8 @@ import {DocumentListComponent} from "./document-list/document-list.component";
 import {DocumentDataFormComponent} from "./document-data-form/document-data-form.component";
 import {AttendanceListComponent} from "./attendance-list/attendance-list.component";
 import {WorkScheduleComponent} from "./work-schedule/work-schedule.component";
+import {VehicleListComponent} from "./vehicle-list/vehicle-list.component";
+import {VehicleFormComponent} from "./vehicle-form/vehicle-form.component";
 
 
 const routes: Routes = [
@@ -49,7 +51,10 @@ const routes: Routes = [
   {path: "documents-form/:id", component: DocumentDataFormComponent},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardComponent]},
   {path: 'attendance-list', component: AttendanceListComponent, canActivate: [AuthGuardComponent]},
-  {path: 'work-schedule', component: WorkScheduleComponent, canActivate: [AuthGuardComponent]}
+  {path: 'work-schedule', component: WorkScheduleComponent, canActivate: [AuthGuardComponent]},
+  {path: 'vehicle-list', component: VehicleListComponent},
+  {path: 'vehicle-form', component: VehicleFormComponent},
+  {path: 'vehicle-form/:id', component: VehicleFormComponent}
 
 
 ];

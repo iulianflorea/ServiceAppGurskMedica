@@ -52,6 +52,8 @@ import {DocumentListComponent} from './document-list/document-list.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { DocumentDataFormComponent } from './document-data-form/document-data-form.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {VehicleFormComponent} from "./vehicle-form/vehicle-form.component";
+import {VehicleListComponent} from "./vehicle-list/vehicle-list.component";
 
 
 @NgModule({
@@ -77,6 +79,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     OrderComponent,
     DocumentListComponent,
     DocumentDataFormComponent,
+    VehicleFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -116,6 +119,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     RouterModule,
     MatCheckboxModule,
     MatTooltipModule,
+    VehicleListComponent,
   ],
   providers: [
     {

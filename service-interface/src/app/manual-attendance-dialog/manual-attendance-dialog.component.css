@@ -24,6 +24,10 @@
   font-weight: bold;
 }
 
+.checkout-toggle {
+  margin-bottom: 12px;
+}
+
 mat-dialog-content {
   min-width: 300px;
 }

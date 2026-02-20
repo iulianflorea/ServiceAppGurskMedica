@@ -184,6 +184,7 @@ $dark-theme: mat.define-dark-theme((
 .transparent-box,
 .container-form,
 .intervention-container,
+.vehicle-container,
 .intervention-sheet-form,
 .product-container,
 .header,
@@ -418,15 +419,7 @@ $dark-theme: mat.define-dark-theme((
   overflow-x: auto;
   padding: 8px 20px 20px;
 }
-//@media (max-width: 768px) {
-//  .list-scroll-body-mobile {
-//    flex: 1;
-//    min-height: 0;
-//    overflow-y: auto;
-//    overflow-x: auto;
-//    padding: 8px 20px 20px;
-//  }
-//}
+
 
 @media (max-width: 768px) {
   .list-page-container {

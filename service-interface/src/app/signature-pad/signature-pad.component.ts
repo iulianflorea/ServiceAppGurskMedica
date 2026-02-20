@@ -11,7 +11,15 @@ export class SignaturePadComponent implements AfterViewInit {
   signaturePad!: SignaturePad;
 
   ngAfterViewInit(): void {
-    this.signaturePad = new SignaturePad(this.canvasRef.nativeElement);
+    const canvas = this.canvasRef.nativeElement;
+    if (window.innerWidth <= 600) {
+      canvas.width = Math.min(window.innerWidth - 48, 320);
+      canvas.height = 180;
+    } else {
+      canvas.width = 420;
+      canvas.height = 200;
+    }
+    this.signaturePad = new SignaturePad(canvas, { penColor: 'black' });
   }
 
   clear(): void {

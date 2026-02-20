@@ -41,29 +41,6 @@
   <div class="form-body-scroll">
   <form [formGroup]="interventionSheetForm" class="erp-body">
 
-    <!-- Left: Signature Panel -->
-    <div class="erp-signature-panel">
-      <div class="erp-section-title">Semnătură Client</div>
-
-      <!-- Existing signature: show image + resign button -->
-      <ng-container *ngIf="existingSignatureBase64 && !reSign">
-        <div class="existing-sig-container">
-          <img [src]="existingSignatureBase64" alt="Semnătură" class="existing-sig-img"/>
-        </div>
-        <button mat-stroked-button type="button" (click)="reSign = true" class="resign-btn">
-          <mat-icon>edit</mat-icon> Resemnează
-        </button>
-      </ng-container>
-
-      <!-- Signature pad: when new or re-signing -->
-      <ng-container *ngIf="!existingSignatureBase64 || reSign">
-        <div class="sig-pad-wrapper">
-          <app-signature-pad></app-signature-pad>
-        </div>
-      </ng-container>
-    </div>
-
-    <!-- Right: Fields Panel -->
     <div class="erp-fields-panel">
 
       <!-- Section: Informații Generale -->
@@ -156,6 +133,26 @@
           </mat-form-field>
 
         </div>
+      </div>
+
+      <!-- Section: Semnătură Client -->
+      <div class="erp-section">
+        <div class="erp-section-title">Semnătură Client</div>
+
+        <ng-container *ngIf="existingSignatureBase64 && !reSign">
+          <div class="existing-sig-container">
+            <img [src]="existingSignatureBase64" alt="Semnătură" class="existing-sig-img"/>
+          </div>
+          <button mat-stroked-button type="button" (click)="reSign = true" class="resign-btn">
+            <mat-icon>edit</mat-icon> Resemnează
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="!existingSignatureBase64 || reSign">
+          <div class="sig-pad-wrapper">
+            <app-signature-pad></app-signature-pad>
+          </div>
+        </ng-container>
       </div>
 
     </div>
