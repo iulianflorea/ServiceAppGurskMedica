@@ -2,13 +2,16 @@ package com.example.ServiceApp.service;
 
 import com.example.ServiceApp.dto.DocumentDataDto;
 import com.example.ServiceApp.dto.DocumentEquipmentDto;
+import com.example.ServiceApp.dto.DocumentProductDto;
 import com.example.ServiceApp.dto.DocumentTrainedPersonDto;
 import com.example.ServiceApp.entity.DocumentData;
 import com.example.ServiceApp.entity.DocumentEquipment;
+import com.example.ServiceApp.entity.DocumentProduct;
 import com.example.ServiceApp.entity.DocumentTrainedPerson;
 import com.example.ServiceApp.mapper.DocumentDataMapper;
 import com.example.ServiceApp.repository.DocumentDataRepository;
 import com.example.ServiceApp.repository.DocumentEquipmentRepository;
+import com.example.ServiceApp.repository.DocumentProductRepository;
 import com.example.ServiceApp.repository.DocumentTrainedPersonRepository;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
@@ -34,13 +37,16 @@ public class DocumentDataService {
 
     private final DocumentDataRepository documentDataRepository;
     private final DocumentEquipmentRepository documentEquipmentRepository;
+    private final DocumentProductRepository documentProductRepository;
     private final DocumentTrainedPersonRepository documentTrainedPersonRepository;
 
     public DocumentDataService(DocumentDataRepository documentDataRepository,
                                DocumentEquipmentRepository documentEquipmentRepository,
+                               DocumentProductRepository documentProductRepository,
                                DocumentTrainedPersonRepository documentTrainedPersonRepository) {
         this.documentDataRepository = documentDataRepository;
         this.documentEquipmentRepository = documentEquipmentRepository;
+        this.documentProductRepository = documentProductRepository;
         this.documentTrainedPersonRepository = documentTrainedPersonRepository;
     }
 
@@ -52,14 +58,16 @@ public class DocumentDataService {
 
         DocumentData entity = DocumentDataMapper.toEntity(dto);
 
-        // Save document first without equipments/trainedPersons to get the ID
+        // Save document first without children to get the ID
         List<DocumentEquipment> equipments = entity.getEquipments();
         entity.setEquipments(new ArrayList<>());
+        List<DocumentProduct> products = entity.getProducts();
+        entity.setProducts(new ArrayList<>());
         List<DocumentTrainedPerson> trainedPersons = entity.getTrainedPersons();
         entity.setTrainedPersons(new ArrayList<>());
         DocumentData saved = documentDataRepository.save(entity);
 
-        // Save equipments directly through repository
+        // Save equipments
         if (equipments != null && !equipments.isEmpty()) {
             for (int i = 0; i < equipments.size(); i++) {
                 DocumentEquipment eq = equipments.get(i);
@@ -69,7 +77,17 @@ public class DocumentDataService {
             documentEquipmentRepository.saveAll(equipments);
         }
 
-        // Save trained persons directly through repository
+        // Save products
+        if (products != null && !products.isEmpty()) {
+            for (int i = 0; i < products.size(); i++) {
+                DocumentProduct pr = products.get(i);
+                pr.setDocumentDataId(saved.getId());
+                pr.setSortOrder(i);
+            }
+            documentProductRepository.saveAll(products);
+        }
+
+        // Save trained persons
         if (trainedPersons != null && !trainedPersons.isEmpty()) {
             for (int i = 0; i < trainedPersons.size(); i++) {
                 DocumentTrainedPerson tp = trainedPersons.get(i);
@@ -79,7 +97,7 @@ public class DocumentDataService {
             documentTrainedPersonRepository.saveAll(trainedPersons);
         }
 
-        // Reload to get equipments and trainedPersons in the response
+        // Reload to get children in the response
         return DocumentDataMapper.toDto(documentDataRepository.findById(saved.getId()).orElse(saved));
     }
 
@@ -155,6 +173,50 @@ public class DocumentDataService {
             }
         }
 
+        // Update products: keep existing, add new, remove deleted
+        List<DocumentProduct> currentProducts = documentProductRepository.findByDocumentDataIdOrderBySortOrderAsc(existing.getId());
+        Set<Long> existingProductIds = currentProducts.stream()
+                .map(DocumentProduct::getId)
+                .collect(Collectors.toSet());
+
+        if (dto.getProducts() != null && !dto.getProducts().isEmpty()) {
+            Set<Long> dtoProductIds = dto.getProducts().stream()
+                    .map(DocumentProductDto::getId)
+                    .filter(prId -> prId != null)
+                    .collect(Collectors.toSet());
+
+            List<Long> idsToDelete = existingProductIds.stream()
+                    .filter(prId -> !dtoProductIds.contains(prId))
+                    .collect(Collectors.toList());
+
+            if (!idsToDelete.isEmpty()) {
+                documentProductRepository.deleteAllByIdIn(idsToDelete);
+            }
+
+            List<DocumentProduct> toSave = new ArrayList<>();
+            for (int i = 0; i < dto.getProducts().size(); i++) {
+                DocumentProductDto prDto = dto.getProducts().get(i);
+                DocumentProduct pr = DocumentProduct.builder()
+                        .id(prDto.getId())
+                        .documentDataId(existing.getId())
+                        .productId(prDto.getProductId())
+                        .productName(prDto.getProductName())
+                        .productCod(prDto.getProductCod())
+                        .quantity(prDto.getQuantity())
+                        .sortOrder(i)
+                        .build();
+                toSave.add(pr);
+            }
+
+            if (!toSave.isEmpty()) {
+                documentProductRepository.saveAll(toSave);
+            }
+        } else {
+            if (!existingProductIds.isEmpty()) {
+                documentProductRepository.deleteAllByIdIn(new ArrayList<>(existingProductIds));
+            }
+        }
+
         // Update trained persons: keep existing, add new, remove deleted
         List<DocumentTrainedPerson> currentTrainedPersons = documentTrainedPersonRepository.findByDocumentDataIdOrderBySortOrderAsc(existing.getId());
         Set<Long> existingTrainedPersonIds = currentTrainedPersons.stream()
@@ -213,6 +275,7 @@ public class DocumentDataService {
             return false;
         }
         documentEquipmentRepository.deleteByDocumentDataId(id);
+        documentProductRepository.deleteByDocumentDataId(id);
         documentTrainedPersonRepository.deleteByDocumentDataId(id);
         documentDataRepository.deleteById(id);
         return true;
@@ -264,6 +327,7 @@ public class DocumentDataService {
 
             // Generate dynamic table rows BEFORE placeholder replacement
             generateEquipmentRows(document, data.getEquipments());
+            generateProductRows(document, data.getProducts());
             generateTrainedPersonRows(document, data.getTrainedPersons());
 
             // Replace remaining placeholders in text
@@ -313,11 +377,105 @@ public class DocumentDataService {
         }
     }
 
+    private void generateProductRows(XWPFDocument document, List<DocumentProductDto> products) {
+        if (products == null || products.isEmpty()) {
+            for (XWPFTable table : document.getTables()) {
+                int templateRowIndex = findProductTemplateRow(table);
+                if (templateRowIndex == -1) continue;
+                XWPFTableRow templateRow = table.getRow(templateRowIndex);
+                for (XWPFTableCell cell : templateRow.getTableCells()) {
+                    for (XWPFParagraph para : cell.getParagraphs()) {
+                        for (XWPFRun run : para.getRuns()) {
+                            run.setText("", 0);
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        for (XWPFTable table : document.getTables()) {
+            int templateRowIndex = findProductTemplateRow(table);
+            if (templateRowIndex == -1) {
+                continue;
+            }
+
+            XWPFTableRow templateRow = table.getRow(templateRowIndex);
+            CTRow originalTemplateCTRow = (CTRow) templateRow.getCtRow().copy();
+
+            replaceInProductRow(templateRow, products.get(0), 1);
+
+            for (int i = 1; i < products.size(); i++) {
+                CTRow copiedCTRow = (CTRow) originalTemplateCTRow.copy();
+                replaceInProductCTRow(copiedCTRow, products.get(i), i + 1);
+                table.getCTTbl().addNewTr().set(copiedCTRow);
+            }
+        }
+    }
+
+    private int findProductTemplateRow(XWPFTable table) {
+        for (int i = 0; i < table.getRows().size(); i++) {
+            XWPFTableRow row = table.getRow(i);
+            for (XWPFTableCell cell : row.getTableCells()) {
+                String text = cell.getText();
+                if (text != null && (text.contains("${productName}") ||
+                        text.contains("${productCod}") ||
+                        text.contains("${productQuantity}"))) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private void replaceInProductRow(XWPFTableRow row, DocumentProductDto pr, int index) {
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("${productName}", pr.getProductName() != null ? pr.getProductName() : "");
+        replacements.put("${productCod}", pr.getProductCod() != null ? pr.getProductCod() : "");
+        replacements.put("${productQuantity}", pr.getQuantity() != null ? String.valueOf(pr.getQuantity()) : "");
+        replacements.put("${nr}", String.valueOf(index));
+
+        for (XWPFTableCell cell : row.getTableCells()) {
+            replaceCellContent(cell, replacements);
+        }
+    }
+
+    private void replaceInProductCTRow(CTRow ctRow, DocumentProductDto pr, int index) {
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("${nr}", String.valueOf(index));
+        replacements.put("${productName}", pr.getProductName() != null ? pr.getProductName() : "");
+        replacements.put("${productCod}", pr.getProductCod() != null ? pr.getProductCod() : "");
+        replacements.put("${productQuantity}", pr.getQuantity() != null ? String.valueOf(pr.getQuantity()) : "");
+
+        String xml = ctRow.xmlText();
+        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+            xml = xml.replace(entry.getKey(), entry.getValue());
+        }
+        try {
+            CTRow newRow = CTRow.Factory.parse(xml);
+            ctRow.set(newRow);
+        } catch (Exception e) {
+            System.err.println("Error parsing product CTRow XML: " + e.getMessage());
+        }
+    }
+
     private void generateTrainedPersonRows(XWPFDocument document, List<DocumentTrainedPersonDto> trainedPersons) {
         System.out.println("=== GENERATE TRAINED PERSON ROWS ===");
         System.out.println("TrainedPersons: " + (trainedPersons != null ? trainedPersons.size() : "null"));
         if (trainedPersons == null || trainedPersons.isEmpty()) {
-            System.out.println("No trained persons, returning.");
+            System.out.println("No trained persons, clearing template row.");
+            for (XWPFTable table : document.getTables()) {
+                int templateRowIndex = findTrainedPersonTemplateRow(table);
+                if (templateRowIndex == -1) continue;
+                XWPFTableRow templateRow = table.getRow(templateRowIndex);
+                for (XWPFTableCell cell : templateRow.getTableCells()) {
+                    for (XWPFParagraph para : cell.getParagraphs()) {
+                        for (XWPFRun run : para.getRuns()) {
+                            run.setText("", 0);
+                        }
+                    }
+                }
+            }
             return;
         }
 

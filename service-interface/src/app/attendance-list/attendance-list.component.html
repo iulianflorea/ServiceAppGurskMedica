@@ -1,6 +1,9 @@
 <div class="attendance-container list-page-container">
   <div class="list-erp-header">
     <span class="list-erp-title">Pontaj</span>
+    <button mat-icon-button (click)="loadAttendance()" matTooltip="Reîncarcă lista" aria-label="Refresh">
+      <mat-icon>refresh</mat-icon>
+    </button>
   </div>
 <div class="list-scroll-body">
   <!-- Filtere și sumar — rămân fixe, nu se scrollează -->

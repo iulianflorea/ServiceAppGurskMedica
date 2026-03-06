@@ -1,11 +1,17 @@
 package com.example.ServiceApp.controller;
 
 import com.example.ServiceApp.dto.EquipmentDto;
-import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.service.EquipmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,8 +26,14 @@ public class EquipmentController {
     }
 
     @PostMapping
-    public EquipmentDto create(@RequestBody EquipmentDto equipmentDto) {
-        return equipmentService.create(equipmentDto);
+    public ResponseEntity<EquipmentDto> saveOrUpdate(
+            @RequestParam(required = false) Long id,
+            @RequestParam String model,
+            @RequestParam String productCode,
+            @RequestParam Long producerId,
+            @RequestParam(required = false) MultipartFile image
+    ) {
+        return equipmentService.saveOrUpdateEquipment(id, model, productCode, producerId, image);
     }
 
     @GetMapping("find-by-id/{id}")
@@ -37,11 +49,6 @@ public class EquipmentController {
     @GetMapping("/find-all")
     public List<EquipmentDto> findAll() {
         return equipmentService.findAll();
-    }
-
-    @PutMapping
-    public EquipmentDto update(@RequestBody EquipmentDto equipmentDto) {
-        return equipmentService.update(equipmentDto);
     }
 
     @DeleteMapping("/delete/{id}")

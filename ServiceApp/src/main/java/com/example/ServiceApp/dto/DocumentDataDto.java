@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,6 +27,9 @@ public class DocumentDataDto {
 
     @Builder.Default
     private List<DocumentEquipmentDto> equipments = new ArrayList<>();
+
+    @Builder.Default
+    private List<DocumentProductDto> products = new ArrayList<>();
 
     @Builder.Default
     private List<DocumentTrainedPersonDto> trainedPersons = new ArrayList<>();

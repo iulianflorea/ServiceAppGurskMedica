@@ -22,28 +22,60 @@
         <div class="erp-fields-grid">
 
           <mat-form-field appearance="outline" class="field-half">
-            <mat-label>Quantity</mat-label>
-            <input matInput formControlName="quantity" #quantityInput/>
+            <mat-label>Cantitate</mat-label>
+            <input matInput formControlName="quantity" type="number" #quantityInput/>
             <mat-icon matSuffix>inventory_2</mat-icon>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="field-half">
-            <mat-label>Code</mat-label>
-            <input matInput formControlName="productCode"/>
+          <!-- Cod manual — vizibil doar când NU e mod scanare -->
+          <mat-form-field appearance="outline" class="field-half" *ngIf="!scanMode">
+            <mat-label>Cod produs</mat-label>
+            <input matInput formControlName="productCode" #codeInput/>
             <mat-icon matSuffix>qr_code</mat-icon>
           </mat-form-field>
 
         </div>
 
-        <div style="margin-top: 0.5rem;">
-          <button mat-raised-button color="primary" type="submit">
+        <!-- Butoane mod scanare -->
+        <div style="display: flex; gap: 10px; margin-top: 0.75rem; flex-wrap: wrap; align-items: center;">
+          <button mat-raised-button color="primary" type="submit" *ngIf="!scanMode">
             <mat-icon>send</mat-icon> Trimite
+          </button>
+
+          <button mat-stroked-button color="primary" type="button"
+                  *ngIf="!scanMode" (click)="enableScanMode()">
+            <mat-icon>qr_code_scanner</mat-icon> Scanează cu camera
+          </button>
+
+          <button mat-stroked-button color="warn" type="button"
+                  *ngIf="scanMode" (click)="disableScanMode()">
+            <mat-icon>keyboard</mat-icon> Introdu manual
           </button>
         </div>
 
-        <p *ngIf="responseMessage" style="margin-top: 1rem; color: #3f51b5; font-weight: 500;">
+        <!-- Scanner cameră -->
+        <div *ngIf="scanMode" class="scanner-container">
+          <p class="scanner-hint">
+            <mat-icon style="vertical-align: middle; font-size: 18px;">info</mat-icon>
+            Asigură-te că cantitatea e completată, apoi îndreaptă camera spre cod.
+          </p>
+          <zxing-scanner
+            [enable]="scannerEnabled"
+            [formats]="formatsToScan"
+            (scanSuccess)="onCodeScanned($event)">
+          </zxing-scanner>
+          <p *ngIf="!scannerEnabled" style="text-align:center; color:#999; margin-top: 8px;">
+            <mat-icon style="vertical-align:middle;">hourglass_top</mat-icon>
+            Procesare...
+          </p>
+        </div>
+
+        <!-- Mesaj răspuns -->
+        <p *ngIf="responseMessage" class="response-msg"
+           [style.color]="responseSuccess ? '#388e3c' : '#d32f2f'">
           {{ responseMessage }}
         </p>
+
       </div>
 
     </form>

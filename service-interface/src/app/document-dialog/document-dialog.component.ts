@@ -5,7 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { DocumentService } from "../services/document.service";
 import { InterventionSheetListComponent } from "../intervention-sheet-list/intervention-sheet-list.component";
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-document-dialog',

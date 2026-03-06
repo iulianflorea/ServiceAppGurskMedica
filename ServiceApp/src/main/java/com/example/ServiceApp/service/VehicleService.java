@@ -174,7 +174,7 @@ public class VehicleService {
                 .date(dto.getDate())
                 .validityMonths(dto.getValidityMonths())
                 .expiryDate(dto.getDate() != null && dto.getValidityMonths() != null
-                        ? dto.getDate().plusMonths(dto.getValidityMonths()) : null)
+                        ? dto.getDate().plusMonths(dto.getValidityMonths()).minusDays(1) : null)
                 .cost(dto.getCost())
                 .build();
         return toItpDto(itpRepository.save(entity));
@@ -186,7 +186,7 @@ public class VehicleService {
         entity.setDate(dto.getDate());
         entity.setValidityMonths(dto.getValidityMonths());
         entity.setExpiryDate(dto.getDate() != null && dto.getValidityMonths() != null
-                ? dto.getDate().plusMonths(dto.getValidityMonths()) : null);
+                ? dto.getDate().plusMonths(dto.getValidityMonths()).minusDays(1) : null);
         entity.setCost(dto.getCost());
         return toItpDto(itpRepository.save(entity));
     }
@@ -203,7 +203,7 @@ public class VehicleService {
                 .date(dto.getDate())
                 .validityMonths(dto.getValidityMonths())
                 .expiryDate(dto.getDate() != null && dto.getValidityMonths() != null
-                        ? dto.getDate().plusMonths(dto.getValidityMonths()) : null)
+                        ? dto.getDate().plusMonths(dto.getValidityMonths()).minusDays(1) : null)
                 .insurer(dto.getInsurer())
                 .policyNumber(dto.getPolicyNumber())
                 .cost(dto.getCost())
@@ -217,7 +217,7 @@ public class VehicleService {
         entity.setDate(dto.getDate());
         entity.setValidityMonths(dto.getValidityMonths());
         entity.setExpiryDate(dto.getDate() != null && dto.getValidityMonths() != null
-                ? dto.getDate().plusMonths(dto.getValidityMonths()) : null);
+                ? dto.getDate().plusMonths(dto.getValidityMonths()).minusDays(1) : null);
         entity.setInsurer(dto.getInsurer());
         entity.setPolicyNumber(dto.getPolicyNumber());
         entity.setCost(dto.getCost());

@@ -7,7 +7,7 @@ import {HttpClient} from "@angular/common/http";
 import {ProductDto} from "../dtos/productDto";
 import {Observable} from "rxjs";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
 
 @Component({
@@ -17,7 +17,7 @@ import {Router} from "@angular/router";
 })
 export class EquipmentListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'model', 'productCode', 'producerId', 'delete'];
+  displayedColumns: string[] = ['id', 'image', 'model', 'productCode', 'producerId', 'delete'];
   dataSource: EquipmentDto[] = [];
   dataSource2 = new MatTableDataSource<EquipmentDto>(this.dataSource);
   keyword: string = '';
@@ -56,6 +56,13 @@ export class EquipmentListComponent implements AfterViewInit {
 
   searchEquipments(keyword: string): Observable<EquipmentDto[]> {
     return this.httpClient.get<EquipmentDto[]>(`${environment.apiUrl}/equipment/search?keyword=${keyword}`);
+  }
+
+  getImage(imageName: string | null): string {
+    if (imageName) {
+      return `${environment.apiUrl}/uploads/` + imageName;
+    }
+    return 'assets/no-image.png';
   }
 
   search() {

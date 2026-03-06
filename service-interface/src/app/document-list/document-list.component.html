@@ -1,10 +1,15 @@
 <div class="container-doc-list list-page-container">
   <div class="list-erp-header">
     <span class="list-erp-title">Lista Documente</span>
-    <button mat-mini-fab color="accent" routerLink="/documents-form"
-            aria-label="Add new document">
-      <mat-icon>plus_one</mat-icon>
-    </button>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button mat-icon-button (click)="loadDocuments()" matTooltip="Reîncarcă lista" aria-label="Refresh">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-mini-fab color="accent" routerLink="/documents-form"
+              aria-label="Add new document">
+        <mat-icon>plus_one</mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="list-page-header">

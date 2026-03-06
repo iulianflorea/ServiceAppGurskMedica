@@ -1,21 +1,33 @@
 package com.example.ServiceApp.service;
 
 import com.example.ServiceApp.dto.EquipmentDto;
-import com.example.ServiceApp.dto.InterventionSheetDto;
 import com.example.ServiceApp.entity.Equipment;
-import com.example.ServiceApp.entity.InterventionSheet;
 import com.example.ServiceApp.mapper.EquipmentMapper;
 import com.example.ServiceApp.repository.EquipmentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EquipmentService {
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     private final EquipmentRepository equipmentRepository;
     private final EquipmentMapper equipmentMapper;
@@ -25,15 +37,40 @@ public class EquipmentService {
         this.equipmentMapper = equipmentMapper;
     }
 
-    public EquipmentDto create(EquipmentDto equipmentDto) {
-        Equipment equipmentToBeSaved = equipmentMapper.toEntity(equipmentDto);
-        if (equipmentDto.getId() == null) {
-            Equipment equipmentSaved = equipmentRepository.save(equipmentToBeSaved);
-            return equipmentMapper.toDto(equipmentSaved);
+    public ResponseEntity<EquipmentDto> saveOrUpdateEquipment(Long id, String model, String productCode, Long producerId, MultipartFile image) {
+        Equipment equipment;
+
+        if (id != null) {
+            Optional<Equipment> optional = equipmentRepository.findById(id);
+            if (optional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            equipment = optional.get();
         } else {
-            update(equipmentDto);
+            equipment = new Equipment();
         }
-        return equipmentMapper.toDto(equipmentToBeSaved);
+
+        equipment.setModel(model);
+        equipment.setProductCode(productCode);
+        equipment.setProducerId(producerId);
+
+        if (image != null && !image.isEmpty()) {
+            String imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+            Path uploadDir = Paths.get(uploadPath);
+            try {
+                if (!Files.exists(uploadDir)) {
+                    Files.createDirectories(uploadDir);
+                }
+                Path filePath = uploadDir.resolve(imageName);
+                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                equipment.setImageName(imageName);
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
+        Equipment saved = equipmentRepository.save(equipment);
+        return ResponseEntity.ok(equipmentMapper.toDto(saved));
     }
 
     public EquipmentDto findById(Long id) {
@@ -47,18 +84,9 @@ public class EquipmentService {
         return equipmentMapper.toDtoList(equipmentPage.getContent());
     }
 
-    public List<EquipmentDto> findAll(){
+    public List<EquipmentDto> findAll() {
         List<Equipment> equipmentList = equipmentRepository.findAll();
         return equipmentMapper.toDtoList(equipmentList);
-    }
-
-    public EquipmentDto update(EquipmentDto equipmentDto) {
-        Equipment equipmentToBeUpdate = equipmentRepository.findById(equipmentDto.getId()).orElseThrow();
-        equipmentToBeUpdate.setModel(equipmentDto.getModel());
-        equipmentToBeUpdate.setProductCode(equipmentDto.getProductCode());
-        equipmentToBeUpdate.setProducerId(equipmentDto.getProducerId());
-        Equipment equipmentUpdated = equipmentRepository.save(equipmentToBeUpdate);
-        return equipmentMapper.toDto(equipmentUpdated);
     }
 
     public void delete(Long id) {
@@ -69,6 +97,5 @@ public class EquipmentService {
         List<Equipment> equipmentList = equipmentRepository.seearchEquipments(keyword);
         return equipmentMapper.toDtoList(equipmentList);
     }
-
 
 }

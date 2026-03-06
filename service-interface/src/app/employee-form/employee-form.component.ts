@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {EmployeeDto} from "../dtos/employeeDto";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-employee-form',

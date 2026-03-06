@@ -13,7 +13,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSort} from "@angular/material/sort";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 
 @Component({

@@ -4,7 +4,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
 
 

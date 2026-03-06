@@ -84,6 +84,7 @@ public List<InterventionSheetDto> findAll() {
         interventionSheet.setTypeOfIntervention(interventionSheetDto.getTypeOfIntervention());
         interventionSheet.setYearsOfWarranty(interventionSheetDto.getYearsOfWarranty());
         interventionSheet.setDataOfExpireWarranty(calculeazaExpirareaGarantiei(interventionSheetDto.getDateOfIntervention(), interventionSheetDto.getYearsOfWarranty()));
+        interventionSheet.setSignatureBase64(interventionSheetDto.getSignatureBase64());
         InterventionSheet interventionSheetSaved = interventionSheetRepository.save(interventionSheet);
         return interventionSheetMapper.toDto(interventionSheetSaved);
     }

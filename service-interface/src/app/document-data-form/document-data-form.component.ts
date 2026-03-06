@@ -4,8 +4,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {Observable, forkJoin, startWith, map} from 'rxjs';
 import {SignaturePadComponent} from '../signature-pad/signature-pad.component';
-import {environment} from "../../environments/environment.prod";
-import {DocumentEquipmentDto, DocumentTrainedPersonDto} from "../dtos/documentDataDto";
+import {environment} from "../../environments/environment";
+import {DocumentEquipmentDto, DocumentProductDto, DocumentTrainedPersonDto} from "../dtos/documentDataDto";
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 interface CustomerDto {
@@ -18,6 +18,12 @@ interface EquipmentDto {
   id: number;
   model: string;
   productCode: string;
+}
+
+interface ProductDto {
+  id: number;
+  name: string;
+  cod: string;
 }
 
 @Component({
@@ -37,6 +43,9 @@ export class DocumentDataFormComponent implements OnInit {
 
   equipmentList: EquipmentDto[] = [];
   filteredEquipmentOptions: Observable<EquipmentDto[]>[] = [];
+
+  productList: ProductDto[] = [];
+  filteredProductOptions: Observable<ProductDto[]>[] = [];
 
   @ViewChild(SignaturePadComponent) signaturePadComponent!: SignaturePadComponent;
   @ViewChildren('trainedPersonSignaturePad') trainedPersonSignaturePads!: QueryList<SignaturePadComponent>;
@@ -66,16 +75,19 @@ export class DocumentDataFormComponent implements OnInit {
       signatureDate: [''],
       contactPerson: [''],
       equipments: this.fb.array([]),
+      products: this.fb.array([]),
       trainedPersons: this.fb.array([])
     });
 
-    // Load customers & equipments
+    // Load customers, equipments & products
     forkJoin({
       customers: this.http.get<CustomerDto[]>(`${environment.apiUrl}/customer/customer-list`),
-      equipments: this.http.get<EquipmentDto[]>(`${environment.apiUrl}/equipment/find-all`)
-    }).subscribe(({customers, equipments}) => {
+      equipments: this.http.get<EquipmentDto[]>(`${environment.apiUrl}/equipment/find-all`),
+      products: this.http.get<ProductDto[]>(`${environment.apiUrl}/product/getAll`)
+    }).subscribe(({customers, equipments, products}) => {
       this.customerList = customers || [];
       this.equipmentList = equipments || [];
+      this.productList = products || [];
 
       this.filteredCustomers = this.documentForm.get('customerControl')!.valueChanges.pipe(
         startWith(''),
@@ -86,6 +98,7 @@ export class DocumentDataFormComponent implements OnInit {
       // Add one empty equipment row by default
       if (!this.id) {
         this.addEquipment();
+        this.addProduct();
         this.addTrainedPerson();
       }
 
@@ -159,6 +172,50 @@ export class DocumentDataFormComponent implements OnInit {
       this.equipmentsArray.removeAt(index);
       this.filteredEquipmentOptions.splice(index, 1);
     }
+  }
+
+  get productsArray(): FormArray {
+    return this.documentForm.get('products') as FormArray;
+  }
+
+  addProduct(): void {
+    const productGroup = this.fb.group({
+      id: [null],
+      productControl: new FormControl(null),
+      productName: [''],
+      productCod: [''],
+      quantity: [1]
+    });
+
+    const filteredOptions = productGroup.get('productControl')!.valueChanges.pipe(
+      startWith(''),
+      map((value: any) => typeof value === 'string' ? value : value?.name),
+      map((name: string) => name ? this._filterProducts(name) : this.productList.slice())
+    );
+    this.filteredProductOptions.push(filteredOptions);
+
+    productGroup.get('productControl')!.valueChanges.subscribe((val: any) => {
+      if (val && typeof val === 'object' && 'id' in val) {
+        productGroup.get('productName')?.setValue(val.name || '');
+        productGroup.get('productCod')?.setValue(val.cod || '');
+      }
+    });
+
+    this.productsArray.push(productGroup);
+  }
+
+  removeProduct(index: number): void {
+    this.productsArray.removeAt(index);
+    this.filteredProductOptions.splice(index, 1);
+  }
+
+  displayProduct(pr?: ProductDto): string {
+    return pr ? pr.name : '';
+  }
+
+  private _filterProducts(name: string): ProductDto[] {
+    const filterValue = name.toLowerCase();
+    return this.productList.filter(p => p.name.toLowerCase().includes(filterValue) || p.cod.toLowerCase().includes(filterValue));
   }
 
   addTrainedPerson(): void {
@@ -258,6 +315,24 @@ export class DocumentDataFormComponent implements OnInit {
         this.addEquipment();
       }
 
+      // Load products
+      if (doc.products && doc.products.length > 0) {
+        doc.products.forEach((pr: DocumentProductDto) => {
+          this.addProduct();
+          const lastIndex = this.productsArray.length - 1;
+          const group = this.productsArray.at(lastIndex) as FormGroup;
+
+          group.get('id')?.setValue(pr.id || null);
+          const prObj = this.productList.find(p => p.id === pr.productId);
+          if (prObj) {
+            group.get('productControl')?.setValue(prObj, {emitEvent: false});
+          }
+          group.get('productName')?.setValue(pr.productName || '');
+          group.get('productCod')?.setValue(pr.productCod || '');
+          group.get('quantity')?.setValue(pr.quantity ?? 1);
+        });
+      }
+
       // Load trained persons
       if (doc.trainedPersons && doc.trainedPersons.length > 0) {
         doc.trainedPersons.forEach((tp: DocumentTrainedPersonDto) => {
@@ -306,6 +381,24 @@ export class DocumentDataFormComponent implements OnInit {
       }
     }
 
+    // Build products array
+    const products: DocumentProductDto[] = [];
+    for (let i = 0; i < this.productsArray.length; i++) {
+      const prGroup = this.productsArray.at(i).value;
+      const prControl = prGroup.productControl;
+
+      if (prControl?.id || prGroup.productName || prGroup.productCod) {
+        products.push({
+          id: prGroup.id || null,
+          productId: prControl?.id || null,
+          productName: prGroup.productName || '',
+          productCod: prGroup.productCod || '',
+          quantity: prGroup.quantity || 1,
+          sortOrder: i
+        });
+      }
+    }
+
     // Build trained persons array with signatures
     const trainedPersons: DocumentTrainedPersonDto[] = [];
     const pads = this.trainedPersonSignaturePads?.toArray() || [];
@@ -344,6 +437,7 @@ export class DocumentDataFormComponent implements OnInit {
       signatureDate: form.signatureDate,
       contactPerson: form.contactPerson,
       equipments: equipments,
+      products: products,
       trainedPersons: trainedPersons
     };
 

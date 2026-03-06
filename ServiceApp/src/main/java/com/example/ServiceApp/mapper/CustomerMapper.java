@@ -17,6 +17,8 @@ public class CustomerMapper {
                 .telephone(customerDto.getTelephone())
                 .email(customerDto.getEmail())
                 .contactPerson(customerDto.getContactPerson())
+                .latitude(customerDto.getLatitude())
+                .longitude(customerDto.getLongitude())
                 .build();
     }
 
@@ -29,6 +31,8 @@ public class CustomerMapper {
                 .telephone(customer.getTelephone())
                 .email(customer.getEmail())
                 .contactPerson(customer.getContactPerson())
+                .latitude(customer.getLatitude())
+                .longitude(customer.getLongitude())
                 .build();
     }
 

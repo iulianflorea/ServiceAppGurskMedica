@@ -1,3 +1,12 @@
+export interface DocumentProductDto {
+  id?: number;
+  productId?: number;
+  productName?: string;
+  productCod?: string;
+  quantity?: number;
+  sortOrder?: number;
+}
+
 export interface DocumentEquipmentDto {
   id?: number;
   equipmentId?: number;
@@ -30,5 +39,6 @@ export class DocumentDataDto {
   signatureDate?: string;
   signatureBase64?: string;
   equipments?: DocumentEquipmentDto[];
+  products?: DocumentProductDto[];
   trainedPersons?: DocumentTrainedPersonDto[];
 }

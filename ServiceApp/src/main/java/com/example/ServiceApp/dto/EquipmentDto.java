@@ -14,4 +14,5 @@ public class EquipmentDto {
     private String productCode;
     private Long producerId;
     private String producerName;
+    private String imageName;
 }

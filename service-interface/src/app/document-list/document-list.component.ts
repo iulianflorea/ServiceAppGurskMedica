@@ -6,7 +6,7 @@ import {DocumentDataDto} from "../dtos/documentDataDto";
 import {Observable} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
 
 export interface DocumentData {

@@ -54,6 +54,10 @@ import { DocumentDataFormComponent } from './document-data-form/document-data-fo
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {VehicleFormComponent} from "./vehicle-form/vehicle-form.component";
 import {VehicleListComponent} from "./vehicle-list/vehicle-list.component";
+import {GoogleMapsModule} from "@angular/google-maps";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import {RouteReuseStrategy} from "@angular/router";
+import {CustomRouteReuseStrategy} from "./custom-route-reuse-strategy";
 
 
 @NgModule({
@@ -120,12 +124,18 @@ import {VehicleListComponent} from "./vehicle-list/vehicle-list.component";
     MatCheckboxModule,
     MatTooltipModule,
     VehicleListComponent,
+    GoogleMapsModule,
+    ZXingScannerModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomRouteReuseStrategy
     }
   ],
   exports: [],

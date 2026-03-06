@@ -167,7 +167,58 @@
       </div>
 
       <!-- ══════════════════════════════════════════ -->
-      <!-- SECTION 3: PERSOANE INSTRUITE              -->
+      <!-- SECTION 3: PRODUSE                         -->
+      <!-- ══════════════════════════════════════════ -->
+      <div class="erp-section">
+        <div class="doc-section-header">
+          <div class="erp-section-title">Produse</div>
+          <button mat-icon-button color="primary" (click)="addProduct()" type="button"
+                  matTooltip="Adaugă produs">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
+
+        <div formArrayName="products">
+          <ng-container *ngFor="let product of productsArray.controls; let i = index">
+            <div class="doc-row-card" [formGroupName]="i">
+              <span class="doc-row-index">{{ i + 1 }}</span>
+              <div class="doc-row-fields">
+
+                <mat-form-field appearance="outline" class="field-eq-name">
+                  <mat-label>Produs</mat-label>
+                  <input matInput [matAutocomplete]="autoPr" formControlName="productControl"
+                         placeholder="Caută produs...">
+                  <mat-icon matSuffix>inventory_2</mat-icon>
+                </mat-form-field>
+
+                <mat-autocomplete #autoPr="matAutocomplete" [displayWith]="displayProduct">
+                  <mat-option *ngFor="let p of filteredProductOptions[i] | async" [value]="p">
+                    {{ p.name }} <span style="color:#999; font-size:11px;">{{ p.cod }}</span>
+                  </mat-option>
+                </mat-autocomplete>
+
+                <mat-form-field appearance="outline" class="field-eq-code">
+                  <mat-label>Cod</mat-label>
+                  <input matInput formControlName="productCod">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 90px;">
+                  <mat-label>Cant.</mat-label>
+                  <input matInput type="number" formControlName="quantity">
+                </mat-form-field>
+
+              </div>
+              <button mat-icon-button color="warn" (click)="removeProduct(i)" type="button"
+                      matTooltip="Șterge">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════ -->
+      <!-- SECTION 4: PERSOANE INSTRUITE              -->
       <!-- ══════════════════════════════════════════ -->
       <div class="erp-section">
         <div class="doc-section-header">

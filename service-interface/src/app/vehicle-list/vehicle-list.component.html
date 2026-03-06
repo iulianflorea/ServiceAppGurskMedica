@@ -8,6 +8,9 @@
         <mat-icon>notifications_active</mat-icon>
         {{ alertTriggering ? 'Se trimite...' : 'Test alerte email' }}
       </button>
+      <button mat-icon-button (click)="loadAll()" matTooltip="Reîncarcă lista" aria-label="Refresh">
+        <mat-icon>refresh</mat-icon>
+      </button>
       <button mat-mini-fab color="accent" routerLink="/vehicle-form" aria-label="Adaugă mașină">
         <mat-icon>add</mat-icon>
       </button>

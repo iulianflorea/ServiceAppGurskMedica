@@ -3,7 +3,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {EmployeeDto} from "../dtos/employeeDto";
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-employee-list',

@@ -22,5 +22,7 @@ public class Customer {
     private String telephone;
     private String email;
     private String contactPerson;
+    private Double latitude;
+    private Double longitude;
 
 }

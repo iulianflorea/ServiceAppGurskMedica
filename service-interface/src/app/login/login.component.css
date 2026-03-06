@@ -27,3 +27,7 @@
   flex-direction: column;
   align-items: center;
 }
+
+.login-form mat-form-field {
+  width: 220px;
+}

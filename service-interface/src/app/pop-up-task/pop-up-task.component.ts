@@ -11,7 +11,7 @@ import {InterventionSheetListComponent} from "../intervention-sheet-list/interve
 import {CommonModule} from "@angular/common";
 // @ts-ignore
 import html2pdf from "html2pdf.js";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 
 

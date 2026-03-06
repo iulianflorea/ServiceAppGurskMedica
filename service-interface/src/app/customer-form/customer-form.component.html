@@ -68,6 +68,43 @@
         </div>
       </div>
 
+      <div class="erp-section">
+        <div class="erp-section-title">Locație pe hartă</div>
+
+        <!-- Buton deschide harta -->
+        <div *ngIf="!mapVisible" style="display: flex; align-items: center; gap: 12px;">
+          <button mat-stroked-button type="button" (click)="toggleMap()">
+            <mat-icon>map</mat-icon> Deschide harta
+          </button>
+          <button mat-stroked-button type="button" (click)="getCurrentLocation()">
+            <mat-icon>my_location</mat-icon> Locație curentă
+          </button>
+          <span *ngIf="latitude && longitude" style="color: #666; font-size: 12px;">
+            Locație salvată: {{ latitude | number:'1.6-6' }}, {{ longitude | number:'1.6-6' }}
+          </span>
+          <span *ngIf="!latitude" style="color: #999; font-size: 12px;">
+            Fără locație setată
+          </span>
+        </div>
+
+        <!-- Harta — apare doar după click pe buton -->
+        <div *ngIf="mapVisible">
+          <div style="margin-bottom: 8px;">
+            <button mat-stroked-button type="button" (click)="getCurrentLocation()">
+              <mat-icon>my_location</mat-icon> Locație curentă
+            </button>
+          </div>
+          <google-map height="350px" width="100%"
+                      [center]="mapCenter" [zoom]="mapZoom"
+                      (mapClick)="onMapClick($event)">
+            <map-marker *ngIf="markerPosition" [position]="markerPosition"></map-marker>
+          </google-map>
+          <p style="margin-top: 8px; color: #666; font-size: 12px;">
+            {{ latitude && longitude ? 'Coordonate: ' + (latitude | number:'1.6-6') + ', ' + (longitude | number:'1.6-6') : 'Click pe hartă pentru a seta locația' }}
+          </p>
+        </div>
+      </div>
+
     </form>
   </div>
 

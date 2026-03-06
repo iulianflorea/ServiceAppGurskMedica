@@ -12,6 +12,7 @@ import com.example.ServiceApp.repository.ProducerRepository;
 import com.example.ServiceApp.repository.ProductRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,10 @@ import java.util.UUID;
 
 @Service
 public class ProductService {
+
+    @Value("${upload.path}")
+    private String uploadPath;
+
     private final ProducerRepository producerRepository;
     private final ProducerMapper producerMapper;
     private final ProductRepository productRepository;
@@ -86,13 +91,12 @@ public class ProductService {
         // Image handling
         if (image != null && !image.isEmpty()) {
             String imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-            Path uploadPath = Paths.get("/home/julian-s-server/Desktop/ServiceAppGurskMedica/uploads");
-//            Path uploadPath = Paths.get("/uploads/");
+            Path uploadDir = Paths.get(uploadPath);
             try {
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
+                if (!Files.exists(uploadDir)) {
+                    Files.createDirectories(uploadDir);
                 }
-                Path filePath = uploadPath.resolve(imageName);
+                Path filePath = uploadDir.resolve(imageName);
                 Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
                 product.setImageName(imageName);
             } catch (IOException e) {

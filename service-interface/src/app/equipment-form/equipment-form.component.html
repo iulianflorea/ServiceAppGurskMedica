@@ -1,3 +1,13 @@
+<!-- Lightbox overlay -->
+<div class="lightbox-overlay" *ngIf="lightboxOpen" (click)="closeLightbox()">
+  <div class="lightbox-content" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="closeLightbox()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <img [src]="previewUrl || getImage(imageName)" alt="equipment image" class="lightbox-image"/>
+  </div>
+</div>
+
 <div class="form-page-container">
 
   <!-- ERP Header -->
@@ -24,33 +34,52 @@
 
   <!-- Scrollable body -->
   <div class="form-body-scroll">
-    <form [formGroup]="equipmentForm" (ngSubmit)="saveEquipment()" class="erp-form-body">
+    <form [formGroup]="equipmentForm" (ngSubmit)="saveEquipment()" class="erp-body">
 
-      <div class="erp-section">
-        <div class="erp-section-title">Informații Echipament</div>
-        <div class="erp-fields-grid">
+      <!-- Left: Image Panel -->
+      <div class="erp-image-panel">
+        <div class="erp-section-title">Imagine Echipament</div>
+        <div class="erp-image-container" (click)="openLightbox()" title="Click pentru a mări">
+          <img [src]="previewUrl || getImage(imageName)" alt="equipment image" class="erp-product-image"/>
+          <div class="image-zoom-hint">
+            <mat-icon>zoom_in</mat-icon>
+          </div>
+        </div>
+        <label class="image-upload-btn" for="imageUpload">
+          <mat-icon>upload</mat-icon>
+          Schimbă imaginea
+        </label>
+        <input id="imageUpload" type="file" (change)="onFileSelected($event)" accept="image/*"/>
+      </div>
 
-          <mat-form-field appearance="outline" class="field-full">
-            <mat-label>Model</mat-label>
-            <input matInput [(ngModel)]="model" [ngModelOptions]="{standalone: true}"/>
-            <mat-icon matSuffix>precision_manufacturing</mat-icon>
-          </mat-form-field>
+      <!-- Right: Fields Panel -->
+      <div class="erp-fields-panel">
+        <div class="erp-section">
+          <div class="erp-section-title">Informații Echipament</div>
+          <div class="erp-fields-grid">
 
-          <mat-form-field appearance="outline" class="field-half">
-            <mat-label>Product Code</mat-label>
-            <input matInput [(ngModel)]="productCode" [ngModelOptions]="{standalone: true}"/>
-            <mat-icon matSuffix>qr_code</mat-icon>
-          </mat-form-field>
+            <mat-form-field appearance="outline" class="field-full">
+              <mat-label>Model</mat-label>
+              <input matInput [(ngModel)]="model" [ngModelOptions]="{standalone: true}"/>
+              <mat-icon matSuffix>precision_manufacturing</mat-icon>
+            </mat-form-field>
 
-          <mat-form-field appearance="outline" class="field-half">
-            <mat-label>Producer</mat-label>
-            <mat-select [(ngModel)]="producerSelected" [ngModelOptions]="{standalone: true}">
-              <mat-option *ngFor="let producer of producerList" [value]="producer.id">
-                {{producer.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+            <mat-form-field appearance="outline" class="field-half">
+              <mat-label>Product Code</mat-label>
+              <input matInput [(ngModel)]="productCode" [ngModelOptions]="{standalone: true}"/>
+              <mat-icon matSuffix>qr_code</mat-icon>
+            </mat-form-field>
 
+            <mat-form-field appearance="outline" class="field-half">
+              <mat-label>Producer</mat-label>
+              <mat-select [(ngModel)]="producerSelected" [ngModelOptions]="{standalone: true}">
+                <mat-option *ngFor="let producer of producerList" [value]="producer.id">
+                  {{producer.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
         </div>
       </div>
 

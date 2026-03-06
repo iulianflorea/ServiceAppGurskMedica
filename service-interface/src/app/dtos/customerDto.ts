@@ -6,4 +6,6 @@ export class CustomerDto {
   telephone?: string;
   email?: string;
   contactPerson?: string;
+  latitude?: number;
+  longitude?: number;
 }

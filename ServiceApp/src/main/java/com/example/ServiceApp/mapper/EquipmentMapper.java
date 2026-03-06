@@ -17,6 +17,7 @@ public class EquipmentMapper {
                 .model(equipmentDto.getModel())
                 .productCode(equipmentDto.getProductCode())
                 .producerId(equipmentDto.getProducerId())
+                .imageName(equipmentDto.getImageName())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public class EquipmentMapper {
                 .productCode(equipment.getProductCode())
                 .producerId(equipment.getProducerId())
                 .producerName(getProducerName(equipment))
+                .imageName(equipment.getImageName())
                 .build();
     }
 

@@ -4,7 +4,7 @@ import {AuthenticationService} from "../auth-guard/AuthenticationService";
 import {FormControl, FormGroup} from "@angular/forms";
 import {BackupDto} from "../dtos/bacupDto";
 import {Observable} from "rxjs";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 
 declare global {

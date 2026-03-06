@@ -20,6 +20,13 @@ export class CustomerFormComponent implements OnInit {
   email: any;
   contactPerson: any;
 
+  latitude: number | null = null;
+  longitude: number | null = null;
+  mapVisible = false;
+  mapCenter: google.maps.LatLngLiteral = {lat: 45.9, lng: 24.9};
+  mapZoom = 7;
+  markerPosition: google.maps.LatLngLiteral | null = null;
+
   customerForm: FormGroup = new FormGroup({
     name: new FormControl,
     cui: new FormControl,
@@ -45,9 +52,51 @@ export class CustomerFormComponent implements OnInit {
         this.telephone = response.telephone;
         this.email = response.email;
         this.contactPerson = response.contactPerson;
+        if (response.latitude != null && response.longitude != null) {
+          this.latitude = response.latitude;
+          this.longitude = response.longitude;
+        }
       })
     }
+  }
 
+  toggleMap() {
+    this.mapVisible = true;
+    if (this.latitude != null && this.longitude != null) {
+      this.mapCenter = {lat: this.latitude, lng: this.longitude};
+      this.markerPosition = {lat: this.latitude, lng: this.longitude};
+      this.mapZoom = 14;
+    } else {
+      this.mapCenter = {lat: 45.9, lng: 24.9};
+      this.markerPosition = null;
+      this.mapZoom = 7;
+    }
+  }
+
+  onMapClick(event: google.maps.MapMouseEvent) {
+    if (event.latLng) {
+      this.latitude = event.latLng.lat();
+      this.longitude = event.latLng.lng();
+      this.markerPosition = {lat: this.latitude, lng: this.longitude};
+    }
+  }
+
+  getCurrentLocation() {
+    if (!navigator.geolocation) {
+      alert('Geolocalizarea nu este suportată de browser.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+        this.mapCenter = {lat: this.latitude, lng: this.longitude};
+        this.markerPosition = {lat: this.latitude, lng: this.longitude};
+        this.mapZoom = 16;
+        this.mapVisible = true;
+      },
+      () => alert('Nu s-a putut obține locația. Verifică permisiunile browserului.')
+    );
   }
 
   saveCustomer() {
@@ -58,7 +107,9 @@ export class CustomerFormComponent implements OnInit {
       address: this.address,
       telephone: this.telephone,
       email: this.email,
-      contactPerson: this.contactPerson
+      contactPerson: this.contactPerson,
+      latitude: this.latitude,
+      longitude: this.longitude
     }
     this.httpClient.post(`${environment.apiUrl}/customer`, customer).subscribe((response) => {
       console.log(response);

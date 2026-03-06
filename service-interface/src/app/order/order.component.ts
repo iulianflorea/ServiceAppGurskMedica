@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormArray, Validators, FormControl} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {hide} from "@popperjs/core";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 interface Client {
   id: number;

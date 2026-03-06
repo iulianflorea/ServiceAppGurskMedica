@@ -14,7 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { VehicleDto } from '../dtos/vehicleDto';
 import { VehicleDocumentService } from '../services/vehicle-document.service';
 import { VehicleDeleteConfirmDialogComponent } from './vehicle-delete-confirm-dialog.component';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-vehicle-list',
@@ -151,14 +151,12 @@ export class VehicleListComponent implements OnInit, AfterViewInit {
   }
 
   getLatestItpExpiry(vehicle: VehicleDto): string | undefined {
-    return vehicle.itpList && vehicle.itpList.length > 0
-      ? vehicle.itpList[vehicle.itpList.length - 1]?.expiryDate
-      : undefined;
+    if (!vehicle.itpList || vehicle.itpList.length === 0) return undefined;
+    return vehicle.itpList.reduce((a, b) => (a.id! > b.id! ? a : b)).expiryDate;
   }
 
   getLatestInsuranceExpiry(vehicle: VehicleDto): string | undefined {
-    return vehicle.insuranceList && vehicle.insuranceList.length > 0
-      ? vehicle.insuranceList[vehicle.insuranceList.length - 1]?.expiryDate
-      : undefined;
+    if (!vehicle.insuranceList || vehicle.insuranceList.length === 0) return undefined;
+    return vehicle.insuranceList.reduce((a, b) => (a.id! > b.id! ? a : b)).expiryDate;
   }
 }

@@ -2,9 +2,11 @@ package com.example.ServiceApp.mapper;
 
 import com.example.ServiceApp.dto.DocumentDataDto;
 import com.example.ServiceApp.dto.DocumentEquipmentDto;
+import com.example.ServiceApp.dto.DocumentProductDto;
 import com.example.ServiceApp.dto.DocumentTrainedPersonDto;
 import com.example.ServiceApp.entity.DocumentData;
 import com.example.ServiceApp.entity.DocumentEquipment;
+import com.example.ServiceApp.entity.DocumentProduct;
 import com.example.ServiceApp.entity.DocumentTrainedPerson;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,13 @@ public class DocumentDataMapper {
                     .collect(Collectors.toList());
         }
 
+        List<DocumentProductDto> productDtos = new ArrayList<>();
+        if (entity.getProducts() != null) {
+            productDtos = entity.getProducts().stream()
+                    .map(DocumentDataMapper::toProductDto)
+                    .collect(Collectors.toList());
+        }
+
         List<DocumentTrainedPersonDto> trainedPersonDtos = new ArrayList<>();
         if (entity.getTrainedPersons() != null) {
             trainedPersonDtos = entity.getTrainedPersons().stream()
@@ -46,6 +55,7 @@ public class DocumentDataMapper {
                 .monthOfWarrantyHandPieces(entity.getMonthOfWarrantyHandPieces())
                 .numberOfContract(entity.getNumberOfContract())
                 .equipments(equipmentDtos)
+                .products(productDtos)
                 .trainedPersons(trainedPersonDtos)
                 .signatureDate(entity.getSignatureDate())
                 .contactPerson(entity.getContactPerson())
@@ -66,6 +76,28 @@ public class DocumentDataMapper {
                 .equipmentName(equipmentName)
                 .productCode(entity.getProductCode())
                 .serialNumber(entity.getSerialNumber())
+                .sortOrder(entity.getSortOrder())
+                .build();
+    }
+
+    public static DocumentProductDto toProductDto(DocumentProduct entity) {
+        if (entity == null) {
+            return null;
+        }
+        String productName = entity.getProductName();
+        if (productName == null && entity.getProduct() != null) {
+            productName = entity.getProduct().getName();
+        }
+        String productCod = entity.getProductCod();
+        if (productCod == null && entity.getProduct() != null) {
+            productCod = entity.getProduct().getCod();
+        }
+        return DocumentProductDto.builder()
+                .id(entity.getId())
+                .productId(entity.getProductId())
+                .productName(productName)
+                .productCod(productCod)
+                .quantity(entity.getQuantity())
                 .sortOrder(entity.getSortOrder())
                 .build();
     }
@@ -97,6 +129,13 @@ public class DocumentDataMapper {
                     .collect(Collectors.toList());
         }
 
+        List<DocumentProduct> products = new ArrayList<>();
+        if (dto.getProducts() != null) {
+            products = dto.getProducts().stream()
+                    .map(DocumentDataMapper::toProductEntity)
+                    .collect(Collectors.toList());
+        }
+
         List<DocumentTrainedPerson> trainedPersons = new ArrayList<>();
         if (dto.getTrainedPersons() != null) {
             trainedPersons = dto.getTrainedPersons().stream()
@@ -113,6 +152,7 @@ public class DocumentDataMapper {
                 .monthOfWarrantyHandPieces(dto.getMonthOfWarrantyHandPieces())
                 .numberOfContract(dto.getNumberOfContract())
                 .equipments(equipments)
+                .products(products)
                 .trainedPersons(trainedPersons)
                 .signatureDate(dto.getSignatureDate())
                 .contactPerson(dto.getContactPerson())
@@ -129,6 +169,20 @@ public class DocumentDataMapper {
                 .equipmentName(dto.getEquipmentName())
                 .productCode(dto.getProductCode())
                 .serialNumber(dto.getSerialNumber())
+                .sortOrder(dto.getSortOrder())
+                .build();
+    }
+
+    public static DocumentProduct toProductEntity(DocumentProductDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        return DocumentProduct.builder()
+                .id(dto.getId())
+                .productId(dto.getProductId())
+                .productName(dto.getProductName())
+                .productCod(dto.getProductCod())
+                .quantity(dto.getQuantity())
                 .sortOrder(dto.getSortOrder())
                 .build();
     }

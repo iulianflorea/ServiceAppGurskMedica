@@ -13,6 +13,7 @@ export class LoginComponent {
   email: string = "";
   password: string = "";
   errorMessage: string = "";
+  hidePassword = true;
 
   constructor(private authService: AuthService, private router: Router) {}
 

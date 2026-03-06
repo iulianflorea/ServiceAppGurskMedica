@@ -5,7 +5,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {HttpClient} from "@angular/common/http";
 import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {Observable} from "rxjs";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 import {Router} from "@angular/router";
 
 @Component({
@@ -15,7 +15,7 @@ import {Router} from "@angular/router";
 })
 export class CustomerListComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'name', 'cui', 'address', 'telephone', 'email', 'contactPerson', 'delete'];
+  displayedColumns: string[] = ['id', 'location', 'name', 'cui', 'address', 'telephone', 'email', 'contactPerson', 'delete'];
   dataSource: CustomerDto[] = [];
   dataSource2 = new MatTableDataSource<CustomerDto>(this.dataSource);
   keyword: string = '';
@@ -56,6 +56,13 @@ export class CustomerListComponent implements AfterViewInit {
 
   searchCustomer(keyword: string): Observable<CustomerDto[]> {
     return this.httpClient.get<CustomerDto[]>(`${environment.apiUrl}/customer/search?keyword=${keyword}`);
+  }
+
+  openGoogleMaps(customer: CustomerDto, event: Event) {
+    event.stopPropagation();
+    if (customer.latitude && customer.longitude) {
+      window.open(`https://www.google.com/maps?q=${customer.latitude},${customer.longitude}`, '_blank');
+    }
   }
 
   search() {

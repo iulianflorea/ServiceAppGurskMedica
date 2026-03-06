@@ -11,7 +11,7 @@ import {
 } from '../dtos/vehicleDto';
 import { UserDto } from '../dtos/userDto';
 import { VehicleDocumentService } from '../services/vehicle-document.service';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 
 export interface DocumentItem {
   name: string;
@@ -178,6 +178,7 @@ export class VehicleFormComponent implements OnInit {
     if (this.newItpDate && this.newItp.validityMonths) {
       const d = new Date(this.newItpDate);
       d.setMonth(d.getMonth() + this.newItp.validityMonths);
+      d.setDate(d.getDate() - 1);
       return this.formatDate(d);
     }
     return '';
@@ -207,6 +208,7 @@ export class VehicleFormComponent implements OnInit {
     if (this.newInsuranceDate && this.newInsurance.validityMonths) {
       const d = new Date(this.newInsuranceDate);
       d.setMonth(d.getMonth() + this.newInsurance.validityMonths);
+      d.setDate(d.getDate() - 1);
       return this.formatDate(d);
     }
     return '';

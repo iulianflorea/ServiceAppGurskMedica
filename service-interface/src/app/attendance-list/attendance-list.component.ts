@@ -23,7 +23,7 @@ import { UserDto } from '../dtos/userDto';
 import { ManualAttendanceDialogComponent } from '../manual-attendance-dialog/manual-attendance-dialog.component';
 import { EditAttendanceDialogComponent } from '../edit-attendance-dialog/edit-attendance-dialog.component';
 import { PasswordResetDialogComponent } from '../password-reset-dialog/password-reset-dialog.component';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-attendance-list',

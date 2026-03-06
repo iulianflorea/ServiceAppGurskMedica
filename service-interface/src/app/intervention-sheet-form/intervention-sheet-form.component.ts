@@ -8,7 +8,7 @@ import {InterventionSheetDto} from "../dtos/interventionSheetDto";
 import {SignaturePadComponent} from "../signature-pad/signature-pad.component";
 import {map, Observable, startWith} from "rxjs";
 import {UserDto} from "../dtos/userDto";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 import {DocumentService} from "../services/document.service";
 // @ts-ignore
 import html2pdf from "html2pdf.js";

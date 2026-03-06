@@ -6,6 +6,7 @@ export class EquipmentDto {
   productCode?: string;
   producerId?: number;
   producerName?: string;
+  imageName?: string;
 
   constructor(id: number, model: string, productCode: string, producerId: number, producerName: string) {
     this.id = id;

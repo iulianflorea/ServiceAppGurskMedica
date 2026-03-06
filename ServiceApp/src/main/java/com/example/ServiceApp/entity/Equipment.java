@@ -20,5 +20,6 @@ public class Equipment {
     @ManyToOne(targetEntity = Producer.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "producer_id", insertable = false, updatable = false)
     private Producer producer;
+    private String imageName;
 
 }

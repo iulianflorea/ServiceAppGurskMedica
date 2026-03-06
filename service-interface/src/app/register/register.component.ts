@@ -7,7 +7,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {HttpClient} from "@angular/common/http";
 import {Router, RouterLink} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-register',
