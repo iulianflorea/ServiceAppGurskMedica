@@ -1,0 +1,111 @@
+<div class="ticket-page">
+
+  <!-- Success state -->
+  <div class="ticket-success" *ngIf="submitted">
+    <mat-icon class="success-icon">check_circle</mat-icon>
+    <h2>Solicitarea a fost trimisă!</h2>
+    <p>Vă vom contacta în cel mai scurt timp la numărul sau adresa de email furnizată.</p>
+    <button mat-raised-button color="primary" (click)="newTicket()">
+      <mat-icon>add</mat-icon> Trimite o altă solicitare
+    </button>
+  </div>
+
+  <!-- Form state -->
+  <div class="ticket-card" *ngIf="!submitted">
+    <div class="ticket-header">
+      <img src="assets/logo.png" alt="Logo" class="ticket-logo" />
+      <h1 class="ticket-title">Solicitare Service</h1>
+      <p class="ticket-subtitle">Completați formularul de mai jos și vă vom contacta în cel mai scurt timp.</p>
+    </div>
+
+    <form [formGroup]="ticketForm" (ngSubmit)="submit()" class="ticket-form">
+
+      <div class="form-section-title">Date Clinică</div>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Nume Clinică / Societate</mat-label>
+          <input matInput formControlName="clinicName" placeholder="ex: Clinica MedFarm SRL" />
+          <mat-icon matSuffix>business</mat-icon>
+          <mat-error *ngIf="ticketForm.get('clinicName')?.hasError('required')">Câmp obligatoriu</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row two-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Oraș</mat-label>
+          <input matInput formControlName="city" placeholder="ex: București" />
+          <mat-icon matSuffix>location_city</mat-icon>
+          <mat-error *ngIf="ticketForm.get('city')?.hasError('required')">Câmp obligatoriu</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Adresă</mat-label>
+          <input matInput formControlName="address" placeholder="ex: Str. Florilor nr. 12" />
+          <mat-icon matSuffix>place</mat-icon>
+          <mat-error *ngIf="ticketForm.get('address')?.hasError('required')">Câmp obligatoriu</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row two-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Telefon</mat-label>
+          <input matInput formControlName="phone" placeholder="ex: 0740 000 000" />
+          <mat-icon matSuffix>phone</mat-icon>
+          <mat-error *ngIf="ticketForm.get('phone')?.hasError('required')">Câmp obligatoriu</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="ex: contact@clinica.ro" />
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="ticketForm.get('email')?.hasError('required')">Câmp obligatoriu</mat-error>
+          <mat-error *ngIf="ticketForm.get('email')?.hasError('email')">Email invalid</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-section-title">Date Echipament</div>
+      <div class="form-row two-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Brand Echipament</mat-label>
+          <input matInput formControlName="equipmentBrand" placeholder="ex: Siemens" />
+          <mat-icon matSuffix>sell</mat-icon>
+          <mat-error *ngIf="ticketForm.get('equipmentBrand')?.hasError('required')">Câmp obligatoriu</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Model Echipament</mat-label>
+          <input matInput formControlName="equipmentModel" placeholder="ex: EKG Pro 3000" />
+          <mat-icon matSuffix>devices</mat-icon>
+          <mat-error *ngIf="ticketForm.get('equipmentModel')?.hasError('required')">Câmp obligatoriu</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Serie Echipament</mat-label>
+          <input matInput formControlName="serialNumber" placeholder="ex: SN-20240512-001" />
+          <mat-icon matSuffix>qr_code</mat-icon>
+          <mat-error *ngIf="ticketForm.get('serialNumber')?.hasError('required')">Câmp obligatoriu</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-section-title">Descriere Problemă</div>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Problemă semnalată</mat-label>
+          <textarea matInput formControlName="problem" rows="4"
+                    placeholder="Descrieți pe scurt problema întâmpinată..."></textarea>
+          <mat-error *ngIf="ticketForm.get('problem')?.hasError('required')">Câmp obligatoriu</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+          <mat-icon>send</mat-icon>
+          {{ loading ? 'Se trimite...' : 'Trimite Solicitarea' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="form-page-container">
+
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <button mat-icon-button class="back-btn" (click)="back()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="erp-title">
+        <span class="erp-breadcrumb">Catalog CBCT</span>
+        <span class="erp-name">{{ deviceId ? 'Editează aparat #' + deviceId : 'Aparat nou' }}</span>
+      </div>
+    </div>
+    <div class="erp-header-actions">
+      <button mat-raised-button color="accent" (click)="save()" [disabled]="saving">
+        <mat-icon>save</mat-icon> Salvează
+      </button>
+    </div>
+  </div>
+
+  <div class="form-body-scroll">
+    <div class="erp-form-body">
+
+      <!-- Brand & Model -->
+      <div class="erp-section">
+        <div class="erp-section-title">Identificare aparat</div>
+        <div class="erp-fields-grid">
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Brand</mat-label>
+            <input matInput [(ngModel)]="brand" [ngModelOptions]="{standalone: true}" placeholder="ex: Planmeca">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Model</mat-label>
+            <input matInput [(ngModel)]="model" [ngModelOptions]="{standalone: true}" placeholder="ex: ProMax 3D">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Reference values table -->
+      <div class="erp-section">
+        <div class="erp-section-title">Valori de referință (conform fișei tehnice)</div>
+        <div class="cbct-table-wrapper">
+          <table class="cbct-table">
+            <thead>
+              <tr>
+                <th>Mod</th>
+                <th>Gen</th>
+                <th>Kvp</th>
+                <th>Curent (mA)</th>
+                <th>Timp scanare (s)</th>
+                <th>DAP (mGy·cm²)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of rows">
+                <td class="mode-cell">{{ row.mode }}</td>
+                <td class="gender-cell">{{ row.gender }}</td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.kvp" [ngModelOptions]="{standalone: true}"></td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.current" [ngModelOptions]="{standalone: true}"></td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.scanTime" [ngModelOptions]="{standalone: true}"></td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.dap" [ngModelOptions]="{standalone: true}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

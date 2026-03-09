@@ -1,0 +1,84 @@
+<div class="container-doc-list list-page-container">
+
+  <div class="list-erp-header">
+    <span class="list-erp-title">Măsurători CBCT</span>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button mat-raised-button color="accent" routerLink="/cbct-devices">
+        <mat-icon>devices</mat-icon> Catalog aparate
+      </button>
+      <button mat-raised-button color="primary" routerLink="/cbct-form">
+        <mat-icon>add</mat-icon> Măsurătoare nouă
+      </button>
+      <button mat-icon-button matTooltip="Export Excel" (click)="exportExcel()">
+        <mat-icon>download</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Refresh" (click)="load()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="list-page-header">
+    <div class="search-bar" style="display:flex; gap:8px;">
+      <mat-form-field appearance="outline" style="flex:1;">
+        <mat-label>Caută...</mat-label>
+        <input matInput [(ngModel)]="filterValue" (ngModelChange)="applyFilter()" placeholder="Client, aparat, serie, data...">
+        <mat-icon matSuffix>{{ loading ? 'hourglass_empty' : 'search' }}</mat-icon>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="list-scroll-body">
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="measurementDate" matSortDirection="desc" matSortDisableClear class="mat-elevation-z0" style="width:100%;">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+        <td mat-cell *matCellDef="let m">{{ m.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="customerName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Client</th>
+        <td mat-cell *matCellDef="let m">{{ m.customerName || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="deviceBrand">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Brand</th>
+        <td mat-cell *matCellDef="let m">{{ m.deviceBrand || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="deviceModel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Model</th>
+        <td mat-cell *matCellDef="let m">{{ m.deviceModel || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="serialNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Serie</th>
+        <td mat-cell *matCellDef="let m">{{ m.serialNumber || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="measurementDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+        <td mat-cell *matCellDef="let m">{{ formatDate(m.measurementDate) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Acțiuni</th>
+        <td mat-cell *matCellDef="let m">
+          <button mat-icon-button color="primary" matTooltip="Editează" (click)="edit(m.id!)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" matTooltip="Șterge" (click)="delete(m)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="edit(row.id!)" style="cursor:pointer;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+
+</div>

@@ -58,6 +58,12 @@ import {GoogleMapsModule} from "@angular/google-maps";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import {RouteReuseStrategy} from "@angular/router";
 import {CustomRouteReuseStrategy} from "./custom-route-reuse-strategy";
+import {TicketFormComponent} from "./ticket-form/ticket-form.component";
+import {TicketListComponent} from "./ticket-list/ticket-list.component";
+import {CbctMeasurementFormComponent} from "./cbct-measurement-form/cbct-measurement-form.component";
+import {CbctDeviceFormComponent} from "./cbct-device-form/cbct-device-form.component";
+import {CbctListComponent} from "./cbct-list/cbct-list.component";
+import {CbctDeviceListComponent} from "./cbct-device-list/cbct-device-list.component";
 
 
 @NgModule({
@@ -84,6 +90,9 @@ import {CustomRouteReuseStrategy} from "./custom-route-reuse-strategy";
     DocumentListComponent,
     DocumentDataFormComponent,
     VehicleFormComponent,
+    TicketFormComponent,
+    CbctMeasurementFormComponent,
+    CbctDeviceFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -124,6 +133,9 @@ import {CustomRouteReuseStrategy} from "./custom-route-reuse-strategy";
     MatCheckboxModule,
     MatTooltipModule,
     VehicleListComponent,
+    TicketListComponent,
+    CbctListComponent,
+    CbctDeviceListComponent,
     GoogleMapsModule,
     ZXingScannerModule,
   ],

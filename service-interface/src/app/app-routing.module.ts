@@ -23,6 +23,12 @@ import {AttendanceListComponent} from "./attendance-list/attendance-list.compone
 import {WorkScheduleComponent} from "./work-schedule/work-schedule.component";
 import {VehicleListComponent} from "./vehicle-list/vehicle-list.component";
 import {VehicleFormComponent} from "./vehicle-form/vehicle-form.component";
+import {TicketFormComponent} from "./ticket-form/ticket-form.component";
+import {TicketListComponent} from "./ticket-list/ticket-list.component";
+import {CbctListComponent} from "./cbct-list/cbct-list.component";
+import {CbctDeviceListComponent} from "./cbct-device-list/cbct-device-list.component";
+import {CbctMeasurementFormComponent} from "./cbct-measurement-form/cbct-measurement-form.component";
+import {CbctDeviceFormComponent} from "./cbct-device-form/cbct-device-form.component";
 
 
 const routes: Routes = [
@@ -46,17 +52,23 @@ const routes: Routes = [
   {path: "scan", component: ProductScanFormComponent},
   {path: "import-database", component: SqlImportComponent},
   {path: "order", component: OrderComponent},
-  {path: "documents", component: DocumentListComponent, data: {reuse: true}},
-  {path: "documents-form", component: DocumentDataFormComponent},
-  {path: "documents-form/:id", component: DocumentDataFormComponent},
+  {path: "documents", component: DocumentListComponent, canActivate: [AuthGuardComponent], data: {reuse: true}},
+  {path: "documents-form", component: DocumentDataFormComponent, canActivate: [AuthGuardComponent]},
+  {path: "documents-form/:id", component: DocumentDataFormComponent, canActivate: [AuthGuardComponent]},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardComponent]},
   {path: 'attendance-list', component: AttendanceListComponent, canActivate: [AuthGuardComponent], data: {reuse: true}},
   {path: 'work-schedule', component: WorkScheduleComponent, canActivate: [AuthGuardComponent]},
   {path: 'vehicle-list', component: VehicleListComponent, data: {reuse: true}},
   {path: 'vehicle-form', component: VehicleFormComponent},
-  {path: 'vehicle-form/:id', component: VehicleFormComponent}
-
-
+  {path: 'vehicle-form/:id', component: VehicleFormComponent},
+  {path: 'ticket-form', component: TicketFormComponent},
+  {path: 'ticket-list', component: TicketListComponent, canActivate: [AuthGuardComponent], data: {reuse: true}},
+  {path: 'cbct-list', component: CbctListComponent, canActivate: [AuthGuardComponent], data: {reuse: true}},
+  {path: 'cbct-devices', component: CbctDeviceListComponent, canActivate: [AuthGuardComponent]},
+  {path: 'cbct-form', component: CbctMeasurementFormComponent, canActivate: [AuthGuardComponent]},
+  {path: 'cbct-form/:id', component: CbctMeasurementFormComponent, canActivate: [AuthGuardComponent]},
+  {path: 'cbct-device-form', component: CbctDeviceFormComponent, canActivate: [AuthGuardComponent]},
+  {path: 'cbct-device-form/:id', component: CbctDeviceFormComponent, canActivate: [AuthGuardComponent]},
 ];
 
 @NgModule({

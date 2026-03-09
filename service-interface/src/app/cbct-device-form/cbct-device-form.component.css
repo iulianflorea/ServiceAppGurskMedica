@@ -1,0 +1,76 @@
+.cbct-table-wrapper {
+  overflow-x: auto;
+}
+
+.cbct-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.cbct-table th {
+  background: #e8eaf6;
+  color: #3f51b5;
+  font-weight: 600;
+  padding: 8px 10px;
+  text-align: center;
+  border: 1px solid #c5cae9;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dark-theme .cbct-table th {
+  background: #1a237e;
+  color: #b3c5f7;
+  border-color: #283593;
+}
+
+.cbct-table td {
+  padding: 6px 8px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.dark-theme .cbct-table td {
+  border-color: #333;
+}
+
+.mode-cell {
+  font-weight: 600;
+  color: #3f51b5;
+  background: #f3f4fb;
+}
+
+.dark-theme .mode-cell {
+  background: #1a237e22;
+  color: #b3c5f7;
+}
+
+.gender-cell {
+  color: #555;
+  font-size: 0.8rem;
+}
+
+.cbct-input {
+  width: 90px;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9rem;
+  text-align: right;
+  outline: none;
+}
+
+.cbct-input:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
+}
+
+.dark-theme .cbct-input {
+  border-color: #555;
+}

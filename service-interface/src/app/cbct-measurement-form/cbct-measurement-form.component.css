@@ -1,0 +1,89 @@
+.cbct-table-wrapper {
+  overflow-x: auto;
+}
+
+.cbct-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+/* ── Numele coloanelor — mereu tema deschisa ─── */
+.cbct-table th {
+  background: #e8eaf6;
+  color: #3f51b5;
+  font-weight: 600;
+  padding: 8px 10px;
+  text-align: center;
+  border: 1px solid #c5cae9;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cbct-table th.ref-th {
+  background: #f3f3f3;
+  color: #999;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Forteaza th sa ramana deschis si in dark mode */
+.dark-theme .cbct-table th {
+  background: #e8eaf6;
+  color: #3f51b5;
+  border-color: #c5cae9;
+}
+
+.dark-theme .cbct-table th.ref-th {
+  background: #f3f3f3;
+  color: #999;
+}
+
+/* ── Celulele de date — urmeaza tema globala ─── */
+.cbct-table td {
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.cbct-table tr:hover td {
+  background: rgba(63, 81, 181, 0.04);
+}
+
+.mode-cell {
+  font-weight: 600;
+  color: #3f51b5;
+  background: transparent;
+}
+
+.gender-cell {
+  color: var(--text-color);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.ref-cell {
+  color: #888;
+  font-style: italic;
+  background: transparent;
+}
+
+.cbct-input {
+  width: 80px;
+  padding: 4px 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9rem;
+  text-align: right;
+  outline: none;
+}
+
+.cbct-input:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
+}

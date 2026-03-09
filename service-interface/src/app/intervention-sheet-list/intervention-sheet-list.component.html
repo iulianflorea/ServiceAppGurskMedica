@@ -17,7 +17,8 @@
     <form (submit)="search()" class="search-bar" style="display: flex; gap: 10px; flex-wrap: wrap;">
       <mat-form-field appearance="outline">
         <mat-label>Search</mat-label>
-        <input matInput [(ngModel)]="keyword" [ngModelOptions]="{standalone: true}"/>
+        <input matInput [(ngModel)]="keyword" (ngModelChange)="applyFilter()" placeholder="Client, aparat, serie, data..." [ngModelOptions]="{standalone: true}"/>
+        <mat-icon matSuffix>{{ loading ? 'hourglass_empty' : 'search' }}</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">

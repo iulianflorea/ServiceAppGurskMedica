@@ -6,7 +6,7 @@ import {HttpClient} from "@angular/common/http";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {Router, RouterLink, RouterModule} from "@angular/router";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule, NgForOf, NgIf} from "@angular/common";
 import {MatInputModule} from "@angular/material/input";
@@ -51,6 +51,8 @@ export class InterventionSheetListComponent implements AfterViewInit {
   keyword: string = '';
   selectedDate: Date | null = null;
   isMobile: boolean = false;
+  private searchSubject = new Subject<string>();
+  loading = false;
 
   @Input() item: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -96,6 +98,10 @@ export class InterventionSheetListComponent implements AfterViewInit {
 
   searchInterventionSheet(keyword: string): Observable<InterventionSheetDto[]> {
     return this.httpClient.get<InterventionSheetDto[]>(`${environment.apiUrl}/intervention-sheet/search?keyword=${keyword}`);
+  }
+
+  applyFilter() {
+    this.searchSubject.next(this.keyword.trim());
   }
 
   search() {

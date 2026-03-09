@@ -199,7 +199,11 @@ $dark-theme: mat.define-dark-theme((
 .sql,
 .order,
 .document-container,
-.container-doc-list
+.container-doc-list,
+.ticket-list-container,
+.ticket-card,
+.ticket-success,
+.cbct-form-container
 {
   background-color: var(--card-color);
   color: var(--text-color);
@@ -480,6 +484,25 @@ tr.mat-row:hover,
 tr.mat-mdc-row:hover {
   background: rgba(63, 81, 181, 0.06);
   transition: background 0.15s ease;
+}
+
+/* ── Ticket status colors ────────────────────────────────────── */
+.status-IN_ASTEPTARE .mat-mdc-select-value,
+.status-IN_ASTEPTARE .mat-mdc-select-value-text {
+  color: #c62828 !important;
+  font-weight: 600 !important;
+}
+
+.status-IN_LUCRU .mat-mdc-select-value,
+.status-IN_LUCRU .mat-mdc-select-value-text {
+  color: #f9a825 !important;
+  font-weight: 600 !important;
+}
+
+.status-TERMINAT .mat-mdc-select-value,
+.status-TERMINAT .mat-mdc-select-value-text {
+  color: #2e7d32 !important;
+  font-weight: 600 !important;
 }
 
 /* Mobile nav menu styling */

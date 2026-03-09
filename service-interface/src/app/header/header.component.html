@@ -22,17 +22,19 @@
         </button>
       </div>
 
-      <button routerLink="/import-database" mat-button>Restore DB</button>
+      <button routerLink="/import-database" mat-button>Restaurare DB</button>
       <button routerLink="/login" mat-button *ngIf="!isLoggedIn()">Login</button>
-      <button routerLink="/scan" mat-button>Scan</button>
-      <button routerLink="/documents" mat-button>documents</button>
-      <button routerLink="/order" mat-button>Order</button>
-      <button routerLink="/customer-list" mat-button>Customers</button>
-      <button routerLink="/product-list" mat-button>Products</button>
-      <button routerLink="/equipment-list" mat-button>Equipments</button>
-      <button routerLink="/intervention-sheet-list" mat-button>Interventions</button>
+      <button routerLink="/scan" mat-button>Act.Stoc</button>
+      <button routerLink="/documents" mat-button>Documente</button>
+      <button routerLink="/order" mat-button>Facturare</button>
+      <button routerLink="/customer-list" mat-button>Clienti</button>
+      <button routerLink="/product-list" mat-button>Produse</button>
+      <button routerLink="/equipment-list" mat-button>Echipamente</button>
+      <button routerLink="/intervention-sheet-list" mat-button>Interventii</button>
       <button routerLink="/vehicle-list" mat-button>Flotă</button>
       <button routerLink="/attendance-list" mat-button>Pontaj</button>
+      <button routerLink="/ticket-list" mat-button>Tichete</button>
+      <button routerLink="/cbct-list" mat-button>CBCT</button>
       <button mat-button (click)="logout()" routerLink="/login" *ngIf="isLoggedIn()">Logout</button>
       <mat-slide-toggle
         [checked]="isDarkMode"
@@ -73,39 +75,45 @@
 
     <mat-menu #menu="matMenu" class="mobile-nav-menu">
       <button mat-menu-item routerLink="/dashboard">
-        <mat-icon>person</mat-icon><span>You're interventions</span>
+        <mat-icon>person</mat-icon><span>Interventiile tale</span>
       </button>
       <button mat-menu-item routerLink="/documents">
-        <mat-icon>description</mat-icon><span>Documents</span>
+        <mat-icon>description</mat-icon><span>Documente</span>
       </button>
       <button mat-menu-item routerLink="/intervention-sheet-list">
-        <mat-icon>assignment</mat-icon><span>Interventions</span>
+        <mat-icon>assignment</mat-icon><span>Interventii</span>
       </button>
       <button mat-menu-item routerLink="/vehicle-list">
         <mat-icon>directions_car</mat-icon><span>Flotă</span>
       </button>
       <button mat-menu-item routerLink="/order">
-        <mat-icon>shopping_cart</mat-icon><span>Order</span>
+        <mat-icon>shopping_cart</mat-icon><span>Facturare</span>
       </button>
       <mat-divider></mat-divider>
       <button mat-menu-item routerLink="/customer-list">
-        <mat-icon>people</mat-icon><span>Customers</span>
+        <mat-icon>people</mat-icon><span>Clienti</span>
       </button>
       <button mat-menu-item routerLink="/product-list">
-        <mat-icon>inventory_2</mat-icon><span>Products</span>
+        <mat-icon>inventory_2</mat-icon><span>Produse</span>
       </button>
       <button mat-menu-item routerLink="/equipment-list">
-        <mat-icon>build</mat-icon><span>Equipments</span>
+        <mat-icon>build</mat-icon><span>Echipamente</span>
       </button>
       <mat-divider></mat-divider>
       <button mat-menu-item routerLink="/attendance-list">
         <mat-icon>access_time</mat-icon><span>Pontaj</span>
       </button>
+      <button mat-menu-item routerLink="/ticket-list">
+        <mat-icon>confirmation_number</mat-icon><span>Tichete</span>
+      </button>
+      <button mat-menu-item routerLink="/cbct-list">
+        <mat-icon>biotech</mat-icon><span>CBCT</span>
+      </button>
       <button mat-menu-item routerLink="/scan">
-        <mat-icon>qr_code_scanner</mat-icon><span>Scan</span>
+        <mat-icon>qr_code_scanner</mat-icon><span>Act.Stoc</span>
       </button>
       <button mat-menu-item routerLink="/import-database">
-        <mat-icon>restore</mat-icon><span>Restore DB</span>
+        <mat-icon>restore</mat-icon><span>Restaurare DB</span>
       </button>
       <mat-divider></mat-divider>
       <button mat-menu-item routerLink="/login" *ngIf="!isLoggedIn()">

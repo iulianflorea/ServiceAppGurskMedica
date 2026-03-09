@@ -1,0 +1,171 @@
+<div class="form-page-container">
+
+  <!-- Header -->
+  <div class="erp-header">
+    <div class="erp-header-left">
+      <button mat-icon-button class="back-btn" (click)="back()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="erp-title">
+        <span class="erp-breadcrumb">CBCT</span>
+        <span class="erp-name">{{ measurementId ? 'Masuratori #' + measurementId : 'Masuratore noua' }}</span>
+      </div>
+    </div>
+    <div class="erp-header-actions">
+      <button mat-raised-button (click)="exportExcel()" [disabled]="!measurementId" matTooltip="Export Excel">
+        <mat-icon>table_view</mat-icon> Excel
+      </button>
+      <button mat-raised-button (click)="exportPdf()" [disabled]="!measurementId" matTooltip="Export PDF">
+        <mat-icon>picture_as_pdf</mat-icon> PDF
+      </button>
+      <button mat-raised-button color="accent" (click)="save()" [disabled]="saving">
+        <mat-icon>save</mat-icon> Salveaza
+      </button>
+    </div>
+  </div>
+
+  <div class="form-body-scroll">
+    <div class="erp-form-body">
+
+      <!-- General info -->
+      <div class="erp-section">
+        <div class="erp-section-title">Informatii generale</div>
+        <div class="erp-fields-grid">
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Client</mat-label>
+            <input matInput
+              [(ngModel)]="customerSearchText"
+              [ngModelOptions]="{standalone: true}"
+              [matAutocomplete]="customerAuto"
+              (ngModelChange)="filterCustomers($event)">
+            <mat-autocomplete #customerAuto="matAutocomplete"
+              (optionSelected)="onCustomerSelected($event.option.value)">
+              <mat-option *ngFor="let c of filteredCustomers" [value]="c.name">{{ c.name }}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Aparat CBCT</mat-label>
+            <input matInput
+              [(ngModel)]="deviceSearchText"
+              [ngModelOptions]="{standalone: true}"
+              [matAutocomplete]="deviceAuto"
+              (ngModelChange)="filterDevices($event)">
+            <mat-autocomplete #deviceAuto="matAutocomplete"
+              (optionSelected)="onDeviceSelected($event.option.value)">
+              <mat-option *ngFor="let d of filteredDevices" [value]="d.brand + ' ' + d.model">{{ d.brand }} {{ d.model }}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Numar de serie (al aparatului masurat)</mat-label>
+            <input matInput [(ngModel)]="serialNumber" [ngModelOptions]="{standalone: true}" (blur)="autosave()">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Data masuratoare</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="measurementDate" [ngModelOptions]="{standalone: true}" (blur)="autosave()">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <!-- Measurement table -->
+      <div class="erp-section">
+        <div class="erp-section-title">Valori masurate (Referinta → Masurat)</div>
+        <div class="cbct-table-wrapper">
+          <table class="cbct-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Mod</th>
+                <th rowspan="2">Gen</th>
+                <th colspan="2">Kvp</th>
+                <th colspan="2">Timp scanare (s)</th>
+                <th rowspan="2" style="width:60px; white-space:normal; word-break:break-word;">DAP ref. (mGy·cm²)</th>
+                <th rowspan="2" style="width:60px;">mGy</th>
+                <th rowspan="2">mm AI HVL</th>
+                <th rowspan="2">µGy/s</th>
+                <th rowspan="2">pulses</th>
+                <th rowspan="2">mm AI TF</th>
+              </tr>
+              <tr>
+                <th class="ref-th">Ref.</th><th>Masurat</th>
+                <th class="ref-th">Ref.</th><th>Masurat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of rows">
+                <td class="mode-cell">{{ row.mode }}</td>
+                <td class="gender-cell">{{ row.gender }}</td>
+
+                <td class="ref-cell">{{ row.ref?.kvp ?? '—' }}</td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.kvp" [ngModelOptions]="{standalone: true}" (blur)="autosave()"></td>
+
+                <td class="ref-cell">{{ row.ref?.scanTime ?? '—' }}</td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.scanTime" [ngModelOptions]="{standalone: true}" (blur)="autosave()"></td>
+
+                <td class="ref-cell">{{ row.ref?.dap ?? '—' }}</td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.mgy" [ngModelOptions]="{standalone: true}" (blur)="autosave()"></td>
+
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.mmAiHvl" [ngModelOptions]="{standalone: true}" (blur)="autosave()"></td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.uGyPerS" [ngModelOptions]="{standalone: true}" (blur)="autosave()"></td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.pulses" [ngModelOptions]="{standalone: true}" (blur)="autosave()"></td>
+                <td><input type="number" class="cbct-input" [(ngModel)]="row.mmAiTf" [ngModelOptions]="{standalone: true}" (blur)="autosave()"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Dozimetrie - dynamic rows -->
+      <div class="erp-section">
+        <div class="erp-section-title" style="display:flex; align-items:center; justify-content:space-between;">
+          <span>Dozimetrie</span>
+          <button mat-stroked-button color="primary" type="button" (click)="addDozimetrieRow()" style="height:32px; font-size:0.8rem;">
+            <mat-icon style="font-size:16px; line-height:16px;">add</mat-icon> Adauga rand
+          </button>
+        </div>
+
+        <div class="cbct-table-wrapper" style="margin-top:8px;">
+          <table class="cbct-table">
+            <thead>
+              <tr>
+                <th style="width:35%;">Punct masurat</th>
+                <th style="width:25%;">Material perete</th>
+                <th style="width:25%;">Valoarea maxima masurata</th>
+                <th style="width:15%;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of dozimetrieRows; let i = index">
+                <td>
+                  <input type="text" class="cbct-input" style="width:95%;" [(ngModel)]="d.punctMasurat"
+                    [ngModelOptions]="{standalone: true}" (blur)="autosave()" placeholder="ex: Intrare hol...">
+                </td>
+                <td>
+                  <input type="text" class="cbct-input" style="width:95%;" [(ngModel)]="d.materialPerete"
+                    [ngModelOptions]="{standalone: true}" (blur)="autosave()" placeholder="ex: beton, gips...">
+                </td>
+                <td>
+                  <input type="number" class="cbct-input" style="width:95%;" [(ngModel)]="d.valoareaMaximaMarsurata"
+                    [ngModelOptions]="{standalone: true}" (blur)="autosave()">
+                </td>
+                <td style="text-align:center;">
+                  <button mat-icon-button color="warn" type="button" (click)="removeDozimetrieRow(i)"
+                    [disabled]="dozimetrieRows.length === 1" matTooltip="Sterge rand">
+                    <mat-icon style="font-size:18px;">delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

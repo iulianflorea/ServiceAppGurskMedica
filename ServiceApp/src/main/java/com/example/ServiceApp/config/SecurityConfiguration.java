@@ -36,7 +36,8 @@ public class SecurityConfiguration{
                         .requestMatchers("/api/v1/auth/**", "/v1/auth/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/documents/**").permitAll()
+                        .requestMatchers("/documents/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/tickets").permitAll()
                         .requestMatchers("/backup/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/interventions/*/documents/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/interventions/admin/**").hasRole("ADMIN")
@@ -47,6 +48,7 @@ public class SecurityConfiguration{
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/work-schedule").hasRole("ADMIN")
                         .requestMatchers("/user/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/vehicles/**").authenticated()
+                        .requestMatchers("/api/cbct/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess
@@ -68,7 +70,7 @@ public class SecurityConfiguration{
                 "https://doc.singularity-cloud.com",
                 "http://localhost:4200"
         ));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // dacă ai cookies sau tokens
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

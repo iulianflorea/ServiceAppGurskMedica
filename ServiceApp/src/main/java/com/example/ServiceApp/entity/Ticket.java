@@ -3,7 +3,7 @@ package com.example.ServiceApp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +16,22 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date dateWhenTicketWasOpened;
-    private String customerNotification;
-    @ManyToOne
-    private Customer customer;
+
+    private String clinicName;
+    private String equipmentModel;
+    private String equipmentBrand;
+    private String serialNumber;
+    private String phone;
+    private String email;
+
+    @Lob
+    private String problem;
+
+    private String city;
+    private String address;
+
+    @Enumerated(EnumType.STRING)
+    private TicketStatus status;
+
+    private LocalDateTime createdAt;
 }

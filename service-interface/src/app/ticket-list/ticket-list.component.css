@@ -1,0 +1,54 @@
+.public-url-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(63, 81, 181, 0.12);
+  border-left: 4px solid #3f51b5;
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin: 0 16px 12px;
+  flex-wrap: wrap;
+}
+
+.url-icon {
+  color: #3f51b5;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.url-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1a237e;
+  white-space: nowrap;
+}
+
+.url-code {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #37474f;
+  background: rgba(0,0,0,0.06);
+  padding: 2px 8px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.problem-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-select {
+  min-width: 130px;
+  font-size: 0.85rem;
+}
+
+
+@media (max-width: 600px) {
+  .public-url-banner {
+    margin: 0 8px 12px;
+  }
+}
